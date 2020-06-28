@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <math.h>
 
 __attribute__((used)) double* multipleFloat64ArraysReturningPtr (double* array1, double* array2, int length)
 {
