@@ -1,0 +1,46 @@
+{
+  "name": "@jetblack/wasi-marsheller",
+  "version": "1.0.0",
+  "author": "Rob Blackbourn <rob.blackbourn@gmail.com> (https://github.com/rob-blackbourn)",
+  "license": "Apache-2.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rob-blackbourn/jetblack-wasi-marshalling.git"
+  },
+  "homepage": "https://github.com/rob-blackbourn/jetblack-wasi-marshalling#readme",
+  "keywords": ["wasi", "marshalling", "wasm", "WebAssembly"],
+  "main": "@jetblack/was-marshalling.min.js",
+  "scripts": {
+    "build:bundlejs:prd": "webpack --config webpack.config.build-lib.js --mode production",
+    "build:bundlejs:dev": "webpack --config webpack.config.build-lib.js --mode development",
+    "build": "run-s build:bundlejs:prd build:bundlejs:dev",
+    "exec:nodejs": "node client/example_for_nodejs.js",
+    "exec:es6": "webpack-dev-server --config webpack.config.exec_es6.js",
+    "exec:browser": "webpack-dev-server --config webpack.config.exec-open-browser.js",
+    "exec:all": "run-p exec:nodejs exec:es6 exec:browser",
+    "start": "run-s build exec:all",
+    "test": "mocha test/**/*test*.js --require @babel/register"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "malloc": "^1.1.0",
+    "mocha": "^8.0.1",
+    "standard": "^14.3.4",
+    "@babel/core": "^7.10.3",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/register": "^7.10.3",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.0.6",
+    "npm-run-all": "^4.1.5",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5"
+  },
+  "standard": {
+    "parser": "babel-eslint"
+  }
+}
