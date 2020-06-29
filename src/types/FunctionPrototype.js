@@ -9,21 +9,13 @@ export class FunctionPrototype {
       throw new RangeError('Invalid number of arguments')
     }
 
-    const marshalledArgs = []
-    for (let i = 0; i < args.length; ++i) {
-      const argDef = this.argDefs[i]
-      const arg = args[i]
-      marshalledArgs[i] = argDef.marshall(arg, memoryManager)
-    }
+    const marshalledArgs = args.map((arg, i) =>
+      this.argDefs[i].marshall(arg, memoryManager))
 
     const result = func(...marshalledArgs)
 
-    for (let i = 0; i < args.length; ++i) {
-      const argDef = this.argDefs[i]
-      const arg = args[i]
-      const marshalledArg = marshalledArgs[i]
-      argDef.unmarshall(marshalledArg, memoryManager, arg)
-    }
+    args.forEach((arg, i) =>
+      this.argDefs[i].unmarshall(marshalledArgs[i], memoryManager, arg))
 
     if (this.returns != null) {
       return this.returns.unmarshall(result, memoryManager)
