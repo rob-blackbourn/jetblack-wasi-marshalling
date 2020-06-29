@@ -1,20 +1,34 @@
 import { ValueType } from './ValueType'
 
+/**
+ * An argument definition is used by {@link FunctionPrototype} to define the
+ * arguments to a function.
+ */
 export class ArgumentDef {
+  /**
+   * Construct an argument defintion. The {@link In}, {@link Out}, and {@link InOut}
+   * helper classes should be used to construct argument definitions as they are
+   * semantically clearer and avoid the possibility of setting both `isInput` and
+   * `isOutput` to `false`.
+   * @param {Type} type The argument type
+   * @param {boolean} isInput If true the argument provides data to the function
+   * @param {boolean} isOutput If true the argument is poulated by the function
+   */
   constructor (type, isInput, isOutput) {
     this.type = type
     this.isInput = isInput
     this.isOutput = isOutput
   }
 
-  free (address, memoryManager, value) {
-    if (this.type instanceof ValueType) {
-      return
-    }
-
-    this.type.free(address, memoryManager, value)
-  }
-
+  /**
+   * Create a representation of the JavaScript value which can be passed to a
+   * WebAssembly module instance. For value types this is typically the value
+   * itself. For refrence types memory will be allocated in the instance, and
+   * the data will be copied.
+   * @param {T} value The value for which a WebAssembly value should be created
+   * @param {MemoryManager} memoryManager A class which provides methods to
+   *    manage the memory of a WebAssembly module.
+   */
   marshall (value, memoryManager) {
     if (this.type instanceof ValueType) {
       return value
@@ -25,11 +39,23 @@ export class ArgumentDef {
     }
   }
 
+  /**
+   * Create a JavaScript representation of the value represented by the address.
+   * @param {number} address The byte offset of the
+   * @param {MemoryManager} memoryManager A class which provides methods to
+   *    manage the memory of a WebAssembly module.
+   * @param {T} value The original value of the argument.
+   */
   unmarshall (address, memoryManager, value) {
     if (this.type instanceof ValueType) {
       return value
     }
 
-    return this.type.unmarshall(address, memoryManager, value)
+    if (this.isOutput) {
+      const result = this.type.unmarshall(address, memoryManager, value)
+      this.type.copy(value, result)
+    } else {
+      this.type.free(address, memoryManager, value)
+    }
   }
 }

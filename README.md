@@ -47,7 +47,7 @@ WebAssembly.instantiateStreaming(
 
 ## The Marshalling Framework
 
-Given the following C function call which multiply two arrays.
+Given the following C function call which multiplies two arrays.
 
 ```C
 #include <stdlib.h>

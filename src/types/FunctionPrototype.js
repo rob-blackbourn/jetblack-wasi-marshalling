@@ -22,13 +22,7 @@ export class FunctionPrototype {
       const argDef = this.argDefs[i]
       const arg = args[i]
       const marshalledArg = marshalledArgs[i]
-
-      if (argDef.isOutput) {
-        const argResult = argDef.unmarshall(marshalledArg, memoryManager, arg)
-        argDef.type.copy(arg, argResult)
-      } else {
-        argDef.free(marshalledArg, memoryManager, arg)
-      }
+      argDef.unmarshall(marshalledArg, memoryManager, arg)
     }
 
     if (this.returns != null) {
