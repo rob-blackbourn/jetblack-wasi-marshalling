@@ -34,13 +34,12 @@ export class ArrayType extends ReferenceType {
   marshall (array, memoryManager) {
     const address = this.alloc(memoryManager, array)
 
+    const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, array.length)
     if (this.type instanceof ReferenceType) {
-      const typedArray = new Uint32Array(memoryManager.memory.buffer, address, array.length)
-      for (let i = 0; i < array.length; ++i) {
-        typedArray[i] = this.type.marshall(array[i], memoryManager)
-      }
+      array.forEach((item, i) => {
+        typedArray[i] = this.type.marshall(item, memoryManager)
+      })
     } else {
-      const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, array.length)
       typedArray.set(array)
     }
 
