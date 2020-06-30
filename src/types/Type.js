@@ -4,7 +4,7 @@ import type { $TypedArray, Class } from 'flow-bin'
 
 import { MemoryManager } from '../MemoryManager'
 
-export class Type {
+export class Type<T> {
   TypedArrayType: Class<$TypedArray>
 
   constructor (typedArrayType: Class<$TypedArray>) {
@@ -19,7 +19,7 @@ export class Type {
     throw new Error('Not Implemented')
   }
 
-  marshall (value: any, memoryManager: MemoryManager): number {
+  marshall (value: T, memoryManager: MemoryManager): number|T {
     throw new Error('Not Implemented')
   }
 

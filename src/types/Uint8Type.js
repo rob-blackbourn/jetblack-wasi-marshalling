@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-export class Uint8Type extends ValueType {
+export class Uint8Type extends ValueType<number> {
   constructor () {
     super(Uint8Array)
   }

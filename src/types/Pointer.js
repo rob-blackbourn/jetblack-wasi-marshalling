@@ -1,9 +1,9 @@
 // @flow
 
-export class Pointer {
-  contents: any
+export class Pointer<T> {
+  contents: T
 
-  constructor (contents: any) {
+  constructor (contents: T) {
     this.contents = contents
   }
 }

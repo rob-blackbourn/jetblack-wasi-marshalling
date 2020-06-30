@@ -5,11 +5,11 @@ import { MemoryManager } from '../MemoryManager'
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
-export class ArrayType extends ReferenceType {
-  type: Type
+export class ArrayType<T> extends ReferenceType<Array<T>> {
+  type: Type<T>
   length: ?number
 
-  constructor (type: Type, length: number) {
+  constructor (type: Type<T>, length: number) {
     super()
     this.type = type
     this.length = length
@@ -42,7 +42,7 @@ export class ArrayType extends ReferenceType {
     }
   }
 
-  marshall (array: Array<any>, memoryManager: MemoryManager): number {
+  marshall (array: Array<T>, memoryManager: MemoryManager): number {
     const address = this.alloc(memoryManager, array)
 
     const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, array.length)

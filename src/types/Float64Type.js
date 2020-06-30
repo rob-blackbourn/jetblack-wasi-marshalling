@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-export class Float64Type extends ValueType {
+export class Float64Type extends ValueType<number> {
   constructor () {
     super(Float64Array)
   }

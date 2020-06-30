@@ -5,11 +5,11 @@ import { MemoryManager } from '../MemoryManager'
 import { ArgumentDef } from './ArgumentDef'
 import { Type } from './Type'
 
-export class FunctionPrototype {
-  argDefs: Array<ArgumentDef>
-  returns: ?Type
+export class FunctionPrototype<R> {
+  argDefs: Array<ArgumentDef<any>>
+  returns: ?Type<R>
 
-  constructor (argDefs: Array<ArgumentDef>, returns: ?Type) {
+  constructor (argDefs: Array<ArgumentDef<any>>, returns: ?Type<R>) {
     this.argDefs = argDefs
     this.returns = returns
   }

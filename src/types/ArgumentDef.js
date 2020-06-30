@@ -9,8 +9,8 @@ import { Type } from './Type'
  * An argument definition is used by {@link FunctionPrototype} to define the
  * arguments to a function.
  */
-export class ArgumentDef {
-  type: Type
+export class ArgumentDef<T> {
+  type: Type<T>
   isInput: boolean
   isOutput: boolean
 
@@ -23,7 +23,7 @@ export class ArgumentDef {
    * @param {boolean} isInput If true the argument provides data to the function
    * @param {boolean} isOutput If true the argument is poulated by the function
    */
-  constructor (type: Type, isInput: boolean, isOutput: boolean) {
+  constructor (type: Type<T>, isInput: boolean, isOutput: boolean) {
     this.type = type
     this.isInput = isInput
     this.isOutput = isOutput
@@ -38,7 +38,7 @@ export class ArgumentDef {
    * @param {MemoryManager} memoryManager A class which provides methods to
    *    manage the memory of a WebAssembly module.
    */
-  marshall (value: any, memoryManager: MemoryManager): any {
+  marshall (value: T, memoryManager: MemoryManager): number|T {
     if (this.type instanceof ValueType) {
       return value
     } else if (this.isInput) {

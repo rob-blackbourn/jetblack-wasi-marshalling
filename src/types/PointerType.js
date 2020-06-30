@@ -6,10 +6,10 @@ import { Pointer } from './Pointer'
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
-export class PointerType extends ReferenceType {
-  type: Type
+export class PointerType<T> extends ReferenceType<Pointer<T>> {
+  type: Type<T>
 
-  constructor (type: Type) {
+  constructor (type: Type<T>) {
     super()
     this.type = type
   }
@@ -28,14 +28,14 @@ export class PointerType extends ReferenceType {
     return address
   }
 
-  marshall (value: Pointer, memoryManager: MemoryManager): number {
+  marshall (value: Pointer<T>, memoryManager: MemoryManager): number {
     const address = this.alloc(memoryManager)
     const marshalledAddress = this.type.marshall(value.contents, memoryManager)
     memoryManager.dataView.setUint32(address, marshalledAddress)
     return address
   }
 
-  unmarshall (address: number, memoryManager: MemoryManager): Pointer {
+  unmarshall (address: number, memoryManager: MemoryManager): Pointer<T> {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
       return new Pointer(this.type.unmarshall(marshalledAddress, memoryManager))
@@ -44,7 +44,7 @@ export class PointerType extends ReferenceType {
     }
   }
 
-  copy (dest: Pointer, source: Pointer): Pointer {
+  copy (dest: Pointer<T>, source: Pointer<T>): Pointer<T> {
     dest.contents = source.contents
     return dest
   }

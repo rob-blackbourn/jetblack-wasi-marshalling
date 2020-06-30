@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-export class Uint64Type extends ValueType {
+export class Uint64Type extends ValueType<number> {
   constructor () {
     // $FlowFixMe
     super(BigUint64Array)

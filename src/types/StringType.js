@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ReferenceType } from './ReferenceType'
 
-export class StringType extends ReferenceType {
+export class StringType extends ReferenceType<string> {
   free (address: number, memoryManager: MemoryManager): void {
     memoryManager.free(address)
   }

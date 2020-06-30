@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-export class Uint32Type extends ValueType {
+export class Uint32Type extends ValueType<number> {
   constructor () {
     super(Uint32Array)
   }
