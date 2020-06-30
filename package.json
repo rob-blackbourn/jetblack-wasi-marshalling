@@ -1,6 +1,6 @@
 {
-  "name": "@jetblack/wasi-marsheller",
-  "version": "1.0.0",
+  "name": "@jetblack/wasi-marshalling",
+  "version": "0.1.0",
   "author": "Rob Blackbourn <rob.blackbourn@gmail.com> (https://github.com/rob-blackbourn)",
   "license": "Apache-2.0",
   "description": "",
@@ -15,7 +15,7 @@
     "wasm",
     "WebAssembly"
   ],
-  "main": "lib/index.min.js",
+  "main": "lib/index.js",
   "scripts": {
     "build:bundlejs:prd": "webpack --config webpack.config.build-lib.js --mode production",
     "build:bundlejs:dev": "webpack --config webpack.config.build-lib.js --mode development",

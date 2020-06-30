@@ -27,7 +27,7 @@ The implementation of the WASI layer is provided through a class of the
 same name. Here is an example of initialising the library.
 
 ```javascript
-import { Wasi } from '@jetblack/wasi-marshalling.develop.js'
+import { Wasi } from '@jetblack/wasi-marshalling'
 
 // Create the Wasi instance passing in environment variables.
 const wasi = new Wasi({})

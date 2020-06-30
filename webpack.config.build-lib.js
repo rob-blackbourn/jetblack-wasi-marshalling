@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
     // library building properties for (3-4)
     output: {
       path: path.join(__dirname, '/'),
-      filename: argv.mode === 'production' ? '[name].min.js' : '[name].develop.js',
+      filename: argv.mode === 'production' ? '[name].js' : '[name].develop.js',
       library: 'WasiMarshalling',
       libraryTarget: 'umd',
       globalObject: 'this'
