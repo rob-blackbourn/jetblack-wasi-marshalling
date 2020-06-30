@@ -12,7 +12,7 @@ module.exports = {
     disableHostCheck: true
   },
   entry: {
-    'use-from-es6': ['./client/example_for_es6.js']
+    'wasi-marshalling': ['./client/example_for_es6.js']
   },
   output: {
     path: path.join(__dirname, '/'),

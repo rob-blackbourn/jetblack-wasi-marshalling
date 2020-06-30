@@ -15,14 +15,13 @@ module.exports = (env, argv) => {
     },
 
     entry: {
-      '@jetblack/wasi-marshalling': ['./src/index.js']
+      'lib/index': ['./src/index.js']
     },
     // library building properties for (3-4)
     output: {
       path: path.join(__dirname, '/'),
       filename: argv.mode === 'production' ? '[name].min.js' : '[name].develop.js',
       library: 'WasiMarshalling',
-      // libraryExport: 'default',
       libraryTarget: 'umd',
       globalObject: 'this'
     },

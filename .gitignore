@@ -19,4 +19,4 @@ build
 /bin/
 /node_modules/
 /coverage/
-/@jetblack/
+lib/

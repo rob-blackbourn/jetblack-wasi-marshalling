@@ -7,7 +7,7 @@ const {
   FunctionPrototype,
   In,
   Out
-} = require('../@jetblack/wasi-marshalling.develop.js')
+} = require('../lib/index.develop.js')
 
 async function setupWasi (fileName, envVars) {
   // Read the wasm file.

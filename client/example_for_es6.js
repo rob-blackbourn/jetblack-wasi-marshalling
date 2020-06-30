@@ -6,7 +6,7 @@ import {
   FunctionPrototype,
   In,
   Out
-} from '../@jetblack/wasi-marshalling.develop.js'
+} from '../lib/index.develop.js'
 
 // Create the Wasi instance passing in environment variables.
 const wasi = new Wasi({})

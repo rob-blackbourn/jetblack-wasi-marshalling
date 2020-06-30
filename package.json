@@ -15,7 +15,7 @@
     "wasm",
     "WebAssembly"
   ],
-  "main": "@jetblack/was-marshalling.min.js",
+  "main": "lib/index.min.js",
   "scripts": {
     "build:bundlejs:prd": "webpack --config webpack.config.build-lib.js --mode production",
     "build:bundlejs:dev": "webpack --config webpack.config.build-lib.js --mode development",
@@ -51,6 +51,8 @@
   "dependencies": {},
   "standard": {
     "parser": "babel-eslint",
-    "plugins": [ "flowtype" ]
+    "plugins": [
+      "flowtype"
+    ]
   }
 }
