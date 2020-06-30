@@ -1,10 +1,19 @@
+// @flow
+
+import { MemoryManager } from '../MemoryManager'
+
 import { ValueType } from './ValueType'
+import { Type } from './Type'
 
 /**
  * An argument definition is used by {@link FunctionPrototype} to define the
  * arguments to a function.
  */
 export class ArgumentDef {
+  type: Type
+  isInput: boolean
+  isOutput: boolean
+
   /**
    * Construct an argument defintion. The {@link In}, {@link Out}, and {@link InOut}
    * helper classes should be used to construct argument definitions as they are
@@ -14,7 +23,7 @@ export class ArgumentDef {
    * @param {boolean} isInput If true the argument provides data to the function
    * @param {boolean} isOutput If true the argument is poulated by the function
    */
-  constructor (type, isInput, isOutput) {
+  constructor (type: Type, isInput: boolean, isOutput: boolean) {
     this.type = type
     this.isInput = isInput
     this.isOutput = isOutput
@@ -29,7 +38,7 @@ export class ArgumentDef {
    * @param {MemoryManager} memoryManager A class which provides methods to
    *    manage the memory of a WebAssembly module.
    */
-  marshall (value, memoryManager) {
+  marshall (value: any, memoryManager: MemoryManager): any {
     if (this.type instanceof ValueType) {
       return value
     } else if (this.isInput) {
@@ -46,7 +55,7 @@ export class ArgumentDef {
    *    manage the memory of a WebAssembly module.
    * @param {T} value The original value of the argument.
    */
-  unmarshall (address, memoryManager, value) {
+  unmarshall (address: number, memoryManager: MemoryManager, value: any): any {
     if (this.type instanceof ValueType) {
       return value
     }

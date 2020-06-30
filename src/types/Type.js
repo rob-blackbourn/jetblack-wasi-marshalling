@@ -11,7 +11,11 @@ export class Type {
     this.TypedArrayType = typedArrayType
   }
 
-  free (address: number, memoryManager: MemoryManager): void {
+  alloc (memoryManager: MemoryManager, array: ?any): number {
+    throw new Error('Not Implemented')
+  }
+
+  free (address: number, memoryManager: MemoryManager, value: ?any): void {
     throw new Error('Not Implemented')
   }
 
@@ -19,7 +23,10 @@ export class Type {
     throw new Error('Not Implemented')
   }
 
-  unmarshall (address: number, memoryManager: MemoryManager): any {
+  unmarshall (address: number, memoryManager: MemoryManager, value: ?any): any {
     throw new Error('Not Implemented')
+  }
+
+  copy (dest: any, source: any): any {
   }
 }
