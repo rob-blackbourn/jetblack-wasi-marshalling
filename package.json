@@ -9,7 +9,12 @@
     "url": "git+https://github.com/rob-blackbourn/jetblack-wasi-marshalling.git"
   },
   "homepage": "https://github.com/rob-blackbourn/jetblack-wasi-marshalling#readme",
-  "keywords": ["wasi", "marshalling", "wasm", "WebAssembly"],
+  "keywords": [
+    "wasi",
+    "marshalling",
+    "wasm",
+    "WebAssembly"
+  ],
   "main": "@jetblack/was-marshalling.min.js",
   "scripts": {
     "build:bundlejs:prd": "webpack --config webpack.config.build-lib.js --mode production",
@@ -20,27 +25,32 @@
     "exec:browser": "webpack-dev-server --config webpack.config.exec-open-browser.js",
     "exec:all": "run-p exec:nodejs exec:es6 exec:browser",
     "start": "run-s build exec:all",
-    "test": "mocha test/**/*test*.js --require @babel/register"
+    "test": "mocha test/**/*test*.js --require @babel/register",
+    "flow": "flow"
   },
   "devDependencies": {
-    "eslint": "^7.2.0",
-    "malloc": "^1.1.0",
-    "mocha": "^8.0.1",
-    "standard": "^14.3.4",
+    "@babel/cli": "^7.10.4",
     "@babel/core": "^7.10.3",
     "@babel/preset-env": "^7.10.2",
+    "@babel/preset-flow": "^7.10.4",
     "@babel/register": "^7.10.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
+    "core-js": "^3.6.5",
+    "eslint": "^7.2.0",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "flow-bin": "^0.128.0",
+    "malloc": "^1.1.0",
+    "mocha": "^8.0.1",
     "npm-run-all": "^4.1.5",
+    "standard": "^14.3.4",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   },
-  "dependencies": {
-    "core-js": "^3.6.5"
-  },
+  "dependencies": {},
   "standard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "plugins": [ "flowtype" ]
   }
 }

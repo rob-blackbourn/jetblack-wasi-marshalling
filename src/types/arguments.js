@@ -1,19 +1,23 @@
+// @flow
+
+import { Type } from './Type'
+
 import { ArgumentDef } from './ArgumentDef'
 
-export class In extends ArgumentDef {
-  constructor (type) {
+export class In<T> extends ArgumentDef<T> {
+  constructor (type: Type<T>) {
     super(type, true, false)
   }
 }
 
-export class Out extends ArgumentDef {
-  constructor (type) {
+export class Out<T> extends ArgumentDef<T> {
+  constructor (type: Type<T>) {
     super(type, false, true)
   }
 }
 
-export class InOut extends ArgumentDef {
-  constructor (type) {
+export class InOut<T> extends ArgumentDef<T> {
+  constructor (type: Type<T>) {
     super(type, true, true)
   }
 }

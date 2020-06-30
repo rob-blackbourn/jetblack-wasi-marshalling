@@ -1,5 +1,14 @@
+// @flow
+
+import { $DataView } from 'flow-bin'
+
 export class MemoryManager {
-  constructor (memory, malloc, free) {
+  memory: WebAssembly.Memory
+  malloc: (byteLength: number) => number
+  free: (address: number) => void
+  dataView: $DataView
+
+  constructor (memory: WebAssembly.Memory, malloc: (byteLength: number) => number, free: (address: number) => void) {
     this.memory = memory
     this.malloc = malloc
     this.free = free
