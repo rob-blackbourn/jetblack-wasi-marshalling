@@ -15,7 +15,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     this.length = length
   }
 
-  alloc (memoryManager: MemoryManager, array: ?Array<any>): number {
+  alloc (memoryManager: MemoryManager, array: ?Array<T>): number {
     if (this.length != null && array != null && this.length !== array.length) {
       throw new RangeError('Invalid array length')
     }
