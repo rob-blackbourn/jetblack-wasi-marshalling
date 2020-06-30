@@ -11,11 +11,11 @@ export class Type<T> {
     this.TypedArrayType = typedArrayType
   }
 
-  alloc (memoryManager: MemoryManager, array: ?any): number {
+  alloc (memoryManager: MemoryManager, array: ?T): number {
     throw new Error('Not Implemented')
   }
 
-  free (address: number, memoryManager: MemoryManager, value: ?any): void {
+  free (address: number, memoryManager: MemoryManager, value: ?T): void {
     throw new Error('Not Implemented')
   }
 
