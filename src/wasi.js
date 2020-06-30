@@ -1,7 +1,9 @@
+// @flow
+
 import { MemoryManager } from './MemoryManager'
 import { WASI, STDOUT, STDERR } from './constants'
 
-function drainWriter (write, prev, current) {
+function drainWriter (write: (line: string) => void, prev: string, current: string): string {
   let text = prev + current
   while (text.includes('\n')) {
     const [line, rest] = text.split('\n', 2)
@@ -14,7 +16,13 @@ function drainWriter (write, prev, current) {
 // An implementation of WASI which supports the minimum
 // required to use multi byte characters.
 export class Wasi {
-  constructor (env) {
+  env: { [string]: string }
+  instance: ?WebAssembly.Instance
+  memoryManager: ?MemoryManager
+  stdoutText: string
+  stderrText: string
+
+  constructor (env: { [string]: string }) {
     this.env = env
     this.instance = null
     this.memoryManager = null
@@ -23,21 +31,22 @@ export class Wasi {
   }
 
   // Initialise the instance from the WebAssembly.
-  init (instance) {
+  init (instance: WebAssembly.Instance) {
     this.instance = instance
+    // $FlowFixMe
     this.memoryManager = new MemoryManager(
-      instance.exports.memory,
-      instance.exports.malloc,
-      instance.exports.free
+      (instance.exports.memory: any),
+      (instance.exports.malloc: any),
+      (instance.exports.free: any)
     )
   }
 
   // Get the environment variables.
-  environ_get (environ, environBuf) {
+  environ_get (environ: number, environBuf: number): number {
     const encoder = new TextEncoder()
 
     Object.entries(this.env).map(
-      ([key, value]) => `${key}=${value}`
+      ([key: string, value: string]) => `${key}=${value}`
     ).forEach(envVar => {
       this.memoryManager.dataView.setUint32(environ, environBuf, true)
       environ += 4
@@ -50,7 +59,7 @@ export class Wasi {
   }
 
   // Get the size required to store the environment variables.
-  environ_sizes_get (environCount, environBufSize) {
+  environ_sizes_get (environCount: number, environBufSize: number): number {
     const encoder = new TextEncoder()
 
     const envVars = Object.entries(this.env).map(
@@ -68,19 +77,19 @@ export class Wasi {
 
   // This gets called on exit to stop the running program.
   // We don't have anything to stop!
-  proc_exit (rval) {
+  proc_exit (rval: number) {
     return WASI.ESUCCESS
   }
 
-  fd_close (fd) {
+  fd_close (fd: number) {
     return WASI.ESUCCESS
   }
 
-  fd_seek (fd, offset_low, offset_high, whence, newOffset) {
+  fd_seek (fd: number, offset_low: number, offset_high: number, whence: number, newOffset: number) {
     return WASI.ESUCCESS
   }
 
-  fd_write (fd, iovs, iovsLen, nwritten) {
+  fd_write (fd: number, iovs: number, iovsLen: number, nwritten: number) {
     if (!(fd === 1 | fd === 2)) {
       return WASI.ERRNO.BADF
     }
@@ -111,9 +120,12 @@ export class Wasi {
     return WASI.ESUCCESS
   }
 
-  fd_fdstat_get (fd, stat) {
+  fd_fdstat_get (fd: number, stat: number) {
     if (!(fd === 1 | fd === 2)) {
       return WASI.ERRNO.BADF
+    }
+    if (this.memoryManager == null || this.memoryManager.dataView == undefined) {
+      throw new Error('No memory')
     }
 
     this.memoryManager.dataView.setUint8(stat + 0, WASI.FILETYPE.CHARACTER_DEVICE)
