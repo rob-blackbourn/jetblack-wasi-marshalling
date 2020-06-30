@@ -5,16 +5,16 @@ import { MemoryManager } from '../MemoryManager'
 import { ArgumentDef } from './ArgumentDef'
 import { Type } from './Type'
 
-export class FunctionPrototype<R> {
+export class FunctionPrototype<T> {
   argDefs: Array<ArgumentDef<any>>
-  returns: ?Type<R>
+  returns: ?Type<T>
 
-  constructor (argDefs: Array<ArgumentDef<any>>, returns: ?Type<R>) {
+  constructor (argDefs: Array<ArgumentDef<any>>, returns: ?Type<T>) {
     this.argDefs = argDefs
     this.returns = returns
   }
 
-  invoke (memoryManager: MemoryManager, func: (...any) => any, ...args: Array<any>): any {
+  invoke (memoryManager: MemoryManager, func: (...any) => any, ...args: Array<any>): ?T {
     if (this.argDefs.length !== args.length) {
       throw new RangeError('Invalid number of arguments')
     }
