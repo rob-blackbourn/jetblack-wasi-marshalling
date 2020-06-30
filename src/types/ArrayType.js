@@ -1,13 +1,21 @@
+// @flow
+
+import { MemoryManager } from '../MemoryManager'
+
 import { ReferenceType } from './ReferenceType'
+import { Type } from './Type'
 
 export class ArrayType extends ReferenceType {
-  constructor (type, length) {
+  type: Type
+  length: ?number
+
+  constructor (type: Type, length: number) {
     super()
     this.type = type
     this.length = length
   }
 
-  alloc (memoryManager, array) {
+  alloc (memoryManager: MemoryManager, array: ?Array<any>): number {
     if (this.length != null && array != null && this.length !== array.length) {
       throw new RangeError('Invalid array length')
     }
@@ -19,19 +27,22 @@ export class ArrayType extends ReferenceType {
     return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
-  free (address, memoryManager, value) {
+  free (address: number, memoryManager: MemoryManager, array: ?Array<any>): void {
     try {
-      const length = this.length || value.length
+      const length = array != null ? array.length : this.length
+      if (length == null) {
+        throw new Error('Unknwon length for array')
+      }
       if (this.type instanceof ReferenceType) {
         const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-        typedArray.forEach(item => this.type.free(item))
+        typedArray.forEach(item => this.type.free(item, memoryManager))
       }
     } finally {
       memoryManager.free(address)
     }
   }
 
-  marshall (array, memoryManager) {
+  marshall (array: Array<any>, memoryManager: MemoryManager): number {
     const address = this.alloc(memoryManager, array)
 
     const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, array.length)
@@ -46,9 +57,12 @@ export class ArrayType extends ReferenceType {
     return address
   }
 
-  unmarshall (address, memoryManager, value) {
+  unmarshall (address: number, memoryManager: MemoryManager, array: ?Array<any>): Array<any> {
     try {
-      const length = this.length || value.length
+      const length = array != null ? array.length : this.length
+      if (length == null) {
+        throw new Error('Unknwon length for array')
+      }
       const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
       return this.type instanceof ReferenceType
         ? Array.from(typedArray, x => this.type.unmarshall(x, memoryManager))
@@ -58,7 +72,7 @@ export class ArrayType extends ReferenceType {
     }
   }
 
-  copy (dest, source) {
+  copy (dest: Array<any>, source: Array<any>): Array<any> {
     dest.splice(0, dest.length, ...source)
     return dest
   }
