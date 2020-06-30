@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Rob Blackbourn <rob.blackbourn@gmail.com> (https://github.com/rob-blackbourn)",
   "license": "Apache-2.0",
-  "description": "",
+  "description": "A simple marshalling layer for WASI",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rob-blackbourn/jetblack-wasi-marshalling.git"
