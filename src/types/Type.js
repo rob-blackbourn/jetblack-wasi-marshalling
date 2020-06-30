@@ -27,6 +27,7 @@ export class Type<T> {
     throw new Error('Not Implemented')
   }
 
-  copy (dest: any, source: any): any {
+  copy (dest: T, source: T): T {
+    throw new Error('Not Implemented')
   }
 }
