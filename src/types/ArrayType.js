@@ -27,7 +27,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
-  free (address: number, memoryManager: MemoryManager, array: ?Array<any>): void {
+  free (address: number, memoryManager: MemoryManager, array: ?Array<T>): void {
     try {
       const length = array != null ? array.length : this.length
       if (length == null) {
@@ -57,7 +57,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     return address
   }
 
-  unmarshall (address: number, memoryManager: MemoryManager, array: ?Array<any>): Array<any> {
+  unmarshall (address: number, memoryManager: MemoryManager, array: ?Array<T>): Array<T> {
     try {
       const length = array != null ? array.length : this.length
       if (length == null) {
@@ -72,7 +72,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     }
   }
 
-  copy (dest: Array<any>, source: Array<any>): Array<any> {
+  copy (dest: Array<T>, source: Array<T>): Array<T> {
     dest.splice(0, dest.length, ...source)
     return dest
   }
