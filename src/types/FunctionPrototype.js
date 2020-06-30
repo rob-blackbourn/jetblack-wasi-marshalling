@@ -14,7 +14,7 @@ export class FunctionPrototype<T> {
     this.returns = returns
   }
 
-  invoke (memoryManager: MemoryManager, func: (...any) => any, ...args: Array<any>): ?T {
+  invoke (memoryManager: MemoryManager, func: (...args: Array<any>) => any, ...args: Array<any>): ?T {
     if (this.argDefs.length !== args.length) {
       throw new RangeError('Invalid number of arguments')
     }
