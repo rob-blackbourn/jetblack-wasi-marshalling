@@ -48,23 +48,25 @@ export class ArgumentDef<T> {
     }
   }
 
-  /**
-   * Create a JavaScript representation of the value represented by the address.
-   * @param {number} address The byte offset of the
-   * @param {MemoryManager} memoryManager A class which provides methods to
-   *    manage the memory of a WebAssembly module.
-   * @param {T} value The original value of the argument.
-   */
-  unmarshall (address: number, memoryManager: MemoryManager, value: any): any {
+  unmarshall (addressOrValue: number|T, memoryManager: MemoryManager, value: ?T): number|?T {
     if (this.type instanceof ValueType) {
-      return value
+      return addressOrValue
     }
 
     if (this.isOutput) {
-      const result = this.type.unmarshall(address, memoryManager, value)
+      if (value == null) {
+        throw new Error('Out put argument missing')
+      }
+      if (typeof addressOrValue !== 'number') {
+        throw new Error('Expected address to be a number')
+      }
+      const result = this.type.unmarshall(addressOrValue, memoryManager, value)
       this.type.copy(value, result)
     } else {
-      this.type.free(address, memoryManager, value)
+      if (typeof addressOrValue !== 'number') {
+        throw new Error('Expected address to be a number')
+      }
+      this.type.free(addressOrValue, memoryManager, value)
     }
   }
 }
