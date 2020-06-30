@@ -1,10 +1,20 @@
+// @flow
+
+import { MemoryManager } from '../MemoryManager'
+
+import { ArgumentDef } from './ArgumentDef'
+import { Type } from './Type'
+
 export class FunctionPrototype {
-  constructor (argDefs, returns) {
+  argDefs: Array<ArgumentDef>
+  returns: ?Type
+
+  constructor (argDefs: Array<ArgumentDef>, returns: ?Type) {
     this.argDefs = argDefs
     this.returns = returns
   }
 
-  invoke (memoryManager, func, ...args) {
+  invoke (memoryManager: MemoryManager, func: (...any) => any, ...args: Array<any>): any {
     if (this.argDefs.length !== args.length) {
       throw new RangeError('Invalid number of arguments')
     }
