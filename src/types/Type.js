@@ -23,7 +23,7 @@ export class Type<T> {
     throw new Error('Not Implemented')
   }
 
-  unmarshall (address: number, memoryManager: MemoryManager, value: ?any): any {
+  unmarshall (address: number, memoryManager: MemoryManager, value: ?T): T {
     throw new Error('Not Implemented')
   }
 
