@@ -1,3 +1,7 @@
+// @flow
+
+import { MemoryManager } from '../MemoryManager'
+
 import { ValueType } from './ValueType'
 
 export class Int32Type extends ValueType {
@@ -5,13 +9,13 @@ export class Int32Type extends ValueType {
     super(Int32Array)
   }
 
-  marshall (value, memoryManager) {
+  marshall (value: number, memoryManager: MemoryManager): number {
     const address = this.alloc(memoryManager)
     memoryManager.dataView.setInt32(address, value)
     return address
   }
 
-  unmarshall (address, memoryManager) {
+  unmarshall (address: number, memoryManager: MemoryManager): number {
     try {
       return memoryManager.dataView.getInt32(address)
     } finally {

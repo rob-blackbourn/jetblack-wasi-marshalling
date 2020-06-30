@@ -1,3 +1,7 @@
+// @flow
+
+import { MemoryManager } from '../MemoryManager'
+
 import { ValueType } from './ValueType'
 
 export class Float64Type extends ValueType {
@@ -5,13 +9,13 @@ export class Float64Type extends ValueType {
     super(Float64Array)
   }
 
-  marshall (value, memoryManager) {
+  marshall (value: number, memoryManager:MemoryManager): number {
     const address = this.alloc(memoryManager)
     memoryManager.dataView.setFloat64(address, value)
     return address
   }
 
-  unmarshall (address, memoryManager) {
+  unmarshall (address: number, memoryManager: MemoryManager): number {
     try {
       return memoryManager.dataView.getFloat64(address)
     } finally {
