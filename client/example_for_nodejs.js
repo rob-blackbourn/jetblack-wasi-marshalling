@@ -4,6 +4,7 @@ const {
   Float64Type,
   ArrayType,
   Int32Type,
+  StringType,
   FunctionPrototype,
   In,
   Out
@@ -69,6 +70,20 @@ async function main () {
     output,
     4)
   console.log(output)
+
+  // The third example reverses a string.
+  const proto3 = new FunctionPrototype(
+    [
+      new In(new StringType())
+    ],
+    new StringType()
+  )
+  const reversed = proto3.invoke(
+    wasi.memoryManager,
+    wasi.instance.exports.reverseString,
+    'abcdefg'
+  )
+  console.log(reversed)
 }
 
 main()
