@@ -87,3 +87,14 @@ __attribute__((used)) char *reverseString(const char *in)
 	free(r);
 	return out;
 }
+
+__attribute__((used)) void sendToStdout(const char *text)
+{
+	fputs(text, stdout);
+}
+
+
+__attribute__((used)) void sendToStderr(const char *text)
+{
+	fputs(text, stderr);
+}
