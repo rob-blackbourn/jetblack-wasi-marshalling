@@ -10,7 +10,6 @@ import { ArgumentDef } from './ArgumentDef'
 export class In extends ArgumentDef {
   /**
    * Construct an input argument
-   * @template T
    * @param {Type<T>} type The argument type
    */
   constructor (type) {
@@ -26,7 +25,6 @@ export class In extends ArgumentDef {
 export class Out extends ArgumentDef {
   /**
    * Construct an output argument
-   * @template T
    * @param {Type<T>} type The argument type
    */
   constructor (type) {
@@ -42,7 +40,6 @@ export class Out extends ArgumentDef {
 export class InOut extends ArgumentDef {
   /**
    * Construct an input/output argument
-   * @template T
    * @param {Type<T>} type The argument type
    */
   constructor (type) {

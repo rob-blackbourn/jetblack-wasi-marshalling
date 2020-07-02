@@ -51,7 +51,7 @@ export class PointerType extends ReferenceType {
    */
   marshall (value, memoryManager) {
     const address = this.alloc(memoryManager)
-    const marshalledAddress = this.type.marshall(value.contents, memoryManager)
+    const marshalledAddress = /** @type {number} */ (this.type.marshall(value.contents, memoryManager))
     memoryManager.dataView.setUint32(address, marshalledAddress)
     return address
   }

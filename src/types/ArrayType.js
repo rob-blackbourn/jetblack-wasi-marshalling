@@ -52,7 +52,7 @@ export class ArrayType extends ReferenceType {
       }
       if (this.type instanceof ReferenceType) {
         const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-        typedArray.forEach(item => this.type.free(item, memoryManager))
+        typedArray.forEach(item => this.type.free(item, memoryManager, null))
       }
     } finally {
       memoryManager.free(address)
@@ -71,9 +71,10 @@ export class ArrayType extends ReferenceType {
     const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, array.length)
     if (this.type instanceof ReferenceType) {
       array.forEach((item, i) => {
-        typedArray[i] = this.type.marshall(item, memoryManager)
+        typedArray[i] = /** @type {number} */ (this.type.marshall(item, memoryManager))
       })
     } else {
+      // @ts-ignore
       typedArray.set(array)
     }
 
@@ -94,8 +95,11 @@ export class ArrayType extends ReferenceType {
         throw new Error('Unknwon length for array')
       }
       const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-      return this.type instanceof ReferenceType
-        ? Array.from(typedArray, x => this.type.unmarshall(x, memoryManager))
+        // @ts-ignore
+        return this.type instanceof ReferenceType
+        // @ts-ignore
+        ? Array.from(typedArray, x => (this.type.unmarshall(x, memoryManager, null)))
+        // @ts-ignore
         : Array.from(typedArray)
     } finally {
       memoryManager.free(address)

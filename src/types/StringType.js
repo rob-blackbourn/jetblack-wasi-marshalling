@@ -4,6 +4,7 @@ import { ReferenceType } from './ReferenceType'
 
 /**
  * A class representing a string type
+ * @template {string} T
  * @extends {ReferenceType<string>}
  */
 export class StringType extends ReferenceType {
@@ -18,7 +19,7 @@ export class StringType extends ReferenceType {
 
   /**
    * Marshall a string into memory
-   * @param {string} string The string to marshall
+   * @param {T} string The string to marshall
    * @param {MemoryManager} memoryManager The memory manager
    * @returns {number} The address of the string in memory
    */
@@ -37,9 +38,10 @@ export class StringType extends ReferenceType {
    * Unmarshall a string
    * @param {number} address The address of the string in memory
    * @param {MemoryManager} memoryManager The memory manager
-   * @returns {string} The unmarshalled string
+   * @param {T} [value] Optional unmarshalled value.
+   * @returns {T} The unmarshalled string
    */
-  unmarshall (address, memoryManager) {
+  unmarshall (address, memoryManager, value) {
     try {
       // Find the number of bytes before the null termination character.
       const buf = new Uint8Array(memoryManager.memory.buffer, address)
@@ -51,7 +53,7 @@ export class StringType extends ReferenceType {
       const array = new Uint8Array(memoryManager.memory.buffer, address, length)
       const decoder = new TextDecoder()
       const string = decoder.decode(array)
-      return string
+      return /** @type {T} */ (string)
     } finally {
       // Free the memory
       memoryManager.free(address)

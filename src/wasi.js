@@ -6,6 +6,20 @@ import { WASI, STDOUT, STDERR } from './constants'
  * @callback writeCallback
  * @param {string} text 
  */
+
+ /**
+ * Allocate memory
+ * @callback malloc
+ * @param {number} byteLength The number of bytes to allocate
+ * @returns {number} The address of the allocatred memory
+ */
+
+ /**
+  * Free allocated memory
+  * @callback free
+  * @param {number} address The address of the allocated memory
+  */
+
 /**
  * Drain the write if a newline is in the latest test.
  * @private
@@ -13,7 +27,7 @@ import { WASI, STDOUT, STDERR } from './constants'
  * @param {string} prev The previous text
  * @param {string} current The latest text
  */
-function drainWriter (write, prev, current) {
+function drainWriter(write, prev, current) {
   let text = prev + current
   while (text.includes('\n')) {
     const [line, rest] = text.split('\n', 2)
@@ -32,7 +46,7 @@ export class Wasi {
    * Create a Wasi class
    * @param {Object.<string, string>} env The environmanet variables
    */
-  constructor (env) {
+  constructor(env) {
     this.env = env
     /**
      * @property {WebAssembly.Instance} [instance] The WebAssembly instance.
@@ -59,12 +73,12 @@ export class Wasi {
    * Initialise the WASI class with a WebAssembly instance.
    * @param {WebAssembly.Instance} instance A WebAssembly instance
    */
-  init (instance) {
+  init(instance) {
     this.instance = instance
     this.memoryManager = new MemoryManager(
-      instance.exports.memory,
-      instance.exports.malloc,
-      instance.exports.free)
+      /** @type {WebAssembly.Memory} */ (instance.exports.memory),
+      /** @type {malloc} */ (instance.exports.malloc),
+      /** @type {free} */ (instance.exports.free))
   }
 
   /**
@@ -72,7 +86,7 @@ export class Wasi {
    * @param {number} environ The environment
    * @param {number} environBuf The address of the buffer
    */
-  environ_get (environ, environBuf) {
+  environ_get(environ, environBuf) {
     const encoder = new TextEncoder()
 
     Object.entries(this.env).map(
@@ -93,7 +107,7 @@ export class Wasi {
    * @param {number} environCount The number of environment variables
    * @param {number} environBufSize The size of the environment variables bufer
    */
-  environ_sizes_get (environCount, environBufSize) {
+  environ_sizes_get(environCount, environBufSize) {
     const encoder = new TextEncoder()
 
     const envVars = Object.entries(this.env).map(
@@ -114,7 +128,7 @@ export class Wasi {
    * anything to stop!
    * @param {number} rval The return value
    */
-  proc_exit (rval) {
+  proc_exit(rval) {
     return WASI.ESUCCESS
   }
 
@@ -122,7 +136,7 @@ export class Wasi {
    * Open the file desriptor
    * @param {number} fd The file descriptor
    */
-  fd_close (fd) {
+  fd_close(fd) {
     return WASI.ESUCCESS
   }
 
@@ -134,7 +148,7 @@ export class Wasi {
    * @param {number} whence Whence
    * @param {number} newOffset The new offset
    */
-  fd_seek (fd, offset_low, offset_high, whence, newOffset) {
+  fd_seek(fd, offset_low, offset_high, whence, newOffset) {
     return WASI.ESUCCESS
   }
 
@@ -145,15 +159,15 @@ export class Wasi {
    * @param {number} iovsLen The length of the scatter vector
    * @param {number} nwritten The number of items written
    */
-  fd_write (fd, iovs, iovsLen, nwritten) {
-    if (!(fd === 1 | fd === 2)) {
+  fd_write(fd, iovs, iovsLen, nwritten) {
+    if (!(fd === 1 || fd === 2)) {
       return WASI.ERRNO.BADF
     }
 
     const buffers = Array.from({ length: iovsLen }, (_, i) => {
       const ptr = iovs + i * 8
-      const buf = this.memeoryManager.dataView.getUint32(ptr, true)
-      const bufLen = this.memeoryManager.dataView.getUint32(ptr + 4, true)
+      const buf = this.memoryManager.dataView.getUint32(ptr, true)
+      const bufLen = this.memoryManager.dataView.getUint32(ptr + 4, true)
       return new Uint8Array(this.memoryManager.memory.buffer, buf, bufLen)
     })
 
@@ -165,7 +179,7 @@ export class Wasi {
       text += textDecoder.decode(buf)
       written += buf.byteLength
     })
-    this.memeoryManager.dataView.setUint32(nwritten, written, true)
+    this.memoryManager.dataView.setUint32(nwritten, written, true)
 
     if (fd === STDOUT) {
       this.stdoutText = drainWriter(console.log, this.stdoutText, text)
@@ -181,8 +195,8 @@ export class Wasi {
    * @param {number} fd The file descriptor
    * @param {number} stat The status
    */
-  fd_fdstat_get (fd, stat) {
-    if (!(fd === 1 | fd === 2)) {
+  fd_fdstat_get(fd, stat) {
+    if (!(fd === 1 || fd === 2)) {
       return WASI.ERRNO.BADF
     }
     if (this.memoryManager == null || this.memoryManager.dataView == undefined) {

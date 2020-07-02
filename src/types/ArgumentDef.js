@@ -6,6 +6,7 @@ import { Type } from './Type'
 /**
  * An argument definition is used by {@link FunctionPrototype} to define the
  * arguments to a function.
+ * @template T
  */
 export class ArgumentDef {
   /**
@@ -48,7 +49,7 @@ export class ArgumentDef {
    * @param {number|T} addressOrValue The marshalled address or value 
    * @param {MemoryManager} memoryManager The memory manager
    * @param {T} [value] The optional unmarshalled value. 
-   * @returns {T} The unmarshalled value.
+   * @returns {number|T} The unmarshalled value.
    */
   unmarshall (addressOrValue, memoryManager, value) {
     if (this.type instanceof ValueType) {

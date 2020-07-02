@@ -4,6 +4,7 @@ import { ValueType } from './ValueType'
 
 /**
  * A type representing an 8 bit unsigned integer
+ * @template {number} T
  * @extends {ValueType<T>}
  */
 export class Uint8Type extends ValueType {
@@ -16,7 +17,7 @@ export class Uint8Type extends ValueType {
 
   /**
    * Marshalls the value to a pointer
-   * @param {number} value The value to marhsall
+   * @param {T} value The value to marhsall
    * @param {MemoryManager} memoryManager The memory manager
    * @returns {number} The address of a pointer to the value
    */
@@ -30,11 +31,12 @@ export class Uint8Type extends ValueType {
    * Unmarshal the value from a pointer.
    * @param {number} address The address of the pointer to the value
    * @param {MemoryManager} memoryManager The memory manager
-   * @returns {number} The unmarshalled value.
+   * @param {T} [value] Optional unmarshalled value
+   * @returns {T} The unmarshalled value.
    */
-  unmarshall (address, memoryManager) {
+  unmarshall (address, memoryManager, value) {
     try {
-      return memoryManager.dataView.getUint8(address)
+      return /** @type {T} */ (memoryManager.dataView.getUint8(address))
     } finally {
       memoryManager.free(address)
     }

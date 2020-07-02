@@ -4,6 +4,7 @@ import { ValueType } from './ValueType'
 
 /**
  * A type representing a 64 bit float
+ * @template {number} T
  * @extends {ValueType<T>}
  */
 export class Float64Type extends ValueType {
@@ -30,11 +31,12 @@ export class Float64Type extends ValueType {
    * Unmarshal the value from a pointer.
    * @param {number} address The address of the pointer to the value
    * @param {MemoryManager} memoryManager The memory manager
-   * @returns {number} The unmarshalled value.
+   * @param {T} [value] Optional unmarshalled value.
+   * @returns {T} The unmarshalled value.
    */
-  unmarshall (address, memoryManager) {
+  unmarshall (address, memoryManager, value) {
     try {
-      return memoryManager.dataView.getFloat64(address)
+      return /** @type {T} */ (memoryManager.dataView.getFloat64(address))
     } finally {
       memoryManager.free(address)
     }
