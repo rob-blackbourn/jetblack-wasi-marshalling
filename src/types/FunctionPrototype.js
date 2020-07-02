@@ -6,7 +6,7 @@ import { Type } from './Type'
 /**
  * A function
  * @callback invokeCallback
- * @param {...any} args
+ * @param {...*} [args] Arguments
  * @return {*} Optional return value
  */
 /**

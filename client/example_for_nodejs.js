@@ -8,7 +8,7 @@ const {
   FunctionPrototype,
   In,
   Out
-} = require('../lib/index.develop.js')
+} = require('../lib/index.js')
 
 async function setupWasi (fileName, envVars) {
   // Read the wasm file.
@@ -19,7 +19,15 @@ async function setupWasi (fileName, envVars) {
 
   // Instantiate the wasm module.
   const res = await WebAssembly.instantiate(buf, {
-    wasi_snapshot_preview1: wasi
+    wasi_snapshot_preview1: {
+      environ_get: (environ, environBuf) => wasi.environ_get(environ, environBuf),
+      environ_sizes_get: (environCount, environBufSize) => wasi.environ_sizes_get(environCount, environBufSize),
+      proc_exit: rval => wasi.proc_exit(rval),
+      fd_close: fd => wasi.fd_close(fd),
+      fd_seek: (fd, offset_low, offset_high, whence, newOffset) => wasi.fd_seek(fd, offset_low, offset_high, whence, newOffset),
+      fd_write: (fd, iovs, iovsLen, nwritten) => wasi.fd_write(fd, iovs, iovsLen, nwritten),
+      fd_fdstat_get: (fd, stat) => wasi.fd_fdstat_get(fd, stat)
+    }
   })
 
   // Initialise the wasi instance

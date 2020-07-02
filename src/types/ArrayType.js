@@ -95,8 +95,8 @@ export class ArrayType extends ReferenceType {
         throw new Error('Unknwon length for array')
       }
       const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-        // @ts-ignore
-        return this.type instanceof ReferenceType
+      // @ts-ignore
+      return this.type instanceof ReferenceType
         // @ts-ignore
         ? Array.from(typedArray, x => (this.type.unmarshall(x, memoryManager, null)))
         // @ts-ignore

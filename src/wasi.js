@@ -108,6 +108,7 @@ export class Wasi {
    * @param {number} environBufSize The size of the environment variables bufer
    */
   environ_sizes_get(environCount, environBufSize) {
+    console.log('here', this)
     const encoder = new TextEncoder()
 
     const envVars = Object.entries(this.env).map(

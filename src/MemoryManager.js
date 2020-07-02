@@ -25,9 +25,12 @@ export class MemoryManager {
     this.memory = memory
     this.malloc = malloc
     this.free = free
-    /**
-     * @property {DataView} A data view of the memory of a WebAssembly
-     */
-    this.dataView = new DataView(this.memory.buffer)
+  }
+
+  /**
+   * @poperty {DataView}
+   */
+  get dataView() {
+    return new DataView(this.memory.buffer)
   }
 }
