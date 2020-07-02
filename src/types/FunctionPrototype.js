@@ -4,12 +4,6 @@ import { ArgumentDef } from './ArgumentDef'
 import { Type } from './Type'
 
 /**
- * A function
- * @callback invokeCallback
- * @param {...*} [args] Arguments
- * @return {*} Optional return value
- */
-/**
  * A function prototype
  * @template T
  */
@@ -27,7 +21,7 @@ export class FunctionPrototype {
   /**
    * Invoke a function
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {invokeCallback} func The function to invoke
+   * @param {Function} func The function to invoke
    * @param {Array<any>} args The function arguments
    * @returns {T} An optional return value
    */
