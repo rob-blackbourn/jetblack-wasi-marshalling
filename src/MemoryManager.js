@@ -25,12 +25,16 @@ export class MemoryManager {
     this.memory = memory
     this.malloc = malloc
     this.free = free
+    this._dataView = null
   }
 
   /**
    * @poperty {DataView}
    */
   get dataView() {
-    return new DataView(this.memory.buffer)
+    if (this._dataView == null || this._dataView.byteLength === 0) {
+      this._dataView = new DataView(this.memory.buffer)
+    }
+    return this._dataView
   }
 }
