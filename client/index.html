@@ -7,18 +7,19 @@
     <body>
         <h3>Use library directly with &lt;script&gt; tag</h3>
         <p>See console for output</p>
-        <script src="../lib/index.develop.js"></script>
+        <script src="index.js"></script>
         <script>
-console.log(WasiMarshalling)
+console.log(wasiMarshalling)
 const {
     Wasi,
     Float64Type,
     ArrayType,
     Int32Type,
+    StringType,
     FunctionPrototype,
     In,
     Out
-} = WasiMarshalling
+} = wasiMarshalling
 
 // Create the Wasi instance passing in environment variables.
 const wasi = new Wasi({})
@@ -26,7 +27,7 @@ const wasi = new Wasi({})
 // Instantiate the wasm module.
 WebAssembly.instantiateStreaming(
   fetch('example.wasm'), {
-    wasi_snapshot_preview1: wasi
+    wasi_snapshot_preview1: wasi.imports()
   })
   .then(res => {
     // Initialise the wasi instance
@@ -71,6 +72,20 @@ WebAssembly.instantiateStreaming(
       output,
       4)
     console.log(output)
+
+    // The third example reverses a string.
+    const proto3 = new FunctionPrototype(
+      [
+        new In(new StringType())
+      ],
+      new StringType()
+    )
+    const reversed = proto3.invoke(
+      wasi.memoryManager,
+      wasi.instance.exports.reverseString,
+      'abcdefg'
+    )
+    console.log(reversed)
   })
         </script>
     </body>

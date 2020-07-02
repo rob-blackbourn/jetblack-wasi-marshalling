@@ -108,7 +108,6 @@ export class Wasi {
    * @param {number} environBufSize The size of the environment variables bufer
    */
   environ_sizes_get(environCount, environBufSize) {
-    console.log('here', this)
     const encoder = new TextEncoder()
 
     const envVars = Object.entries(this.env).map(
@@ -209,5 +208,17 @@ export class Wasi {
     this.memoryManager.dataView.setBigUint64(stat + 8, WASI.RIGHTS.FD_WRITE, true)
     this.memoryManager.dataView.setBigUint64(stat + 16, WASI.RIGHTS.FD_WRITE, true)
     return WASI.ESUCCESS
+  }
+
+  imports() {
+    return {
+      environ_get: (environ, environBuf) => this.environ_get(environ, environBuf),
+      environ_sizes_get: (environCount, environBufSize) => this.environ_sizes_get(environCount, environBufSize),
+      proc_exit: rval => this.proc_exit(rval),
+      fd_close: fd => this.fd_close(fd),
+      fd_seek: (fd, offset_low, offset_high, whence, newOffset) => this.fd_seek(fd, offset_low, offset_high, whence, newOffset),
+      fd_write: (fd, iovs, iovsLen, nwritten) => this.fd_write(fd, iovs, iovsLen, nwritten),
+      fd_fdstat_get: (fd, stat) => this.fd_fdstat_get(fd, stat)
+    }
   }
 }

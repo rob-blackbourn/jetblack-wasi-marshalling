@@ -1,6 +1,6 @@
 {
   "name": "@jetblack/wasi-marshalling",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Rob Blackbourn <rob.blackbourn@gmail.com> (https://github.com/rob-blackbourn)",
   "license": "Apache-2.0",
   "description": "A simple marshalling layer for WASI",
@@ -18,10 +18,9 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c",
-    "exec:nodejs": "node client/example_for_nodejs.js",
-    "exec:es6": "webpack-dev-server --config webpack.config.exec_es6.js",
-    "exec:browser": "webpack-dev-server --config webpack.config.exec-open-browser.js",
-    "exec:all": "run-p exec:nodejs exec:es6 exec:browser",
+    "exec:prepare": "npm run build && cp lib/index.js client/index.js",
+    "exec:nodejs": "npm run exec:prepare && node client/main.js",
+    "exec:browser": "npm run exec:prepare && npx serve client",
     "start": "run-s build exec:all",
     "test": "mocha -r esm test/**/*test*.js",
     "jsdoc": "jsdoc -c jsdoc.json"

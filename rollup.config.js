@@ -11,7 +11,7 @@ export default {
     {
       file: 'lib/index.min.js',
       format: 'umd',
-      name: 'wasiMarshalling',
+      name: 'WasiMarshalling',
       plugins: [terser()]
     }
   ]
