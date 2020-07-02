@@ -1,21 +1,32 @@
-// @flow
-
 import { MemoryManager } from '../MemoryManager'
 
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
-export class ArrayType<T> extends ReferenceType<Array<T>> {
-  type: Type<T>
-  length: ?number
-
-  constructor (type: Type<T>, length: number) {
+/**
+ * An arra type
+ * @template T
+ * @extends {ReferenceType<Array<T>>}
+ */
+export class ArrayType extends ReferenceType {
+  /**
+   * Construct an array type
+   * @param {Type<T>} type The type of the elements in the array
+   * @param {number} length The length of the array
+   */
+  constructor (type, length) {
     super()
     this.type = type
     this.length = length
   }
 
-  alloc (memoryManager: MemoryManager, array: ?Array<T>): number {
+  /**
+   * Allocate memory for the array.
+   * @param {MemoryManager} memoryManager The memory manager
+   * @param {Array<T>} [array] An optional unmarshalled array
+   * @returns {number} The address of the allocated memory.
+   */
+  alloc (memoryManager, array) {
     if (this.length != null && array != null && this.length !== array.length) {
       throw new RangeError('Invalid array length')
     }
@@ -27,7 +38,13 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
-  free (address: number, memoryManager: MemoryManager, array: ?Array<T>): void {
+  /**
+   * Fre allocated memory.
+   * @param {number} address The address of the memory to be freed
+   * @param {MemoryManager} memoryManager The memory manager
+   * @param {Array<T>} [array] An optional unmarshalled array
+   */
+  free (address, memoryManager, array) {
     try {
       const length = array != null ? array.length : this.length
       if (length == null) {
@@ -42,7 +59,13 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     }
   }
 
-  marshall (array: Array<T>, memoryManager: MemoryManager): number {
+  /**
+   * Marshall a (possibly nested) array.
+   * @param {Array<T>} array The array to be marshalled
+   * @param {MemoryManager} memoryManager The memory manager
+   * @returns {number} The address of the marshalled array
+   */
+  marshall (array, memoryManager) {
     const address = this.alloc(memoryManager, array)
 
     const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, array.length)
@@ -57,7 +80,14 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     return address
   }
 
-  unmarshall (address: number, memoryManager: MemoryManager, array: ?Array<T>): Array<T> {
+  /**
+   * Unmarshall a possibly nested array.
+   * @param {number} address The address of the marshalled array
+   * @param {MemoryManager} memoryManager The memory manager
+   * @param {Array<T>} array AN optional unmarshalled array
+   * @returns {Array<T>} The unmarshalled array
+   */
+  unmarshall (address, memoryManager, array) {
     try {
       const length = array != null ? array.length : this.length
       if (length == null) {
@@ -72,7 +102,13 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     }
   }
 
-  copy (dest: Array<T>, source: Array<T>): Array<T> {
+  /**
+   * Copy an array
+   * @param {Array<T>} dest The array to receive the data
+   * @param {Array<T>} source The source array
+   * @returns {Array<T>} The array to which the data was copied.
+   */
+  copy (dest, source) {
     dest.splice(0, dest.length, ...source)
     return dest
   }

@@ -1,9 +1,19 @@
-// @flow
-
 import { MemoryManager } from './MemoryManager'
 import { WASI, STDOUT, STDERR } from './constants'
 
-function drainWriter (write: (line: string) => void, prev: string, current: string): string {
+/**
+ * Write
+ * @callback writeCallback
+ * @param {string} text 
+ */
+/**
+ * Drain the write if a newline is in the latest test.
+ * @private
+ * @param {writeCallback} write A function to write a complete line
+ * @param {string} prev The previous text
+ * @param {string} current The latest text
+ */
+function drainWriter (write, prev, current) {
   let text = prev + current
   while (text.includes('\n')) {
     const [line, rest] = text.split('\n', 2)
@@ -13,40 +23,60 @@ function drainWriter (write: (line: string) => void, prev: string, current: stri
   return text
 }
 
-// An implementation of WASI which supports the minimum
-// required to use multi byte characters.
+/**
+ * An implementation of WASI which supports the minimum required to memory
+ * allocation, stdio and multi byte (UTF-8) characters.
+ */
 export class Wasi {
-  env: { [string]: string }
-  instance: ?WebAssembly.Instance
-  memoryManager: ?MemoryManager
-  stdoutText: string
-  stderrText: string
-
-  constructor (env: { [string]: string }) {
+  /**
+   * Create a Wasi class
+   * @param {Object.<string, string>} env The environmanet variables
+   */
+  constructor (env) {
     this.env = env
+    /**
+     * @property {WebAssembly.Instance} [instance] The WebAssembly instance.
+     */
     this.instance = null
+    /**
+     * @property {MemoryManager} [memoryManager] The WebAssembly memory manager
+     */
     this.memoryManager = null
+    /**
+     * @private
+     * @property {string} Text sent to stdout before a newline has een received.
+     */
     this.stdoutText = ''
+    /**
+     * @private
+     * @property {string} Text sent to stderr before a newline has een received.
+     */
     this.stderrText = ''
   }
 
   // Initialise the instance from the WebAssembly.
-  init (instance: WebAssembly.Instance) {
+  /**
+   * Initialise the WASI class with a WebAssembly instance.
+   * @param {WebAssembly.Instance} instance A WebAssembly instance
+   */
+  init (instance) {
     this.instance = instance
-    // $FlowFixMe
     this.memoryManager = new MemoryManager(
-      (instance.exports.memory: any),
-      (instance.exports.malloc: any),
-      (instance.exports.free: any)
-    )
+      instance.exports.memory,
+      instance.exports.malloc,
+      instance.exports.free)
   }
 
-  // Get the environment variables.
-  environ_get (environ: number, environBuf: number): number {
+  /**
+   * Get the environment variables.
+   * @param {number} environ The environment
+   * @param {number} environBuf The address of the buffer
+   */
+  environ_get (environ, environBuf) {
     const encoder = new TextEncoder()
 
     Object.entries(this.env).map(
-      ([key: string, value: string]) => `${key}=${value}`
+      ([key, value]) => `${key}=${value}`
     ).forEach(envVar => {
       this.memoryManager.dataView.setUint32(environ, environBuf, true)
       environ += 4
@@ -58,8 +88,12 @@ export class Wasi {
     return WASI.ESUCCESS
   }
 
-  // Get the size required to store the environment variables.
-  environ_sizes_get (environCount: number, environBufSize: number): number {
+  /**
+   * Get the size required to store the environment variables.
+   * @param {number} environCount The number of environment variables
+   * @param {number} environBufSize The size of the environment variables bufer
+   */
+  environ_sizes_get (environCount, environBufSize) {
     const encoder = new TextEncoder()
 
     const envVars = Object.entries(this.env).map(
@@ -75,21 +109,43 @@ export class Wasi {
     return WASI.ESUCCESS
   }
 
-  // This gets called on exit to stop the running program.
-  // We don't have anything to stop!
-  proc_exit (rval: number) {
+  /**
+   * This gets called on exit to stop the running program. We don't have
+   * anything to stop!
+   * @param {number} rval The return value
+   */
+  proc_exit (rval) {
     return WASI.ESUCCESS
   }
 
-  fd_close (fd: number) {
+  /**
+   * Open the file desriptor
+   * @param {number} fd The file descriptor
+   */
+  fd_close (fd) {
     return WASI.ESUCCESS
   }
 
-  fd_seek (fd: number, offset_low: number, offset_high: number, whence: number, newOffset: number) {
+  /**
+   * Seek
+   * @param {number} fd The file descriptor
+   * @param {number} offset_low The low offset
+   * @param {number} offset_high The high offset
+   * @param {number} whence Whence
+   * @param {number} newOffset The new offset
+   */
+  fd_seek (fd, offset_low, offset_high, whence, newOffset) {
     return WASI.ESUCCESS
   }
 
-  fd_write (fd: number, iovs: number, iovsLen: number, nwritten: number) {
+  /**
+   * Write to a file descriptor
+   * @param {number} fd The file descriptor
+   * @param {number} iovs The address of the scatter vector
+   * @param {number} iovsLen The length of the scatter vector
+   * @param {number} nwritten The number of items written
+   */
+  fd_write (fd, iovs, iovsLen, nwritten) {
     if (!(fd === 1 | fd === 2)) {
       return WASI.ERRNO.BADF
     }
@@ -120,7 +176,12 @@ export class Wasi {
     return WASI.ESUCCESS
   }
 
-  fd_fdstat_get (fd: number, stat: number) {
+  /**
+   * Get the status of a file descriptor
+   * @param {number} fd The file descriptor
+   * @param {number} stat The status
+   */
+  fd_fdstat_get (fd, stat) {
     if (!(fd === 1 | fd === 2)) {
       return WASI.ERRNO.BADF
     }

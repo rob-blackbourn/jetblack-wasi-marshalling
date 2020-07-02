@@ -1,21 +1,38 @@
-// @flow
-
 import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-export class Uint8Type extends ValueType<number> {
+/**
+ * A type representing an 8 bit unsigned integer
+ * @extends {ValueType<T>}
+ */
+export class Uint8Type extends ValueType {
+  /**
+   * Construct an 8 bit unsigned integer type
+   */
   constructor () {
     super(Uint8Array)
   }
 
-  marshall (value: number, memoryManager: MemoryManager): number {
+  /**
+   * Marshalls the value to a pointer
+   * @param {number} value The value to marhsall
+   * @param {MemoryManager} memoryManager The memory manager
+   * @returns {number} The address of a pointer to the value
+   */
+  marshall (value, memoryManager) {
     const address = this.alloc(memoryManager)
     memoryManager.dataView.setUint8(address, value)
     return address
   }
 
-  unmarshall (address: number, memoryManager: MemoryManager): number {
+  /**
+   * Unmarshal the value from a pointer.
+   * @param {number} address The address of the pointer to the value
+   * @param {MemoryManager} memoryManager The memory manager
+   * @returns {number} The unmarshalled value.
+   */
+  unmarshall (address, memoryManager) {
     try {
       return memoryManager.dataView.getUint8(address)
     } finally {

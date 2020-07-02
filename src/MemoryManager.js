@@ -1,17 +1,33 @@
-// @flow
+/**
+ * Allocate memory
+ * @callback malloc
+ * @param {number} byteLength The number of bytes to allocate
+ * @returns {number} The address of the allocatred memory
+ */
 
-import { $DataView } from 'flow-bin'
+ /**
+  * Free allocated memory
+  * @callback free
+  * @param {number} address The address of the allocated memory
+  */
 
+/**
+ * The memory manager
+ */
 export class MemoryManager {
-  memory: WebAssembly.Memory
-  malloc: (byteLength: number) => number
-  free: (address: number) => void
-  dataView: $DataView
-
-  constructor (memory: WebAssembly.Memory, malloc: (byteLength: number) => number, free: (address: number) => void) {
+  /**
+   * Construct a memory manager.
+   * @param {WebAssembly.Memory} memory The memory fro the WebAssembly instance.
+   * @param {malloc} malloc Allocate memory
+   * @param {free} free Free memory
+   */
+  constructor (memory, malloc, free) {
     this.memory = memory
     this.malloc = malloc
     this.free = free
+    /**
+     * @property {DataView} A data view of the memory of a WebAssembly
+     */
     this.dataView = new DataView(this.memory.buffer)
   }
 }
