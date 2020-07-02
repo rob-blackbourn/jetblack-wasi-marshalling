@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import assert from 'assert'
 import { makeMockMemoryManager } from './mocks'
 import {
@@ -32,7 +30,7 @@ describe('test the marshaller', () => {
     const value = [1, 2, 3, 4]
     const type = new ArrayType(new Float64Type(), value.length)
     const ptr = type.marshall(value, memoryManager)
-    const roundtrip = type.unmarshall(ptr, memoryManager)
+    const roundtrip = type.unmarshall(ptr, memoryManager, null)
     console.log(value, roundtrip)
     assert.deepStrictEqual(value, roundtrip)
     assert.strictEqual(memoryManager.usedCount(), 0)
@@ -43,7 +41,7 @@ describe('test the marshaller', () => {
     const value = ['one', 'two', 'three', 'four']
     const type = new ArrayType(new StringType(), value.length)
     const ptr = type.marshall(value, memoryManager)
-    const roundtrip = type.unmarshall(ptr, memoryManager)
+    const roundtrip = type.unmarshall(ptr, memoryManager, null)
     assert.deepStrictEqual(value, roundtrip)
     assert.strictEqual(memoryManager.usedCount(), 0)
   })
@@ -56,7 +54,7 @@ describe('test the marshaller', () => {
     ]
     const type = new ArrayType(new ArrayType(new Int32Type(), 3), 2)
     const ptr = type.marshall(value, memoryManager)
-    const roundtrip = type.unmarshall(ptr, memoryManager)
+    const roundtrip = type.unmarshall(ptr, memoryManager, null)
     assert.deepStrictEqual(value, roundtrip)
     assert.strictEqual(memoryManager.usedCount(), 0)
   })
@@ -87,8 +85,8 @@ describe('test the marshaller', () => {
 
     const proto = new FunctionPrototype(
       [
-        new In(new ArrayType(new Float64Type())),
-        new In(new ArrayType(new Float64Type())),
+        new In(new ArrayType(new Float64Type(), null)),
+        new In(new ArrayType(new Float64Type(), null)),
         new In(new Int32Type())
       ],
       new ArrayType(new Float64Type(), 4)
@@ -119,9 +117,9 @@ describe('test the marshaller', () => {
 
     const proto = new FunctionPrototype(
       [
-        new In(new ArrayType(new Float64Type())),
-        new In(new ArrayType(new Float64Type())),
-        new Out(new ArrayType(new Float64Type())),
+        new In(new ArrayType(new Float64Type(), null)),
+        new In(new ArrayType(new Float64Type(), null)),
+        new Out(new ArrayType(new Float64Type(), null)),
         new In(new Int32Type())
       ]
     )
