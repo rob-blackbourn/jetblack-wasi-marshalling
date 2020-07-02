@@ -236,7 +236,7 @@
     
 
     
-    <h4 class="name" id="alloc"><span class="type-signature"></span>alloc<span class="signature">(memoryManager, array)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id="alloc"><span class="type-signature">(abstract) </span>alloc<span class="signature">(memoryManager, array)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -360,7 +360,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line22">line 22</a>
+        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -418,7 +418,7 @@
     
 
     
-    <h4 class="name" id="copy"><span class="type-signature"></span>copy<span class="signature">(dest, source)</span><span class="type-signature"> &rarr; {T}</span></h4>
+    <h4 class="name" id="copy"><span class="type-signature">(abstract) </span>copy<span class="signature">(dest, source)</span><span class="type-signature"> &rarr; {T}</span></h4>
     
 
     
@@ -542,7 +542,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line63">line 63</a>
+        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -600,7 +600,7 @@
     
 
     
-    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(address, memoryManager, value)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="free"><span class="type-signature">(abstract) </span>free<span class="signature">(address, memoryManager, value<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -632,6 +632,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -657,6 +659,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -680,6 +690,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -702,6 +720,16 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -747,7 +775,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line32">line 32</a>
+        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -783,7 +811,7 @@
     
 
     
-    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(value, memoryManager)</span><span class="type-signature"> &rarr; {number|T}</span></h4>
+    <h4 class="name" id="marshall"><span class="type-signature">(abstract) </span>marshall<span class="signature">(value, memoryManager)</span><span class="type-signature"> &rarr; {number|T}</span></h4>
     
 
     
@@ -907,7 +935,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line42">line 42</a>
+        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -968,7 +996,7 @@
     
 
     
-    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(address, memoryManager, value)</span><span class="type-signature"> &rarr; {T}</span></h4>
+    <h4 class="name" id="unmarshall"><span class="type-signature">(abstract) </span>unmarshall<span class="signature">(address, memoryManager, value<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {T}</span></h4>
     
 
     
@@ -1000,6 +1028,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1025,6 +1055,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1048,6 +1086,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1070,6 +1116,16 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1115,7 +1171,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line53">line 53</a>
+        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -1185,7 +1241,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 12:56:56 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 17:07:15 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

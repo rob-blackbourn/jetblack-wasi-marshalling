@@ -23,10 +23,11 @@
     "exec:browser": "webpack-dev-server --config webpack.config.exec-open-browser.js",
     "exec:all": "run-p exec:nodejs exec:es6 exec:browser",
     "start": "run-s build exec:all",
-    "test": "mocha test/**/*test*.js",
+    "test": "mocha -r esm test/**/*test*.js",
     "jsdoc": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
+    "esm": "^3.2.25",
     "jsdoc": "^3.6.4",
     "jsdoc-typeof-plugin": "^1.0.0",
     "malloc": "^1.1.0",
