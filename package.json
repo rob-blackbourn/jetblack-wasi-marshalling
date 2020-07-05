@@ -26,6 +26,7 @@
     "jsdoc": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
+    "@types/mocha": "^7.0.2",
     "esm": "^3.2.25",
     "jsdoc": "^3.6.4",
     "jsdoc-typeof-plugin": "^1.0.0",

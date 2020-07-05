@@ -61,9 +61,10 @@ export class PointerType extends ReferenceType {
    * Unmarshall a pointer.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer in memory
+   * @param {Pointer<T>} [value] An optional value
    * @returns {Pointer<T>} The unmarshalled pointer
    */
-  unmarshall (memoryManager, address) {
+  unmarshall (memoryManager, address, value) {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
       return new Pointer(this.type.unmarshall(memoryManager, marshalledAddress))
