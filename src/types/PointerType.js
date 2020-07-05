@@ -21,13 +21,13 @@ export class PointerType extends ReferenceType {
 
   /**
    * Free an allocated pointer
-   * @param {number} address The address of the pointer to be freed
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the pointer to be freed
    */
-  free (address, memoryManager) {
+  free (memoryManager, address) {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
-      this.type.free(marshalledAddress, memoryManager)
+      this.type.free(memoryManager, marshalledAddress)
     } finally {
       memoryManager.free(address)
     }
@@ -45,26 +45,27 @@ export class PointerType extends ReferenceType {
 
   /**
    * Marshal a pointer
-   * @param {Pointer<T>} value The value to marshall
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {Pointer<T>} value The value to marshall
    * @returns {number} The address of the pointer in memory
    */
-  marshall (value, memoryManager) {
+  marshall (memoryManager, value) {
     const address = this.alloc(memoryManager)
-    const marshalledAddress = /** @type {number} */ (this.type.marshall(value.contents, memoryManager))
+    const marshalledAddress = /** @type {number} */ (this.type.marshall(memoryManager, value.contents))
     memoryManager.dataView.setUint32(address, marshalledAddress)
     return address
   }
 
   /**
-   * 
-   * @param {number} address The address of the pointer in memory
+   * Unmarshall a pointer.
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the pointer in memory
+   * @returns {Pointer<T>} The unmarshalled pointer
    */
-  unmarshall (address, memoryManager) {
+  unmarshall (memoryManager, address) {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
-      return new Pointer(this.type.unmarshall(marshalledAddress, memoryManager))
+      return new Pointer(this.type.unmarshall(memoryManager, marshalledAddress))
     } finally {
       memoryManager.free(address)
     }

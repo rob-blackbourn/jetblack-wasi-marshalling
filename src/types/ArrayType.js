@@ -40,11 +40,11 @@ export class ArrayType extends ReferenceType {
 
   /**
    * Free allocated memory.
-   * @param {number} address The address of the memory to be freed
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the memory to be freed
    * @param {Array<T>} [array] An optional unmarshalled array
    */
-  free (address, memoryManager, array) {
+  free (memoryManager, address, array) {
     try {
       const length = array != null ? array.length : this.length
       if (length == null) {
@@ -52,7 +52,7 @@ export class ArrayType extends ReferenceType {
       }
       if (this.type instanceof ReferenceType) {
         const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-        typedArray.forEach(item => this.type.free(item, memoryManager, null))
+        typedArray.forEach(item => this.type.free(memoryManager, item, null))
       }
     } finally {
       memoryManager.free(address)
@@ -61,17 +61,17 @@ export class ArrayType extends ReferenceType {
 
   /**
    * Marshall a (possibly nested) array.
-   * @param {Array<T>} array The array to be marshalled
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {Array<T>} array The array to be marshalled
    * @returns {number} The address of the marshalled array
    */
-  marshall (array, memoryManager) {
+  marshall (memoryManager, array) {
     const address = this.alloc(memoryManager, array)
 
     const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, array.length)
     if (this.type instanceof ReferenceType) {
       array.forEach((item, i) => {
-        typedArray[i] = /** @type {number} */ (this.type.marshall(item, memoryManager))
+        typedArray[i] = /** @type {number} */ (this.type.marshall(memoryManager, item))
       })
     } else {
       // @ts-ignore
@@ -83,12 +83,12 @@ export class ArrayType extends ReferenceType {
 
   /**
    * Unmarshall a possibly nested array.
-   * @param {number} address The address of the marshalled array
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the marshalled array
    * @param {Array<T>} array AN optional unmarshalled array
    * @returns {Array<T>} The unmarshalled array
    */
-  unmarshall (address, memoryManager, array) {
+  unmarshall (memoryManager, address, array) {
     try {
       const length = array != null ? array.length : this.length
       if (length == null) {
@@ -98,7 +98,7 @@ export class ArrayType extends ReferenceType {
       // @ts-ignore
       return this.type instanceof ReferenceType
         // @ts-ignore
-        ? Array.from(typedArray, x => (this.type.unmarshall(x, memoryManager, null)))
+        ? Array.from(typedArray, x => (this.type.unmarshall(memoryManager, x, null)))
         // @ts-ignore
         : Array.from(typedArray)
     } finally {

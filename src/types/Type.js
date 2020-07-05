@@ -27,34 +27,34 @@ export class Type {
   /**
    * Free the memory for the value
    * @abstract
-   * @param {number} address The address of the value in memory
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the value in memory
    * @param {T} [value] An optional unmarshalled value
    */
-  free (address, memoryManager, value) {
+  free (memoryManager, address, value) {
     throw new Error('Not Implemented')
   }
 
   /**
    * Marshal a value.
    * @abstract
-   * @param {T} value The value to marshall
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {T} value The value to marshall
    * @returns {number|T} The marshalled value
    */
-  marshall (value, memoryManager) {
+  marshall (memoryManager, value) {
     throw new Error('Not Implemented')
   }
 
   /**
    * Unmarshall a value.
    * @abstract
-   * @param {number} address The address of the value in memory
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the value in memory
    * @param {T} [value] An optional unmarshalled value
    * @returns {T}
    */
-  unmarshall (address, memoryManager, value) {
+  unmarshall (memoryManager, address, value) {
     throw new Error('Not Implemented')
   }
 

@@ -10,20 +10,20 @@ import { ReferenceType } from './ReferenceType'
 export class StringType extends ReferenceType {
   /**
    * Free an allocated string
-   * @param {number} address The address of the string in memory
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the string in memory
    */
-  free (address, memoryManager) {
+  free (memoryManager, address) {
     memoryManager.free(address)
   }
 
   /**
    * Marshall a string into memory
-   * @param {T} string The string to marshall
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {T} string The string to marshall
    * @returns {number} The address of the string in memory
    */
-  marshall (string, memoryManager) {
+  marshall (memoryManager, string) {
     // Encode the string in utf-8.
     const encoder = new TextEncoder()
     const encodedString = encoder.encode(string)
@@ -36,12 +36,12 @@ export class StringType extends ReferenceType {
 
   /**
    * Unmarshall a string
-   * @param {number} address The address of the string in memory
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the string in memory
    * @param {T} [value] Optional unmarshalled value.
    * @returns {T} The unmarshalled string
    */
-  unmarshall (address, memoryManager, value) {
+  unmarshall (memoryManager, address, value) {
     try {
       // Find the number of bytes before the null termination character.
       const buf = new Uint8Array(memoryManager.memory.buffer, address)

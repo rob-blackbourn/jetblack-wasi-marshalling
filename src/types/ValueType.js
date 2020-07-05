@@ -19,11 +19,11 @@ export class ValueType extends Type {
 
   /**
    * Free allocated memory
-   * @param {number} address The address of the memory to be freed
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the memory to be freed
    * @param {T} [value] Optional unmarshalled value.
    */
-  free (address, memoryManager, value) {
+  free (memoryManager, address, value) {
     memoryManager.free(address)
   }
 }

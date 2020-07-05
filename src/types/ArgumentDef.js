@@ -29,16 +29,16 @@ export class ArgumentDef {
    * WebAssembly module instance. For value types this is typically the value
    * itself. For refrence types memory will be allocated in the instance, and
    * the data will be copied.
-   * @param {T} value The value for which a WebAssembly value should be created
    * @param {MemoryManager} memoryManager A class which provides methods to
+   * @param {T} value The value for which a WebAssembly value should be created
    *    manage the memory of a WebAssembly module.
    * @returns {number|T} The address of the allocated memory or the marshalled value.
    */
-  marshall (value, memoryManager) {
+  marshall (memoryManager, value) {
     if (this.type instanceof ValueType) {
       return value
     } else if (this.isInput) {
-      return this.type.marshall(value, memoryManager)
+      return this.type.marshall(memoryManager, value)
     } else {
       return this.type.alloc(memoryManager, value)
     }
@@ -46,12 +46,12 @@ export class ArgumentDef {
 
   /**
    * Unmarshall a value
-   * @param {number|T} addressOrValue The marshalled address or value 
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number|T} addressOrValue The marshalled address or value 
    * @param {T} [value] The optional unmarshalled value. 
    * @returns {number|T} The unmarshalled value.
    */
-  unmarshall (addressOrValue, memoryManager, value) {
+  unmarshall (memoryManager, addressOrValue, value) {
     if (this.type instanceof ValueType) {
       return addressOrValue
     }
@@ -63,13 +63,13 @@ export class ArgumentDef {
       if (typeof addressOrValue !== 'number') {
         throw new Error('Expected address to be a number')
       }
-      const result = this.type.unmarshall(addressOrValue, memoryManager, value)
+      const result = this.type.unmarshall(memoryManager, addressOrValue, value)
       this.type.copy(value, result)
     } else {
       if (typeof addressOrValue !== 'number') {
         throw new Error('Expected address to be a number')
       }
-      this.type.free(addressOrValue, memoryManager, value)
+      this.type.free(memoryManager, addressOrValue, value)
     }
   }
 }

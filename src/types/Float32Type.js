@@ -17,11 +17,11 @@ export class Float32Type extends ValueType {
 
   /**
    * Marshalls the value to a pointer
-   * @param {number} value The value to marhsall
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} value The value to marhsall
    * @returns {number} The address of a pointer to the value
    */
-  marshall (value, memoryManager) {
+  marshall (memoryManager, value) {
     const address = this.alloc(memoryManager)
     memoryManager.dataView.setFloat32(address, value)
     return address
@@ -29,12 +29,12 @@ export class Float32Type extends ValueType {
 
   /**
    * Unmarshal the value from a pointer.
-   * @param {number} address The address of the pointer to the value
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the pointer to the value
    * @param {T} [value] Optional unmarshalled value
    * @returns {T} The unmarshalled value.
    */
-  unmarshall (address, memoryManager, value) {
+  unmarshall (memoryManager, address, value) {
     try {
       return /** @type {T} */ (memoryManager.dataView.getFloat32(address))
     } finally {

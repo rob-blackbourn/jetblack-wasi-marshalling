@@ -17,11 +17,11 @@ export class Float64Type extends ValueType {
 
   /**
    * Marshalls the value to a pointer
-   * @param {number} value The value to marhsall
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} value The value to marhsall
    * @returns {number} The address of a pointer to the value
    */
-  marshall (value, memoryManager) {
+  marshall (memoryManager, value) {
     const address = this.alloc(memoryManager)
     memoryManager.dataView.setFloat64(address, value)
     return address
@@ -34,7 +34,7 @@ export class Float64Type extends ValueType {
    * @param {T} [value] Optional unmarshalled value.
    * @returns {T} The unmarshalled value.
    */
-  unmarshall (address, memoryManager, value) {
+  unmarshall (memoryManager, address, value) {
     try {
       return /** @type {T} */ (memoryManager.dataView.getFloat64(address))
     } finally {
