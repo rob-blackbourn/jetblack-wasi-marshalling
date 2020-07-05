@@ -1,15 +1,9 @@
-/**
- * Allocate memory
- * @callback malloc
- * @param {number} byteLength The number of bytes to allocate
- * @returns {number} The address of the allocatred memory
- */
+// @filename: types.d.ts
 
- /**
-  * Free allocated memory
-  * @callback free
-  * @param {number} address The address of the allocated memory
-  */
+/**
+ * TypedArayType
+ * @typedef {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} TypedArrayType
+ */
 
 /**
  * The memory manager
@@ -26,6 +20,13 @@ export class MemoryManager {
     this.malloc = malloc
     this.free = free
     this._dataView = null
+    this._registry = typeof FinalizationRegistry === 'undefined'
+      ? null
+      : new FinalizationRegistry(addresses => {
+          for (const address of addresses) {
+            free(address)
+          }
+        })
   }
 
   /**
@@ -36,5 +37,15 @@ export class MemoryManager {
       this._dataView = new DataView(this.memory.buffer)
     }
     return this._dataView
+  }
+
+  /**
+   * @property {FinalizationRegistry}
+   */
+  get registry() {
+    if (this._registry === null) {
+      throw new Error('FinalizationRegistry is not implemented')
+    }
+    return this._registry
   }
 }

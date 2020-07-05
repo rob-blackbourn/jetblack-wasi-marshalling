@@ -4,7 +4,7 @@ import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
 /**
- * An arra type
+ * An array type
  * @template T
  * @extends {ReferenceType<Array<T>>}
  */
@@ -39,7 +39,7 @@ export class ArrayType extends ReferenceType {
   }
 
   /**
-   * Fre allocated memory.
+   * Free allocated memory.
    * @param {number} address The address of the memory to be freed
    * @param {MemoryManager} memoryManager The memory manager
    * @param {Array<T>} [array] An optional unmarshalled array
