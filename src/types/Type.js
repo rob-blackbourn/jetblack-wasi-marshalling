@@ -17,10 +17,10 @@ export class Type {
    * Allocate memory for the type
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} array An optional array
+   * @param {T} value An optional value
    * @returns {number} The address of the allocated value in memory
    */
-  alloc (memoryManager, array) {
+  alloc (memoryManager, value) {
     throw new Error('Not Implemented')
   }
 

@@ -22,7 +22,7 @@ export class Int64Type extends ValueType {
    * @returns {number} The address of a pointer to the value
    */
   marshall (memoryManager, value) {
-    const address = this.alloc(memoryManager)
+    const address = this.alloc(memoryManager, value)
     memoryManager.dataView.setBigInt64(address, value)
     return address
   }

@@ -36,9 +36,10 @@ export class PointerType extends ReferenceType {
   /**
    * Allocate memory for a pointer
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {Pointer<T>} [value] The value
    * @returns{number} The address of the allocated memory
    */
-  alloc (memoryManager) {
+  alloc (memoryManager, value) {
     const address = memoryManager.malloc(Uint32Array.BYTES_PER_ELEMENT)
     return address
   }
@@ -50,7 +51,7 @@ export class PointerType extends ReferenceType {
    * @returns {number} The address of the pointer in memory
    */
   marshall (memoryManager, value) {
-    const address = this.alloc(memoryManager)
+    const address = this.alloc(memoryManager, value)
     const marshalledAddress = /** @type {number} */ (this.type.marshall(memoryManager, value.contents))
     memoryManager.dataView.setUint32(address, marshalledAddress)
     return address

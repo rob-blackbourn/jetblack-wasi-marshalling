@@ -18,11 +18,11 @@ export class Float32Type extends ValueType {
   /**
    * Marshalls the value to a pointer
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {number} value The value to marhsall
+   * @param {T} value The value to marhsall
    * @returns {number} The address of a pointer to the value
    */
   marshall (memoryManager, value) {
-    const address = this.alloc(memoryManager)
+    const address = this.alloc(memoryManager, value)
     memoryManager.dataView.setFloat32(address, value)
     return address
   }

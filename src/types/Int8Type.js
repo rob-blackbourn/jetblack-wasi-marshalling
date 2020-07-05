@@ -22,7 +22,7 @@ export class Int8Type extends ValueType {
    * @returns {number} The address of a pointer to the value
    */
   marshall (memoryManager, value) {
-    const address = this.alloc(memoryManager)
+    const address = this.alloc(memoryManager, value)
     memoryManager.dataView.setInt8(address, value)
     return address
   }

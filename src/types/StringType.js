@@ -20,13 +20,13 @@ export class StringType extends ReferenceType {
   /**
    * Marshall a string into memory
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} string The string to marshall
+   * @param {T} value The string to marshall
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, string) {
+  marshall (memoryManager, value) {
     // Encode the string in utf-8.
     const encoder = new TextEncoder()
-    const encodedString = encoder.encode(string)
+    const encodedString = encoder.encode(value)
     // Copy the string into memory allocated in the WebAssembly
     const address = memoryManager.malloc(encodedString.byteLength + 1)
     const buf = new Uint8Array(memoryManager.memory.buffer, address, encodedString.byteLength + 1)

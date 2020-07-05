@@ -33,14 +33,17 @@ export class ArgumentDef {
    * @param {T} value The value for which a WebAssembly value should be created
    *    manage the memory of a WebAssembly module.
    * @returns {number|T} The address of the allocated memory or the marshalled value.
+   * @throws {Error} If the argument is not input and/or output.
    */
   marshall (memoryManager, value) {
     if (this.type instanceof ValueType) {
       return value
     } else if (this.isInput) {
       return this.type.marshall(memoryManager, value)
-    } else {
+    } else if (this.isOutput) {
       return this.type.alloc(memoryManager, value)
+    } else {
+      throw new Error('An argument must be input and/or output')
     }
   }
 

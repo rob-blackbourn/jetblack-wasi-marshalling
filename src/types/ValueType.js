@@ -11,9 +11,10 @@ export class ValueType extends Type {
   /**
    * Allocate memory for the type
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {T} [value] An optional value.
    * @returns {number} The address of the allocated memory
    */
-  alloc (memoryManager) {
+  alloc (memoryManager, value) {
     return memoryManager.malloc(this.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
