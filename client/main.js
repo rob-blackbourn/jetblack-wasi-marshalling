@@ -3,12 +3,14 @@ const {
   Wasi,
   Float64Type,
   ArrayType,
+  ManagedArrayType,
   Int32Type,
   StringType,
   FunctionPrototype,
   In,
-  Out
-} = require('./index.js')
+  Out,
+  MemoryManager
+} = require('../lib/index.js')
 
 async function setupWasi (fileName, envVars) {
   // Read the wasm file.
@@ -84,6 +86,44 @@ async function main () {
     'abcdefg'
   )
   console.log(reversed)
+
+
+  const proto4 = new FunctionPrototype(
+    [
+      new In(new ManagedArrayType(new Float64Type())),
+      new In(new ManagedArrayType(new Float64Type())),
+      new In(new Int32Type())
+    ],
+    new ManagedArrayType(new Float64Type(), 4)
+  )
+
+  const result4 = proto4.invoke(
+    wasi.memoryManager,
+    wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+    wasi.memoryManager.createManagedArray(Float64Array, [1, 2, 3, 4]),
+    wasi.memoryManager.createManagedArray(Float64Array, [5, 6, 7, 8]),
+    4)
+  console.log(result4)
+
+  const proto5 = new FunctionPrototype(
+    [
+      new In(new ManagedArrayType(new Float64Type())),
+      new In(new ManagedArrayType(new Float64Type())),
+      new Out(new ManagedArrayType(new Float64Type())),
+      new In(new Int32Type())
+    ]
+  )
+
+  const output2 = wasi.memoryManager.createManagedArray(Float64Array, 4)
+  proto5.invoke(
+    wasi.memoryManager,
+    wasi.instance.exports.multipleFloat64ArraysWithOutputArray,
+    wasi.memoryManager.createManagedArray(Float64Array, [1, 2, 3, 4]),
+    wasi.memoryManager.createManagedArray(Float64Array, [5, 6, 7, 8]),
+    output2,
+    4)
+  console.log(output2)
+
 }
 
 main()

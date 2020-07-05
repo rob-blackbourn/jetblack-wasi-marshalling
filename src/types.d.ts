@@ -12,4 +12,7 @@ declare class TypedArray {
     constructor(buffer: ArrayBuffer, byteOffset: number, length: number);
 
     byteOffset: number;
+    length: number;
+
+    forEach(callback: (item: any, i: number) => void): void;
 }

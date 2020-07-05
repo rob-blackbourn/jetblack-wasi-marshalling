@@ -48,4 +48,23 @@ export class MemoryManager {
     }
     return this._registry
   }
+
+  /**
+   * Create a typed array
+   * @template {number|bigint} T
+   * @param {TypedArrayType} typedArrayType The typed array type
+   * @param {number|Array<T>} lengthOrArray Either an array to be copied or the required length
+   * @returns {TypedArray} The typed array
+   */
+  createManagedArray (typedArrayType, lengthOrArray) {
+    const length = lengthOrArray instanceof Array ? lengthOrArray.length : lengthOrArray
+    const address = this.malloc(length * typedArrayType.BYTES_PER_ELEMENT)
+    const typedArray = new typedArrayType(this.memory.buffer, address, length)
+    if (lengthOrArray instanceof Array) {
+      // @ts-ignore
+      typedArray.set(lengthOrArray)
+    }
+    this.registry.register(typedArray, address)
+    return typedArray
+  }
 }

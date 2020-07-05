@@ -12,9 +12,9 @@ export class ArrayType extends ReferenceType {
   /**
    * Construct an array type
    * @param {Type<T>} type The type of the elements in the array
-   * @param {number} length The length of the array
+   * @param {number} [length] The length of the array
    */
-  constructor (type, length) {
+  constructor (type, length = null) {
     super()
     this.type = type
     this.length = length

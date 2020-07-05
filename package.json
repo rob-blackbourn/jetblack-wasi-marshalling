@@ -22,7 +22,7 @@
     "exec:nodejs": "npm run exec:prepare && node client/main.js",
     "exec:browser": "npm run exec:prepare && npx serve client",
     "start": "run-s build exec:all",
-    "test": "mocha -r esm test/**/*test*.js",
+    "test": "mocha --harmony-weak-refs -r esm test/**/*test*.js",
     "jsdoc": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
