@@ -17,13 +17,13 @@ export class Int16Type extends ValueType {
 
   /**
    * Marshalls the value to a pointer
-   * @param {T} value The value to marhsall
+   * @param {T} unmarshalledValue The value to marhsall
    * @param {MemoryManager} memoryManager The memory manager
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager, value) {
-    const address = this.alloc(memoryManager, value)
-    memoryManager.dataView.setInt16(address, value)
+  marshall (memoryManager, unmarshalledValue) {
+    const address = this.alloc(memoryManager, unmarshalledValue)
+    memoryManager.dataView.setInt16(address, unmarshalledValue)
     return address
   }
 
@@ -31,10 +31,10 @@ export class Int16Type extends ValueType {
    * Unmarshal the value from a pointer.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer to the value
-   * @param {T} [value] Optional unmarshalled value
+   * @param {T} [unmarshalledValue] Optional unmarshalled value
    * @returns {T} The unmarshalled value.
    */
-  unmarshall (memoryManager, address, value) {
+  unmarshall (memoryManager, address, unmarshalledValue) {
     try {
       return /** @type {T} */ (memoryManager.dataView.getInt16(address))
     } finally {

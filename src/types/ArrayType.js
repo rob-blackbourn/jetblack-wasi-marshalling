@@ -23,15 +23,15 @@ export class ArrayType extends ReferenceType {
   /**
    * Allocate memory for the array.
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Array<T>} [value] An optional unmarshalled array
+   * @param {Array<T>} [unmarshalledValue] An optional unmarshalled array
    * @returns {number} The address of the allocated memory.
    */
-  alloc (memoryManager, value) {
-    if (this.length != null && value != null && this.length !== value.length) {
+  alloc (memoryManager, unmarshalledValue) {
+    if (this.length != null && unmarshalledValue != null && this.length !== unmarshalledValue.length) {
       throw new RangeError('Invalid array length')
     }
 
-    const length = value != null ? value.length : this.length
+    const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
     if (length == null) {
       throw new RangeError('Unknown length')
     }
@@ -42,11 +42,11 @@ export class ArrayType extends ReferenceType {
    * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {Array<T>} [value] An optional unmarshalled array
+   * @param {Array<T>} [unmarshalledValue] An optional unmarshalled array
    */
-  free (memoryManager, address, value) {
+  free (memoryManager, address, unmarshalledValue) {
     try {
-      const length = value != null ? value.length : this.length
+      const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
       if (length == null) {
         throw new Error('Unknwon length for array')
       }
@@ -62,20 +62,20 @@ export class ArrayType extends ReferenceType {
   /**
    * Marshall a (possibly nested) array.
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Array<T>} value The array to be marshalled
+   * @param {Array<T>} unmarshalledValue The array to be marshalled
    * @returns {number} The address of the marshalled array
    */
-  marshall (memoryManager, value) {
-    const address = this.alloc(memoryManager, value)
+  marshall (memoryManager, unmarshalledValue) {
+    const address = this.alloc(memoryManager, unmarshalledValue)
 
-    const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, value.length)
+    const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, unmarshalledValue.length)
     if (this.type instanceof ReferenceType) {
-      value.forEach((item, i) => {
+      unmarshalledValue.forEach((item, i) => {
         typedArray[i] = /** @type {number} */ (this.type.marshall(memoryManager, item))
       })
     } else {
       // @ts-ignore
-      typedArray.set(value)
+      typedArray.set(unmarshalledValue)
     }
 
     return address
@@ -85,12 +85,12 @@ export class ArrayType extends ReferenceType {
    * Unmarshall a possibly nested array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the marshalled array
-   * @param {Array<T>} value AN optional unmarshalled array
+   * @param {Array<T>} unmarshalledValue AN optional unmarshalled array
    * @returns {Array<T>} The unmarshalled array
    */
-  unmarshall (memoryManager, address, value) {
+  unmarshall (memoryManager, address, unmarshalledValue) {
     try {
-      const length = value != null ? value.length : this.length
+      const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
       if (length == null) {
         throw new Error('Unknwon length for array')
       }

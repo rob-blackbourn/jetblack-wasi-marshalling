@@ -30,18 +30,18 @@ export class ArgumentDef {
    * itself. For refrence types memory will be allocated in the instance, and
    * the data will be copied.
    * @param {MemoryManager} memoryManager A class which provides methods to
-   * @param {T} value The value for which a WebAssembly value should be created
+   * @param {T} unmarshalledValue The value for which a WebAssembly value should be created
    *    manage the memory of a WebAssembly module.
    * @returns {number|T} The address of the allocated memory or the marshalled value.
    * @throws {Error} If the argument is not input and/or output.
    */
-  marshall (memoryManager, value) {
+  marshall (memoryManager, unmarshalledValue) {
     if (this.type instanceof ValueType) {
-      return value
+      return unmarshalledValue
     } else if (this.isInput) {
-      return this.type.marshall(memoryManager, value)
+      return this.type.marshall(memoryManager, unmarshalledValue)
     } else if (this.isOutput) {
-      return this.type.alloc(memoryManager, value)
+      return this.type.alloc(memoryManager, unmarshalledValue)
     } else {
       throw new Error('An argument must be input and/or output')
     }
@@ -51,28 +51,28 @@ export class ArgumentDef {
    * Unmarshall a value
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number|T} addressOrValue The marshalled address or value 
-   * @param {T} [value] The optional unmarshalled value. 
+   * @param {T} [unmarshalledValue] The optional unmarshalled value. 
    * @returns {number|T} The unmarshalled value.
    */
-  unmarshall (memoryManager, addressOrValue, value) {
+  unmarshall (memoryManager, addressOrValue, unmarshalledValue) {
     if (this.type instanceof ValueType) {
       return addressOrValue
     }
 
     if (this.isOutput) {
-      if (value == null) {
+      if (unmarshalledValue == null) {
         throw new Error('Out put argument missing')
       }
       if (typeof addressOrValue !== 'number') {
         throw new Error('Expected address to be a number')
       }
-      const result = this.type.unmarshall(memoryManager, addressOrValue, value)
-      this.type.copy(value, result)
+      const result = this.type.unmarshall(memoryManager, addressOrValue, unmarshalledValue)
+      this.type.copy(unmarshalledValue, result)
     } else {
       if (typeof addressOrValue !== 'number') {
         throw new Error('Expected address to be a number')
       }
-      this.type.free(memoryManager, addressOrValue, value)
+      this.type.free(memoryManager, addressOrValue, unmarshalledValue)
     }
   }
 }

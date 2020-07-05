@@ -17,10 +17,10 @@ export class Type {
    * Allocate memory for the type
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} value An optional value
+   * @param {T} unmarshalledValue An optional value
    * @returns {number} The address of the allocated value in memory
    */
-  alloc (memoryManager, value) {
+  alloc (memoryManager, unmarshalledValue) {
     throw new Error('Not Implemented')
   }
 
@@ -29,9 +29,9 @@ export class Type {
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the value in memory
-   * @param {T} [value] An optional unmarshalled value
+   * @param {T} [unmarshalledValue] An optional unmarshalled value
    */
-  free (memoryManager, address, value) {
+  free (memoryManager, address, unmarshalledValue) {
     throw new Error('Not Implemented')
   }
 
@@ -39,10 +39,10 @@ export class Type {
    * Marshal a value.
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} value The value to marshall
+   * @param {T} unmarshalledValue The value to marshall
    * @returns {number|T} The marshalled value
    */
-  marshall (memoryManager, value) {
+  marshall (memoryManager, unmarshalledValue) {
     throw new Error('Not Implemented')
   }
 
@@ -51,10 +51,10 @@ export class Type {
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the value in memory
-   * @param {T} [value] An optional unmarshalled value
+   * @param {T} [unmarshalledValue] An optional unmarshalled value
    * @returns {T}
    */
-  unmarshall (memoryManager, address, value) {
+  unmarshall (memoryManager, address, unmarshalledValue) {
     throw new Error('Not Implemented')
   }
 
