@@ -15,7 +15,7 @@ export {
   Float64Type,
   ReferenceType,
   StringType,
-  ManagedStringType,
+  StringBufferType,
   Pointer,
   PointerType,
   ArrayType,

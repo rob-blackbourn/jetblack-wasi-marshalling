@@ -69,23 +69,27 @@ export class MemoryManager {
   }
 
   /**
-   * Marshall a string
+   * Create a string buffer
    * @param {string} string The string to marshall
    * @param {boolean} finalize If true add to the finalizer registry
-   * @returns {number} The address of a the string.
+   * @returns {Uint8Array} The address of a the string.
    */
-  marshallString (string, finalize) {
+  createStringBuffer (string, finalize) {
     // Encode the string in utf-8.
     const encoder = new TextEncoder()
     const encodedString = encoder.encode(string)
-    // Copy the string into memory allocated in the WebAssembly
+    // Copy the string into memory allocated in the WebAssembly adding one
+    // character for the null byte.
     const address = this.malloc(encodedString.byteLength + 1)
-    const buf = new Uint8Array(this.memory.buffer, address, encodedString.byteLength + 1)
+    const buf = new Uint8Array(
+      this.memory.buffer,
+      address,
+      encodedString.byteLength + 1)
     buf.set(encodedString)
     if (finalize) {
       this.registry.register(buf, address)
     }
-    return address
+    return buf
   }
 
   /**
