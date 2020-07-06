@@ -19,7 +19,7 @@ export {
   Pointer,
   PointerType,
   ArrayType,
-  ManagedArrayType,
+  TypedArrayType,
   ArgumentDef,
   In,
   Out,

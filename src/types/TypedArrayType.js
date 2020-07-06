@@ -8,7 +8,7 @@ import { Type } from './Type'
  * @template T
  * @extends {ReferenceType<TypedArray>}
  */
-export class ManagedArrayType extends ReferenceType {
+export class TypedArrayType extends ReferenceType {
   /**
    * Construct an array type
    * @param {Type<T>} type The type of the elements in the array
@@ -45,17 +45,18 @@ export class ManagedArrayType extends ReferenceType {
   }
 
   /**
-   * Marshall a (possibly nested) array.
+   * Marshall a typed array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {TypedArray} unmarshalledValue The array to be marshalled
    * @returns {number} The address of the marshalled array
    */
   marshall (memoryManager, unmarshalledValue) {
+    // Simply return the address.
     return unmarshalledValue.byteOffset
   }
 
   /**
-   * Unmarshall a possibly nested array.
+   * Unmarshall a typed array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the marshalled array
    * @param {TypedArray} [unmarshalledValue] An optional unmarshalled array
@@ -63,9 +64,16 @@ export class ManagedArrayType extends ReferenceType {
    */
   unmarshall (memoryManager, address, unmarshalledValue) {
     if (unmarshalledValue != null) {
+      // We assume typed arrays are references to memory in the WebAssembly, so
+      // the unmarshalled value and the marshalled values are the same,
       return unmarshalledValue
     } else {
-      const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, this.length)
+      // Create the typed array. Note this is just a view into the WebAssembly
+      // memory buffer.
+      const typedArray = new this.type.TypedArrayType(
+        memoryManager.memory.buffer,
+        address,
+        this.length)
       memoryManager.registry.register(typedArray, address)
       return typedArray
     }

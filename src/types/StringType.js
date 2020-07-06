@@ -25,14 +25,7 @@ export class StringType extends ReferenceType {
    * @returns {number} The address of the string in memory
    */
   marshall (memoryManager, unmarshalledValue) {
-    // Encode the string in utf-8.
-    const encoder = new TextEncoder()
-    const encodedString = encoder.encode(unmarshalledValue)
-    // Copy the string into memory allocated in the WebAssembly
-    const address = memoryManager.malloc(encodedString.byteLength + 1)
-    const buf = new Uint8Array(memoryManager.memory.buffer, address, encodedString.byteLength + 1)
-    buf.set(encodedString)
-    return address
+    return memoryManager.marshallString(unmarshalledValue, false)
   }
 
   /**
@@ -44,17 +37,7 @@ export class StringType extends ReferenceType {
    */
   unmarshall (memoryManager, address, unmarshalledValue) {
     try {
-      // Find the number of bytes before the null termination character.
-      const buf = new Uint8Array(memoryManager.memory.buffer, address)
-      let length = 0
-      while (buf[length] !== 0) {
-        ++length
-      }
-      // Decode the string
-      const array = new Uint8Array(memoryManager.memory.buffer, address, length)
-      const decoder = new TextDecoder()
-      const string = decoder.decode(array)
-      return /** @type {T} */ (string)
+      return /** @type {T} */ (memoryManager.unmarshallString(address, false))
     } finally {
       // Free the memory
       memoryManager.free(address)

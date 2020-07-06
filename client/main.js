@@ -3,7 +3,7 @@ const {
   Wasi,
   Float64Type,
   ArrayType,
-  ManagedArrayType,
+  TypedArrayType,
   Int32Type,
   StringType,
   FunctionPrototype,
@@ -90,36 +90,36 @@ async function main () {
 
   const proto4 = new FunctionPrototype(
     [
-      new In(new ManagedArrayType(new Float64Type())),
-      new In(new ManagedArrayType(new Float64Type())),
+      new In(new TypedArrayType(new Float64Type())),
+      new In(new TypedArrayType(new Float64Type())),
       new In(new Int32Type())
     ],
-    new ManagedArrayType(new Float64Type(), 4)
+    new TypedArrayType(new Float64Type(), 4)
   )
 
   const result4 = proto4.invoke(
     wasi.memoryManager,
     wasi.instance.exports.multipleFloat64ArraysReturningPtr,
-    wasi.memoryManager.createManagedArray(Float64Array, [1, 2, 3, 4]),
-    wasi.memoryManager.createManagedArray(Float64Array, [5, 6, 7, 8]),
+    wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
+    wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
     4)
   console.log(result4)
 
   const proto5 = new FunctionPrototype(
     [
-      new In(new ManagedArrayType(new Float64Type())),
-      new In(new ManagedArrayType(new Float64Type())),
-      new Out(new ManagedArrayType(new Float64Type())),
+      new In(new TypedArrayType(new Float64Type())),
+      new In(new TypedArrayType(new Float64Type())),
+      new Out(new TypedArrayType(new Float64Type())),
       new In(new Int32Type())
     ]
   )
 
-  const output2 = wasi.memoryManager.createManagedArray(Float64Array, 4)
+  const output2 = wasi.memoryManager.createTypedArray(Float64Array, 4)
   proto5.invoke(
     wasi.memoryManager,
     wasi.instance.exports.multipleFloat64ArraysWithOutputArray,
-    wasi.memoryManager.createManagedArray(Float64Array, [1, 2, 3, 4]),
-    wasi.memoryManager.createManagedArray(Float64Array, [5, 6, 7, 8]),
+    wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
+    wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
     output2,
     4)
   console.log(output2)

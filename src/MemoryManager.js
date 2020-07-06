@@ -56,7 +56,7 @@ export class MemoryManager {
    * @param {number|Array<T>} lengthOrArray Either an array to be copied or the required length
    * @returns {TypedArray} The typed array
    */
-  createManagedArray (typedArrayType, lengthOrArray) {
+  createTypedArray (typedArrayType, lengthOrArray) {
     const length = lengthOrArray instanceof Array ? lengthOrArray.length : lengthOrArray
     const address = this.malloc(length * typedArrayType.BYTES_PER_ELEMENT)
     const typedArray = new typedArrayType(this.memory.buffer, address, length)
@@ -67,4 +67,48 @@ export class MemoryManager {
     this.registry.register(typedArray, address)
     return typedArray
   }
+
+  /**
+   * Marshall a string
+   * @param {string} string The string to marshall
+   * @param {boolean} finalize If true add to the finalizer registry
+   * @returns {number} The address of a the string.
+   */
+  marshallString (string, finalize) {
+    // Encode the string in utf-8.
+    const encoder = new TextEncoder()
+    const encodedString = encoder.encode(string)
+    // Copy the string into memory allocated in the WebAssembly
+    const address = this.malloc(encodedString.byteLength + 1)
+    const buf = new Uint8Array(this.memory.buffer, address, encodedString.byteLength + 1)
+    buf.set(encodedString)
+    if (finalize) {
+      this.registry.register(buf, address)
+    }
+    return address
+  }
+
+  /**
+   * Unmarshall a string
+   * @param {number} address The address of the string
+   * @param {boolean} finalize If true add to the finalizer registry
+   * @returns {string} The unmarshalled string
+   */
+  unmarshallString (address, finalize) {
+    // Find the number of bytes before the null termination character.
+    const buf = new Uint8Array(this.memory.buffer, address)
+    let length = 0
+    while (buf[length] !== 0) {
+      ++length
+    }
+    // Decode the string
+    const array = new Uint8Array(this.memory.buffer, address, length)
+    const decoder = new TextDecoder()
+    const string = decoder.decode(array)
+    if (finalize) {
+      this.registry.register(string, address)
+    }
+    return string
+  }
+
 }
