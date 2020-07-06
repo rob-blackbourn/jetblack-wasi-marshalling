@@ -6,13 +6,15 @@ export default {
     {
       file: 'lib/index.js',
       format: 'umd',
-      name: 'wasiMarshalling'
+      name: 'wasiMarshalling',
+      sourcemap: true
     },
     {
       file: 'lib/index.min.js',
       format: 'umd',
       name: 'WasiMarshalling',
-      plugins: [terser()]
+      plugins: [terser()],
+      sourcemap: true
     }
   ]
 }

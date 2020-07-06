@@ -60,7 +60,7 @@ export class ArrayType extends ReferenceType {
   }
 
   /**
-   * Marshall a (possibly nested) array.
+   * Marshall a possibly nested array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {Array<T>} unmarshalledValue The array to be marshalled
    * @returns {number} The address of the marshalled array

@@ -1,8 +1,13 @@
 // @filename: types.d.ts
 
 /**
- * TypedArayType
+ * TypedArrayType
  * @typedef {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} TypedArrayType
+ */
+
+ /**
+ * TypedArray
+ * @typedef {Int8Array|Int16Array|Int32Array|BigInt64Array|Uint8Array|Uint16Array|Uint32Array|BigUint64Array|Float32Array|Float64Array} TypedArray
  */
 
 /**
@@ -67,52 +72,4 @@ export class MemoryManager {
     this.registry.register(typedArray, address)
     return typedArray
   }
-
-  /**
-   * Create a string buffer
-   * @param {string} string The string to marshall
-   * @param {boolean} finalize If true add to the finalizer registry
-   * @returns {Uint8Array} The address of a the string.
-   */
-  createStringBuffer (string, finalize) {
-    // Encode the string in utf-8.
-    const encoder = new TextEncoder()
-    const encodedString = encoder.encode(string)
-    // Copy the string into memory allocated in the WebAssembly adding one
-    // character for the null byte.
-    const address = this.malloc(encodedString.byteLength + 1)
-    const buf = new Uint8Array(
-      this.memory.buffer,
-      address,
-      encodedString.byteLength + 1)
-    buf.set(encodedString)
-    if (finalize) {
-      this.registry.register(buf, address)
-    }
-    return buf
-  }
-
-  /**
-   * Unmarshall a string
-   * @param {number} address The address of the string
-   * @param {boolean} finalize If true add to the finalizer registry
-   * @returns {string} The unmarshalled string
-   */
-  unmarshallString (address, finalize) {
-    // Find the number of bytes before the null termination character.
-    const buf = new Uint8Array(this.memory.buffer, address)
-    let length = 0
-    while (buf[length] !== 0) {
-      ++length
-    }
-    // Decode the string
-    const array = new Uint8Array(this.memory.buffer, address, length)
-    const decoder = new TextDecoder()
-    const string = decoder.decode(array)
-    if (finalize) {
-      this.registry.register(string, address)
-    }
-    return string
-  }
-
 }

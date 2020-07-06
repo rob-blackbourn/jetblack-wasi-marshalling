@@ -1,24 +1,13 @@
 import { MemoryManager } from './MemoryManager'
 import { WASI, STDOUT, STDERR } from './constants'
 
+// @filename: types.d.ts
+
 /**
  * Write
  * @callback writeCallback
  * @param {string} text 
  */
-
- /**
- * Allocate memory
- * @callback malloc
- * @param {number} byteLength The number of bytes to allocate
- * @returns {number} The address of the allocatred memory
- */
-
- /**
-  * Free allocated memory
-  * @callback free
-  * @param {number} address The address of the allocated memory
-  */
 
 /**
  * Drain the write if a newline is in the latest test.

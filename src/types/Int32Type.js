@@ -4,8 +4,7 @@ import { ValueType } from './ValueType'
 
 /**
  * A type representing a 32 bit integer
- * @template {number} T
- * @extends {ValueType<T>}
+ * @extends {ValueType<number>}
  */
 export class Int32Type extends ValueType {
   /**
@@ -18,7 +17,7 @@ export class Int32Type extends ValueType {
   /**
    * Marshalls the value to a pointer
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} unmarshalledValue The value to marhsall
+   * @param {number} unmarshalledValue The value to marhsall
    * @returns {number} The address of a pointer to the value
    */
   marshall (memoryManager, unmarshalledValue) {
@@ -31,12 +30,12 @@ export class Int32Type extends ValueType {
    * Unmarshal the value from a pointer.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer to the value
-   * @param {T} [unmarshalledValue] Optional unmarshalled value
-   * @returns {T} The unmarshalled value.
+   * @param {number} [unmarshalledValue] Optional unmarshalled value
+   * @returns {number} The unmarshalled value.
    */
   unmarshall (memoryManager, address, unmarshalledValue) {
     try {
-      return /** @type {T} */ (memoryManager.dataView.getInt32(address))
+      return memoryManager.dataView.getInt32(address)
     } finally {
       memoryManager.free(address)
     }
