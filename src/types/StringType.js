@@ -39,7 +39,7 @@ export class StringType extends ReferenceType {
   unmarshall (memoryManager, address, unmarshalledValue) {
     try {
       const stringBuffer = StringBuffer.fromAddress(memoryManager, address, false)
-      return stringBuffer.decode()
+      return stringBuffer.toString()
     } finally {
       // Free the memory
       memoryManager.free(address)

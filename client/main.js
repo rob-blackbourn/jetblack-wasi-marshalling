@@ -139,7 +139,7 @@ async function main () {
     wasi.instance.exports.reverseString,
     StringBuffer.fromString(wasi.memoryManager, 'abcdefg', true)
   )
-  console.log(result6.decode())
+  console.log(result6.toString())
 
 }
 

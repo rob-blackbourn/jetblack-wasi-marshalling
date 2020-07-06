@@ -67,7 +67,7 @@ export class StringBuffer extends Uint8Array {
    * Decode the string buffer to a string
    * @returns {string}
    */
-  decode () {
+  toString () {
     const decoder = new TextDecoder()
     const string = decoder.decode(this)
     return string
