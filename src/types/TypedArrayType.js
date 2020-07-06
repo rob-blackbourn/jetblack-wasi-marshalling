@@ -4,6 +4,10 @@ import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
 /**
+ * @typedef {import('../MemoryManager.js').TypedArray} TypedArray
+ */
+
+/**
  * An array type
  * @template T
  * @extends {ReferenceType<TypedArray>}
