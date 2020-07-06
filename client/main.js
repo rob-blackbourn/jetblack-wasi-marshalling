@@ -6,6 +6,8 @@ const {
   TypedArrayType,
   Int32Type,
   StringType,
+  StringBuffer,
+  StringBufferType,
   FunctionPrototype,
   In,
   Out,
@@ -123,6 +125,21 @@ async function main () {
     output2,
     4)
   console.log(output2)
+
+
+  // Reverse a string using a string buffer
+  const proto6 = new FunctionPrototype(
+    [
+      new In(new StringBufferType())
+    ],
+    new StringBufferType()
+  )
+  const result6 = proto6.invoke(
+    wasi.memoryManager,
+    wasi.instance.exports.reverseString,
+    StringBuffer.fromString(wasi.memoryManager, 'abcdefg', true)
+  )
+  console.log(result6.decode())
 
 }
 

@@ -33,4 +33,14 @@ export class StringBufferType extends ReferenceType {
       return StringBuffer.fromAddress(memoryManager, address, true)
     }
   }
+
+  /**
+   * Free allocated memory.
+   * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the memory to be freed
+   * @param {StringBuffer} [unmarshalledValue] An optional unmarshalled value
+   */
+  free (memoryManager, address, unmarshalledValue) {
+    // The finalizer handles freeing.
+  }
 }

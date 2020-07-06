@@ -1,4 +1,5 @@
 export { MemoryManager } from './MemoryManager'
+export { StringBuffer } from './StringBuffer'
 
 export {
   Type,
