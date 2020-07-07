@@ -10,7 +10,7 @@ import {
   Pointer,
   PointerType,
   StringType
-} from '../src/types'
+} from '../src'
 
 describe('test the marshaller', () => {
   it('should convert a string to a pointer and back', () => {
