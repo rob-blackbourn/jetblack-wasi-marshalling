@@ -71,7 +71,7 @@ export class MemoryManager {
       // @ts-ignore
       typedArray.set(lengthOrArray)
     }
-    this.registry.register(typedArray, address)
+    this.freeWhenFinalized(typedArray, address)
     return typedArray
   }
 }

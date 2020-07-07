@@ -19,7 +19,7 @@
   "scripts": {
     "build": "rollup -c",
     "exec:prepare": "npm run build && cp lib/index.js client/index.js",
-    "exec:nodejs": "npm run exec:prepare && node client/main.js",
+    "exec:nodejs": "npm run exec:prepare && node --harmony-weak-refs client/main.js",
     "exec:browser": "npm run exec:prepare && npx serve client",
     "start": "run-s build exec:all",
     "test": "mocha --harmony-weak-refs -r esm test/**/*test*.js",
