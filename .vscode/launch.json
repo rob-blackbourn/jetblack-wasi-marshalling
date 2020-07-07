@@ -11,7 +11,8 @@
             "skipFiles": [
               "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/client/example_for_nodejs.js"
+            "runtimeArgs": ["--harmony-weak-refs"],
+            "program": "${workspaceFolder}/client/main.js"
           },
           {
             "type": "node",

@@ -47,6 +47,8 @@ WebAssembly.instantiateStreaming(
 
 ## The Marshalling Framework
 
+### Introduction
+
 Given the following C function call which multiplies two arrays.
 
 ```C
@@ -100,6 +102,54 @@ console.log(result)
 
 The framework will take care of passing the data to the wasm module,
 unpacking the result and allocating/deallocating the memory.
+
+### Finalizers and Typed Arrays
+
+A recent introduction to JavaScript is the
+[FinalizationRegistry](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/FinalizationRegistry).
+This allows us to register a function to call when an object is garbage
+collected. We can use this to handle memory management in WebAssembly.
+
+The
+[TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)
+family of objects provide transparant interoperability between Javascript and
+WebAssembly. Rather than copying values (as with `ArrayType`) we can simply pass a
+`TypedArray` via `TypedArrayType". The prototype fot the above functions would
+look like this:
+
+```javascript
+import {
+  TypedArrayType,
+  Float64Type,
+  Int32Type,
+  FunctionPrototype,
+  In
+} from '@jetblack/wasi-marshalling.develop.js'
+
+const proto = new FunctionPrototype(
+  [
+    new In(new TypedArrayType(new Float64Type())),
+    new In(new TypedArrayType(new Float64Type())),
+    new In(new Int32Type())
+  ],
+  new TypedArrayType(new Float64Type(), 4)
+)
+
+const result = proto.invoke(
+  wasi.memoryManager,
+  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+  wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
+  wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
+  4)
+
+console.log(result)
+```
+
+Note how we call `createTypedArray` from the memory manager. This allocates
+the memory and registers the pointer with the finalizer to ensure the memory
+gets freed.
+
+### Types
 
 The framework handles the following types:
 

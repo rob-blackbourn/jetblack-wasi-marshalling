@@ -1,6 +1,6 @@
 import { MemoryManager } from '../MemoryManager'
+import { Pointer } from '../Pointer'
 
-import { Pointer } from './Pointer'
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
@@ -21,13 +21,14 @@ export class PointerType extends ReferenceType {
 
   /**
    * Free an allocated pointer
-   * @param {number} address The address of the pointer to be freed
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the pointer to be freed
+   * @param {Pointer<T>} [unmarshalledValue] An optional unmarshalled value
    */
-  free (address, memoryManager) {
+  free (memoryManager, address, unmarshalledValue) {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
-      this.type.free(marshalledAddress, memoryManager)
+      this.type.free(memoryManager, marshalledAddress, null)
     } finally {
       memoryManager.free(address)
     }
@@ -36,35 +37,38 @@ export class PointerType extends ReferenceType {
   /**
    * Allocate memory for a pointer
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {Pointer<T>} [unmarshalledValue] The value
    * @returns{number} The address of the allocated memory
    */
-  alloc (memoryManager) {
+  alloc (memoryManager, unmarshalledValue) {
     const address = memoryManager.malloc(Uint32Array.BYTES_PER_ELEMENT)
     return address
   }
 
   /**
    * Marshal a pointer
-   * @param {Pointer<T>} value The value to marshall
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {Pointer<T>} unmarshalledValue The value to marshall
    * @returns {number} The address of the pointer in memory
    */
-  marshall (value, memoryManager) {
-    const address = this.alloc(memoryManager)
-    const marshalledAddress = /** @type {number} */ (this.type.marshall(value.contents, memoryManager))
+  marshall (memoryManager, unmarshalledValue) {
+    const address = this.alloc(memoryManager, unmarshalledValue)
+    const marshalledAddress = /** @type {number} */ (this.type.marshall(memoryManager, unmarshalledValue.contents))
     memoryManager.dataView.setUint32(address, marshalledAddress)
     return address
   }
 
   /**
-   * 
-   * @param {number} address The address of the pointer in memory
+   * Unmarshall a pointer.
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the pointer in memory
+   * @param {Pointer<T>} [unmarshalledValue] An optional value
+   * @returns {Pointer<T>} The unmarshalled pointer
    */
-  unmarshall (address, memoryManager) {
+  unmarshall (memoryManager, address, unmarshalledValue) {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
-      return new Pointer(this.type.unmarshall(marshalledAddress, memoryManager))
+      return new Pointer(this.type.unmarshall(memoryManager, marshalledAddress))
     } finally {
       memoryManager.free(address)
     }

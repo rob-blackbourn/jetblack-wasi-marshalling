@@ -19,13 +19,14 @@
   "scripts": {
     "build": "rollup -c",
     "exec:prepare": "npm run build && cp lib/index.js client/index.js",
-    "exec:nodejs": "npm run exec:prepare && node client/main.js",
+    "exec:nodejs": "npm run exec:prepare && node --harmony-weak-refs client/main.js",
     "exec:browser": "npm run exec:prepare && npx serve client",
     "start": "run-s build exec:all",
-    "test": "mocha -r esm test/**/*test*.js",
+    "test": "mocha --harmony-weak-refs -r esm test/**/*test*.js",
     "jsdoc": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
+    "@types/mocha": "^7.0.2",
     "esm": "^3.2.25",
     "jsdoc": "^3.6.4",
     "jsdoc-typeof-plugin": "^1.0.0",

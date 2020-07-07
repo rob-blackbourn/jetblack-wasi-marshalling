@@ -1,4 +1,6 @@
 export { MemoryManager } from './MemoryManager'
+export { StringBuffer } from './StringBuffer'
+export { Pointer } from './Pointer'
 
 export {
   Type,
@@ -15,9 +17,11 @@ export {
   Float64Type,
   ReferenceType,
   StringType,
-  Pointer,
+  StringBufferType,
   PointerType,
+  AddressType,
   ArrayType,
+  TypedArrayType,
   ArgumentDef,
   In,
   Out,

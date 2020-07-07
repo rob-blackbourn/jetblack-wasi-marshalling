@@ -4,8 +4,7 @@ import { ValueType } from './ValueType'
 
 /**
  * A type representing an 8 bit integer
- * @template {number} T
- * @extends {ValueType<T>}
+ * @extends {ValueType<number>}
  */
 export class Int8Type extends ValueType {
   /**
@@ -17,26 +16,26 @@ export class Int8Type extends ValueType {
 
   /**
    * Marshalls the value to a pointer
-   * @param {T} value The value to marhsall
    * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} unmarshalledValue The value to marhsall
    * @returns {number} The address of a pointer to the value
    */
-  marshall (value, memoryManager) {
-    const address = this.alloc(memoryManager)
-    memoryManager.dataView.setInt8(address, value)
+  marshall (memoryManager, unmarshalledValue) {
+    const address = this.alloc(memoryManager, unmarshalledValue)
+    memoryManager.dataView.setInt8(address, unmarshalledValue)
     return address
   }
 
   /**
    * Unmarshal the value from a pointer.
-   * @param {number} address The address of the pointer to the value
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} [value] Optional unmarshalled value
-   * @returns {T} The unmarshalled value.
+   * @param {number} address The address of the pointer to the value
+   * @param {number} [unmarshalledValue] Optional unmarshalled value
+   * @returns {number} The unmarshalled value.
    */
-  unmarshall (address, memoryManager, value) {
+  unmarshall (memoryManager, address, unmarshalledValue) {
     try {
-      return /** @type {T} */ (memoryManager.dataView.getInt8(address))
+      return memoryManager.dataView.getInt8(address)
     } finally {
       memoryManager.free(address)
     }

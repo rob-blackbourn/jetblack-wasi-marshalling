@@ -31,15 +31,15 @@ export class FunctionPrototype {
     }
 
     const marshalledArgs = args.map((arg, i) =>
-      this.argDefs[i].marshall(arg, memoryManager))
+      this.argDefs[i].marshall(memoryManager, arg))
 
     const result = func(...marshalledArgs)
 
     args.forEach((arg, i) =>
-      this.argDefs[i].unmarshall(marshalledArgs[i], memoryManager, arg))
+      this.argDefs[i].unmarshall(memoryManager, marshalledArgs[i], arg))
 
     if (this.returns != null) {
-      return this.returns.unmarshall(result, memoryManager)
+      return this.returns.unmarshall(memoryManager, result)
     }
   }
 }
