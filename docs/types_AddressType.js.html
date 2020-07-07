@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: types/ValueType.js</title>
+    <title>JSDoc: Source: types/AddressType.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: types/ValueType.js</h1>
+    <h1 class="page-title">Source: types/AddressType.js</h1>
 
     
 
@@ -27,33 +27,51 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import { MemoryManager } from '../MemoryManager'
+import { Pointer } from '../Pointer'
 
-import { Type } from './Type'
+import { ReferenceType } from './ReferenceType'
 
 /**
- * A base class representing a value type
- * @template T
- * @extends {Type&lt;T>}
+ * A class representing a string buffer type
+ * @extends {ReferenceType&lt;Pointer&lt;number>>}
  */
-export class ValueType extends Type {
+export class AddressType extends ReferenceType {
+
   /**
-   * Allocate memory for the type
+   * Marshall an address into memory
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} [unmarshalledValue] An optional value.
-   * @returns {number} The address of the allocated memory
+   * @param {Pointer&lt;number>} unmarshalledValue The string buffer to marshall
+   * @returns {number} The address of the string in memory
    */
-  alloc (memoryManager, unmarshalledValue) {
-    return memoryManager.malloc(this.TypedArrayType.BYTES_PER_ELEMENT)
+  marshall (memoryManager, unmarshalledValue) {
+    return unmarshalledValue.contents
   }
 
   /**
-   * Free allocated memory
+   * Unmarshall an address
+   * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the string buffer in memory
+   * @param {Pointer&lt;number>} [unmarshalledValue] Optional unmarshalled value.
+   * @returns {Pointer&lt;number>} The unmarshalled string buffer
+   */
+  unmarshall (memoryManager, address, unmarshalledValue) {
+    if (unmarshalledValue != null) {
+      return unmarshalledValue
+    } else {
+      const pointer =  new Pointer(address)
+      memoryManager.freeWhenFinalized(pointer, address)
+      return pointer
+    }
+  }
+
+  /**
+   * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {T} [unmarshalledValue] Optional unmarshalled value.
+   * @param {Pointer} [unmarshalledValue] An optional unmarshalled value
    */
   free (memoryManager, address, unmarshalledValue) {
-    memoryManager.free(address)
+    // The finalizer handles freeing.
   }
 }
 </code></pre>

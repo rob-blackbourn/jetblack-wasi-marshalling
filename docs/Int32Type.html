@@ -97,7 +97,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Int32Type.js.html">types/Int32Type.js</a>, <a href="types_Int32Type.js.html#line14">line 14</a>
+        <a href="types_Int32Type.js.html">types/Int32Type.js</a>, <a href="types_Int32Type.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -137,7 +137,7 @@
 
 
     <ul>
-        <li><a href="ValueType.html">ValueType</a>.&lt;T></li>
+        <li><a href="ValueType.html">ValueType</a>.&lt;number></li>
     </ul>
 
 
@@ -171,7 +171,7 @@
     
 
     
-    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(value, memoryManager)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(memoryManager, unmarshalledValue)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -215,29 +215,6 @@
 
         <tr>
             
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">T</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The value to marhsall</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>memoryManager</code></td>
             
 
@@ -255,6 +232,29 @@
             
 
             <td class="description last"><p>The memory manager</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The value to marhsall</p></td>
         </tr>
 
     
@@ -295,7 +295,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Int32Type.js.html">types/Int32Type.js</a>, <a href="types_Int32Type.js.html#line24">line 24</a>
+        <a href="types_Int32Type.js.html">types/Int32Type.js</a>, <a href="types_Int32Type.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -353,7 +353,7 @@
     
 
     
-    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(address, memoryManager, value<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {T}</span></h4>
+    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -399,37 +399,6 @@
 
         <tr>
             
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The address of the pointer to the value</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>memoryManager</code></td>
             
 
@@ -461,13 +430,44 @@
 
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>address</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">T</span>
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The address of the pointer to the value</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
 
 
             
@@ -528,7 +528,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Int32Type.js.html">types/Int32Type.js</a>, <a href="types_Int32Type.js.html#line37">line 37</a>
+        <a href="types_Int32Type.js.html">types/Int32Type.js</a>, <a href="types_Int32Type.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -568,7 +568,7 @@
     </dt>
     <dd>
         
-<span class="param-type">T</span>
+<span class="param-type">number</span>
 
 
     </dd>
@@ -596,13 +596,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 17:07:15 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 07 2020 08:05:07 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

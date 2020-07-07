@@ -96,17 +96,15 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Methods</h3>
 
         
-                
+            
 
     
 
     
-    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(address)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="strlen"><span class="type-signature"></span>strlen<span class="signature">(memoryManager, address)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -114,7 +112,7 @@
 
 
 <div class="description">
-    <p>Free allocated memory</p>
+    <p>Find the length of a null terminated string.</p>
 </div>
 
 
@@ -150,6 +148,29 @@
 
         <tr>
             
+                <td class="name"><code>memoryManager</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MemoryManager.html">MemoryManager</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The memory manager.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>address</code></td>
             
 
@@ -166,13 +187,154 @@
 
             
 
-            <td class="description last"><p>The address of the allocated memory</p></td>
+            <td class="description last"><p>The address of the string in memory.</p></td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="StringBuffer.js.html">StringBuffer.js</a>, <a href="StringBuffer.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The length of the string.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="TypedArray">TypedArray</h4>
+
+
+
+
+<div class="description">
+    <p>TypedArray</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Int8Array</span>
+|
+
+<span class="param-type">Int16Array</span>
+|
+
+<span class="param-type">Int32Array</span>
+|
+
+<span class="param-type">BigInt64Array</span>
+|
+
+<span class="param-type">Uint8Array</span>
+|
+
+<span class="param-type">Uint16Array</span>
+|
+
+<span class="param-type">Uint32Array</span>
+|
+
+<span class="param-type">BigUint64Array</span>
+|
+
+<span class="param-type">Float32Array</span>
+|
+
+<span class="param-type">Float64Array</span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -223,93 +385,55 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             
                 
+<h4 class="name" id="TypedArray">TypedArray</h4>
 
-    
-
-    
-    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(address)</span><span class="type-signature"></span></h4>
-    
-
-    
 
 
 
 <div class="description">
-    <p>Free allocated memory</p>
+    <p>TypedArray</p>
 </div>
 
 
 
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
+    <h5>Type:</h5>
+    <ul>
+        <li>
             
-                <td class="name"><code>address</code></td>
-            
+<span class="param-type">Int8Array</span>
+|
 
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
+<span class="param-type">Int16Array</span>
+|
+
+<span class="param-type">Int32Array</span>
+|
+
+<span class="param-type">BigInt64Array</span>
+|
+
+<span class="param-type">Uint8Array</span>
+|
+
+<span class="param-type">Uint16Array</span>
+|
+
+<span class="param-type">Uint32Array</span>
+|
+
+<span class="param-type">BigUint64Array</span>
+|
+
+<span class="param-type">Float32Array</span>
+|
+
+<span class="param-type">Float64Array</span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The address of the allocated memory</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+        </li>
+    </ul>
 
 
 
@@ -344,7 +468,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="wasi.js.html">wasi.js</a>, <a href="wasi.js.html#line17">line 17</a>
+        <a href="types_TypedArrayType.js.html">types/TypedArrayType.js</a>, <a href="types_TypedArrayType.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -360,93 +484,55 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             
                 
+<h4 class="name" id="TypedArrayType">TypedArrayType</h4>
 
-    
-
-    
-    <h4 class="name" id="malloc"><span class="type-signature"></span>malloc<span class="signature">(byteLength)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-
-    
 
 
 
 <div class="description">
-    <p>Allocate memory</p>
+    <p>TypedArrayType</p>
 </div>
 
 
 
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
+    <h5>Type:</h5>
+    <ul>
+        <li>
             
-                <td class="name"><code>byteLength</code></td>
-            
+<span class="param-type">Int8ArrayConstructor</span>
+|
 
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
+<span class="param-type">Int16ArrayConstructor</span>
+|
+
+<span class="param-type">Int32ArrayConstructor</span>
+|
+
+<span class="param-type">BigInt64ArrayConstructor</span>
+|
+
+<span class="param-type">Uint8ArrayConstructor</span>
+|
+
+<span class="param-type">Uint16ArrayConstructor</span>
+|
+
+<span class="param-type">Uint32ArrayConstructor</span>
+|
+
+<span class="param-type">BigUint64ArrayConstructor</span>
+|
+
+<span class="param-type">Float32ArrayConstructor</span>
+|
+
+<span class="param-type">Float64ArrayConstructor</span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The number of bytes to allocate</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+        </li>
+    </ul>
 
 
 
@@ -481,7 +567,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MemoryManager.js.html">MemoryManager.js</a>, <a href="MemoryManager.js.html#line1">line 1</a>
+        <a href="MemoryManager.js.html">MemoryManager.js</a>, <a href="MemoryManager.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -492,201 +578,6 @@
     
 </dl>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The address of the allocatred memory</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-            
-                
-
-    
-
-    
-    <h4 class="name" id="malloc"><span class="type-signature"></span>malloc<span class="signature">(byteLength)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Allocate memory</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>byteLength</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The number of bytes to allocate</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="wasi.js.html">wasi.js</a>, <a href="wasi.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The address of the allocatred memory</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -799,7 +690,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="wasi.js.html">wasi.js</a>, <a href="wasi.js.html#line4">line 4</a>
+        <a href="wasi.js.html">wasi.js</a>, <a href="wasi.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -843,13 +734,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 17:07:15 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 07 2020 08:05:07 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

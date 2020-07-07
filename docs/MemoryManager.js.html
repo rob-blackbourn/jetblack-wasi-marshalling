@@ -26,18 +26,17 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Allocate memory
- * @callback malloc
- * @param {number} byteLength The number of bytes to allocate
- * @returns {number} The address of the allocatred memory
+            <pre class="prettyprint source linenums"><code>// @filename: types.d.ts
+
+/**
+ * TypedArrayType
+ * @typedef {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} TypedArrayType
  */
 
  /**
-  * Free allocated memory
-  * @callback free
-  * @param {number} address The address of the allocated memory
-  */
+ * TypedArray
+ * @typedef {Int8Array|Int16Array|Int32Array|BigInt64Array|Uint8Array|Uint16Array|Uint32Array|BigUint64Array|Float32Array|Float64Array} TypedArray
+ */
 
 /**
  * The memory manager
@@ -54,6 +53,13 @@ export class MemoryManager {
     this.malloc = malloc
     this.free = free
     this._dataView = null
+    this._registry = typeof FinalizationRegistry === 'undefined'
+      ? null
+      : new FinalizationRegistry(addresses => {
+          for (const address of addresses) {
+            free(address)
+          }
+        })
   }
 
   /**
@@ -64,6 +70,37 @@ export class MemoryManager {
       this._dataView = new DataView(this.memory.buffer)
     }
     return this._dataView
+  }
+
+  /**
+   * Free an address when finalized.
+   * @param {*} target The object that will be finalized
+   * @param {number} address The address to be freed
+   */
+  freeWhenFinalized(target, address) {
+    if (this._registry === null) {
+      throw new Error('FinalizationRegistry is not implemented')
+    }
+    this._registry.register(target, address)
+  }
+
+  /**
+   * Create a typed array
+   * @template {number|bigint} T
+   * @param {TypedArrayType} typedArrayType The typed array type
+   * @param {number|Array&lt;T>} lengthOrArray Either an array to be copied or the required length
+   * @returns {TypedArray} The typed array
+   */
+  createTypedArray (typedArrayType, lengthOrArray) {
+    const length = lengthOrArray instanceof Array ? lengthOrArray.length : lengthOrArray
+    const address = this.malloc(length * typedArrayType.BYTES_PER_ELEMENT)
+    const typedArray = new typedArrayType(this.memory.buffer, address, length)
+    if (lengthOrArray instanceof Array) {
+      // @ts-ignore
+      typedArray.set(lengthOrArray)
+    }
+    this.freeWhenFinalized(typedArray, address)
+    return typedArray
   }
 }
 </code></pre>
@@ -76,13 +113,13 @@ export class MemoryManager {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 17:07:15 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 07 2020 08:05:07 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

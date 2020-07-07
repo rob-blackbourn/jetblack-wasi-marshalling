@@ -220,7 +220,7 @@
     
 
     
-    <h4 class="name" id="alloc"><span class="type-signature"></span>alloc<span class="signature">(memoryManager)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="alloc"><span class="type-signature"></span>alloc<span class="signature">(memoryManager, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -252,6 +252,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -277,10 +279,51 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>The memory manager</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Pointer.html">Pointer</a>.&lt;T></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The value</p></td>
         </tr>
 
     
@@ -321,7 +364,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line41">line 41</a>
+        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -481,7 +524,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line79">line 79</a>
+        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -539,7 +582,7 @@
     
 
     
-    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(address, memoryManager)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -571,6 +614,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -579,29 +624,6 @@
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The address of the pointer to be freed</p></td>
-        </tr>
-
     
 
         <tr>
@@ -619,10 +641,82 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>The memory manager</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The address of the pointer to be freed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Pointer.html">Pointer</a>.&lt;T></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An optional unmarshalled value</p></td>
         </tr>
 
     
@@ -663,7 +757,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line27">line 27</a>
+        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -699,7 +793,7 @@
     
 
     
-    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(value, memoryManager)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(memoryManager, unmarshalledValue)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -743,29 +837,6 @@
 
         <tr>
             
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Pointer.html">Pointer</a>.&lt;T></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The value to marshall</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>memoryManager</code></td>
             
 
@@ -783,6 +854,29 @@
             
 
             <td class="description last"><p>The memory manager</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Pointer.html">Pointer</a>.&lt;T></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The value to marshall</p></td>
         </tr>
 
     
@@ -823,7 +917,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line52">line 52</a>
+        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -881,12 +975,16 @@
     
 
     
-    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(address, memoryManager)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Pointer.html">Pointer</a>.&lt;T>}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    <p>Unmarshall a pointer.</p>
+</div>
 
 
 
@@ -909,6 +1007,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -917,29 +1017,6 @@
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The address of the pointer in memory</p></td>
-        </tr>
-
     
 
         <tr>
@@ -957,10 +1034,82 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>The memory manager</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The address of the pointer in memory</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Pointer.html">Pointer</a>.&lt;T></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An optional value</p></td>
         </tr>
 
     
@@ -1001,7 +1150,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line64">line 64</a>
+        <a href="types_PointerType.js.html">types/PointerType.js</a>, <a href="types_PointerType.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -1026,6 +1175,28 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The unmarshalled pointer</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Pointer.html">Pointer</a>.&lt;T></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1047,13 +1218,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 17:07:15 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 07 2020 08:05:07 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

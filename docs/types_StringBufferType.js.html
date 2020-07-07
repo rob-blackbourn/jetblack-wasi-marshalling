@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: types/ValueType.js</title>
+    <title>JSDoc: Source: types/StringBufferType.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: types/ValueType.js</h1>
+    <h1 class="page-title">Source: types/StringBufferType.js</h1>
 
     
 
@@ -27,33 +27,49 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import { MemoryManager } from '../MemoryManager'
+import { StringBuffer } from '../StringBuffer'
 
-import { Type } from './Type'
+import { ReferenceType } from './ReferenceType'
 
 /**
- * A base class representing a value type
- * @template T
- * @extends {Type&lt;T>}
+ * A class representing a string buffer type
+ * @extends {ReferenceType&lt;StringBuffer>}
  */
-export class ValueType extends Type {
+export class StringBufferType extends ReferenceType {
+
   /**
-   * Allocate memory for the type
+   * Marshall a string buffer into memory
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} [unmarshalledValue] An optional value.
-   * @returns {number} The address of the allocated memory
+   * @param {StringBuffer} unmarshalledValue The string buffer to marshall
+   * @returns {number} The address of the string in memory
    */
-  alloc (memoryManager, unmarshalledValue) {
-    return memoryManager.malloc(this.TypedArrayType.BYTES_PER_ELEMENT)
+  marshall (memoryManager, unmarshalledValue) {
+    return unmarshalledValue.byteOffset
   }
 
   /**
-   * Free allocated memory
+   * Unmarshall a string buffer
+   * @param {MemoryManager} memoryManager The memory manager
+   * @param {number} address The address of the string buffer in memory
+   * @param {StringBuffer} [unmarshalledValue] Optional unmarshalled value.
+   * @returns {StringBuffer} The unmarshalled string buffer
+   */
+  unmarshall (memoryManager, address, unmarshalledValue) {
+    if (unmarshalledValue != null) {
+      return unmarshalledValue
+    } else {
+      return StringBuffer.fromAddress(memoryManager, address, true)
+    }
+  }
+
+  /**
+   * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {T} [unmarshalledValue] Optional unmarshalled value.
+   * @param {StringBuffer} [unmarshalledValue] An optional unmarshalled value
    */
   free (memoryManager, address, unmarshalledValue) {
-    memoryManager.free(address)
+    // The finalizer handles freeing.
   }
 }
 </code></pre>

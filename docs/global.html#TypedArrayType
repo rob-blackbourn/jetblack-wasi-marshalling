@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Type</title>
+    <title>JSDoc: Class: TypedArrayType</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Type</h1>
+    <h1 class="page-title">Class: TypedArrayType</h1>
 
     
 
@@ -28,9 +28,10 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Type<span class="signature">(typedArrayType)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="global.html#TypedArrayType">TypedArrayType</a>#</span>TypedArrayType<span class="signature">(type, length<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>The base class for representing types</p></div>
+            <div class="class-description"><p>An array type</p></div>
         
     
 </header>
@@ -45,7 +46,7 @@
     
 
     
-    <h4 class="name" id="Type"><span class="type-signature"></span>new Type<span class="signature">(typedArrayType)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="TypedArrayType"><span class="type-signature"></span>new TypedArrayType<span class="signature">(type, length<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -53,7 +54,7 @@
 
 
 <div class="description">
-    <p>The abstract constructor for a type.</p>
+    <p>Construct an array type</p>
 </div>
 
 
@@ -77,7 +78,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -89,50 +94,74 @@
 
         <tr>
             
-                <td class="name"><code>typedArrayType</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Int8ArrayConstructor</span>
-|
-
-<span class="param-type">Int16ArrayConstructor</span>
-|
-
-<span class="param-type">Int32ArrayConstructor</span>
-|
-
-<span class="param-type">BigInt64ArrayConstructor</span>
-|
-
-<span class="param-type">Uint8ArrayConstructor</span>
-|
-
-<span class="param-type">Uint16ArrayConstructor</span>
-|
-
-<span class="param-type">Uint32ArrayConstructor</span>
-|
-
-<span class="param-type">BigUint64ArrayConstructor</span>
-|
-
-<span class="param-type">Float32ArrayConstructor</span>
-|
-
-<span class="param-type">Float64ArrayConstructor</span>
+<span class="param-type"><a href="Type.html">Type</a>.&lt;T></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>The typed array for the type</p></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The type of the elements in the array</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>length</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The optional length of the array</p></td>
         </tr>
 
     
@@ -173,7 +202,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line12">line 12</a>
+        <a href="types_TypedArrayType.js.html">types/TypedArrayType.js</a>, <a href="types_TypedArrayType.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -207,6 +236,17 @@
     </div>
 
     
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="ReferenceType.html">ReferenceType</a>.&lt;<a href="global.html#TypedArray">TypedArray</a>></li>
+    </ul>
+
+
+    
 
     
 
@@ -214,7 +254,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="Type.html">Type</a></dt>
+            <dt><a href="global.html#TypedArrayType">TypedArrayType</a></dt>
             <dd></dd>
         </dl>
     
@@ -236,7 +276,7 @@
     
 
     
-    <h4 class="name" id="alloc"><span class="type-signature">(abstract) </span>alloc<span class="signature">(memoryManager, unmarshalledValue)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id="alloc"><span class="type-signature"></span>alloc<span class="signature">(memoryManager, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -244,7 +284,7 @@
 
 
 <div class="description">
-    <p>Allocate memory for the type</p>
+    <p>Allocate memory for the array.</p>
 </div>
 
 
@@ -267,6 +307,8 @@
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -293,6 +335,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -309,17 +359,27 @@
             <td class="type">
             
                 
-<span class="param-type">T</span>
+<span class="param-type"><a href="global.html#TypedArray">TypedArray</a></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>An optional value</p></td>
+            <td class="description last"><p>An optional unmarshalled array</p></td>
         </tr>
 
     
@@ -360,7 +420,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line23">line 23</a>
+        <a href="types_TypedArrayType.js.html">types/TypedArrayType.js</a>, <a href="types_TypedArrayType.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -389,7 +449,7 @@
 
         
 <div class="param-desc">
-    <p>The address of the allocated value in memory</p>
+    <p>The address of the allocated memory.</p>
 </div>
 
 
@@ -418,7 +478,7 @@
     
 
     
-    <h4 class="name" id="copy"><span class="type-signature">(abstract) </span>copy<span class="signature">(dest, source)</span><span class="type-signature"> &rarr; {T}</span></h4>
+    <h4 class="name" id="copy"><span class="type-signature"></span>copy<span class="signature">(dest, source)</span><span class="type-signature"> &rarr; {<a href="global.html#TypedArray">TypedArray</a>}</span></h4>
     
 
     
@@ -426,7 +486,7 @@
 
 
 <div class="description">
-    <p>Copy a value</p>
+    <p>Copy an array</p>
 </div>
 
 
@@ -468,7 +528,7 @@
             <td class="type">
             
                 
-<span class="param-type">T</span>
+<span class="param-type"><a href="global.html#TypedArray">TypedArray</a></span>
 
 
             
@@ -478,7 +538,7 @@
 
             
 
-            <td class="description last"><p>The destination value</p></td>
+            <td class="description last"><p>The array to receive the data</p></td>
         </tr>
 
     
@@ -491,7 +551,7 @@
             <td class="type">
             
                 
-<span class="param-type">T</span>
+<span class="param-type"><a href="global.html#TypedArray">TypedArray</a></span>
 
 
             
@@ -501,7 +561,7 @@
 
             
 
-            <td class="description last"><p>The source value</p></td>
+            <td class="description last"><p>The source array</p></td>
         </tr>
 
     
@@ -542,7 +602,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line68">line 68</a>
+        <a href="types_TypedArrayType.js.html">types/TypedArrayType.js</a>, <a href="types_TypedArrayType.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -571,7 +631,7 @@
 
         
 <div class="param-desc">
-    <p>The destination value</p>
+    <p>The array to which the data was copied.</p>
 </div>
 
 
@@ -582,7 +642,7 @@
     </dt>
     <dd>
         
-<span class="param-type">T</span>
+<span class="param-type"><a href="global.html#TypedArray">TypedArray</a></span>
 
 
     </dd>
@@ -600,7 +660,7 @@
     
 
     
-    <h4 class="name" id="free"><span class="type-signature">(abstract) </span>free<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -608,7 +668,7 @@
 
 
 <div class="description">
-    <p>Free the memory for the value</p>
+    <p>Free allocated memory.</p>
 </div>
 
 
@@ -701,7 +761,7 @@
 
             
 
-            <td class="description last"><p>The address of the value in memory</p></td>
+            <td class="description last"><p>The address of the memory to be freed</p></td>
         </tr>
 
     
@@ -714,7 +774,7 @@
             <td class="type">
             
                 
-<span class="param-type">T</span>
+<span class="param-type"><a href="global.html#TypedArray">TypedArray</a></span>
 
 
             
@@ -734,7 +794,7 @@
 
             
 
-            <td class="description last"><p>An optional unmarshalled value</p></td>
+            <td class="description last"><p>An optional unmarshalled array</p></td>
         </tr>
 
     
@@ -775,7 +835,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line34">line 34</a>
+        <a href="types_TypedArrayType.js.html">types/TypedArrayType.js</a>, <a href="types_TypedArrayType.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -811,7 +871,7 @@
     
 
     
-    <h4 class="name" id="marshall"><span class="type-signature">(abstract) </span>marshall<span class="signature">(memoryManager, unmarshalledValue)</span><span class="type-signature"> &rarr; {number|T}</span></h4>
+    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(memoryManager, unmarshalledValue)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -819,7 +879,7 @@
 
 
 <div class="description">
-    <p>Marshal a value.</p>
+    <p>Marshall a typed array.</p>
 </div>
 
 
@@ -884,7 +944,7 @@
             <td class="type">
             
                 
-<span class="param-type">T</span>
+<span class="param-type"><a href="global.html#TypedArray">TypedArray</a></span>
 
 
             
@@ -894,7 +954,7 @@
 
             
 
-            <td class="description last"><p>The value to marshall</p></td>
+            <td class="description last"><p>The array to be marshalled</p></td>
         </tr>
 
     
@@ -935,7 +995,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line45">line 45</a>
+        <a href="types_TypedArrayType.js.html">types/TypedArrayType.js</a>, <a href="types_TypedArrayType.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -964,7 +1024,7 @@
 
         
 <div class="param-desc">
-    <p>The marshalled value</p>
+    <p>The address of the marshalled array</p>
 </div>
 
 
@@ -976,9 +1036,6 @@
     <dd>
         
 <span class="param-type">number</span>
-|
-
-<span class="param-type">T</span>
 
 
     </dd>
@@ -996,7 +1053,7 @@
     
 
     
-    <h4 class="name" id="unmarshall"><span class="type-signature">(abstract) </span>unmarshall<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {T}</span></h4>
+    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="global.html#TypedArray">TypedArray</a>}</span></h4>
     
 
     
@@ -1004,7 +1061,7 @@
 
 
 <div class="description">
-    <p>Unmarshall a value.</p>
+    <p>Unmarshall a typed array.</p>
 </div>
 
 
@@ -1097,7 +1154,7 @@
 
             
 
-            <td class="description last"><p>The address of the value in memory</p></td>
+            <td class="description last"><p>The address of the marshalled array</p></td>
         </tr>
 
     
@@ -1110,7 +1167,7 @@
             <td class="type">
             
                 
-<span class="param-type">T</span>
+<span class="param-type"><a href="global.html#TypedArray">TypedArray</a></span>
 
 
             
@@ -1130,7 +1187,7 @@
 
             
 
-            <td class="description last"><p>An optional unmarshalled value</p></td>
+            <td class="description last"><p>An optional unmarshalled array</p></td>
         </tr>
 
     
@@ -1171,7 +1228,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_Type.js.html">types/Type.js</a>, <a href="types_Type.js.html#line57">line 57</a>
+        <a href="types_TypedArrayType.js.html">types/TypedArrayType.js</a>, <a href="types_TypedArrayType.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -1199,6 +1256,10 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>The unmarshalled array</p>
+</div>
+
 
 
 <dl>
@@ -1207,7 +1268,7 @@
     </dt>
     <dd>
         
-<span class="param-type">T</span>
+<span class="param-type"><a href="global.html#TypedArray">TypedArray</a></span>
 
 
     </dd>

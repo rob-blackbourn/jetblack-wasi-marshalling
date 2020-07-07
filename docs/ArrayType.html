@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>ArrayType<span class="signature">(type, length)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ArrayType<span class="signature">(type, length<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>An arra type</p></div>
+            <div class="class-description"><p>An array type</p></div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="ArrayType"><span class="type-signature"></span>new ArrayType<span class="signature">(type, length)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ArrayType"><span class="type-signature"></span>new ArrayType<span class="signature">(type, length<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -77,7 +77,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -102,7 +106,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"><p>The type of the elements in the array</p></td>
@@ -125,7 +141,23 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
             
 
             <td class="description last"><p>The length of the array</p></td>
@@ -243,7 +275,7 @@
     
 
     
-    <h4 class="name" id="alloc"><span class="type-signature"></span>alloc<span class="signature">(memoryManager, array<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id="alloc"><span class="type-signature"></span>alloc<span class="signature">(memoryManager, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -320,7 +352,7 @@
 
         <tr>
             
-                <td class="name"><code>array</code></td>
+                <td class="name"><code>unmarshalledValue</code></td>
             
 
             <td class="type">
@@ -627,7 +659,7 @@
     
 
     
-    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(address, memoryManager, array<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -635,7 +667,7 @@
 
 
 <div class="description">
-    <p>Fre allocated memory.</p>
+    <p>Free allocated memory.</p>
 </div>
 
 
@@ -673,37 +705,6 @@
 
         <tr>
             
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The address of the memory to be freed</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>memoryManager</code></td>
             
 
@@ -735,7 +736,38 @@
 
         <tr>
             
-                <td class="name"><code>array</code></td>
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The address of the memory to be freed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
             
 
             <td class="type">
@@ -838,7 +870,7 @@
     
 
     
-    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(array, memoryManager)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(memoryManager, unmarshalledValue)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -846,7 +878,7 @@
 
 
 <div class="description">
-    <p>Marshall a (possibly nested) array.</p>
+    <p>Marshall a possibly nested array.</p>
 </div>
 
 
@@ -882,29 +914,6 @@
 
         <tr>
             
-                <td class="name"><code>array</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;T></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The array to be marshalled</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>memoryManager</code></td>
             
 
@@ -922,6 +931,29 @@
             
 
             <td class="description last"><p>The memory manager</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;T></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The array to be marshalled</p></td>
         </tr>
 
     
@@ -1020,7 +1052,7 @@
     
 
     
-    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(address, memoryManager, array)</span><span class="type-signature"> &rarr; {Array.&lt;T>}</span></h4>
+    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(memoryManager, address, unmarshalledValue)</span><span class="type-signature"> &rarr; {Array.&lt;T>}</span></h4>
     
 
     
@@ -1064,29 +1096,6 @@
 
         <tr>
             
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The address of the marshalled array</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>memoryManager</code></td>
             
 
@@ -1110,7 +1119,30 @@
 
         <tr>
             
-                <td class="name"><code>array</code></td>
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The address of the marshalled array</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unmarshalledValue</code></td>
             
 
             <td class="type">
@@ -1235,13 +1267,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 17:07:15 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 07 2020 08:05:07 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

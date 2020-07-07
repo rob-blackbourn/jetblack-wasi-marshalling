@@ -75,7 +75,7 @@ const wasi = new Wasi({})
 // Instantiate the wasm module.
 WebAssembly.instantiateStreaming(
   fetch('example.wasm'), {
-    wasi_snapshot_preview1: wasi
+    wasi_snapshot_preview1: wasi.imports()
   })
   .then(res => {
     // Initialise the wasi instance
@@ -85,6 +85,7 @@ WebAssembly.instantiateStreaming(
   })
 </code></pre>
 <h2>The Marshalling Framework</h2>
+<h3>Introduction</h3>
 <p>Given the following C function call which multiplies two arrays.</p>
 <pre class="prettyprint source lang-C"><code>#include &lt;stdlib.h>
 
@@ -132,6 +133,47 @@ console.log(result)
 </code></pre>
 <p>The framework will take care of passing the data to the wasm module,
 unpacking the result and allocating/deallocating the memory.</p>
+<h3>Finalizers and Typed Arrays</h3>
+<p>A recent introduction to JavaScript is the
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/FinalizationRegistry">FinalizationRegistry</a>.
+This allows us to register a function to call when an object is garbage
+collected. We can use this to handle memory management in WebAssembly.</p>
+<p>The
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray">TypedArray</a>
+family of objects provide transparant interoperability between Javascript and
+WebAssembly. Rather than copying values (as with <code>ArrayType</code>) we can simply pass a
+<code>TypedArray</code> via `TypedArrayType&quot;. The prototype fot the above functions would
+look like this:</p>
+<pre class="prettyprint source lang-javascript"><code>import {
+  TypedArrayType,
+  Float64Type,
+  Int32Type,
+  FunctionPrototype,
+  In
+} from '@jetblack/wasi-marshalling.develop.js'
+
+const proto = new FunctionPrototype(
+  [
+    new In(new TypedArrayType(new Float64Type())),
+    new In(new TypedArrayType(new Float64Type())),
+    new In(new Int32Type())
+  ],
+  new TypedArrayType(new Float64Type(), 4)
+)
+
+const result = proto.invoke(
+  wasi.memoryManager,
+  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+  wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
+  wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
+  4)
+
+console.log(result)
+</code></pre>
+<p>Note how we call <code>createTypedArray</code> from the memory manager. This allocates
+the memory and registers the pointer with the finalizer to ensure the memory
+gets freed.</p>
+<h3>Types</h3>
 <p>The framework handles the following types:</p>
 <ul>
 <li>Int8, Int16, Int32, Int64</li>
@@ -149,8 +191,6 @@ npm run build
 <p>To Run the examples in the <code>client</code> folder.</p>
 <pre class="prettyprint source lang-bash"><code># Run a node example
 npm run exec:nodejs
-# Run a browser which uploads an es6 module
-npm run exec:es6
 # Run code in a `&lt;script>` tag in the browser
 npm run exec:browser
 </code></pre></article>
@@ -164,13 +204,13 @@ npm run exec:browser
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 02 2020 17:07:15 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 07 2020 08:05:07 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: StringType</title>
+    <title>JSDoc: Class: StringBuffer</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: StringType</h1>
+    <h1 class="page-title">Class: StringBuffer</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>StringType<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>StringBuffer<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>A class representing a string type</p></div>
+            <div class="class-description"><p>A styped array representing a string.</p></div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="StringType"><span class="type-signature"></span>new StringType<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="StringBuffer"><span class="type-signature"></span>new StringBuffer<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_StringType.js.html">types/StringType.js</a>, <a href="types_StringType.js.html#line10">line 10</a>
+        <a href="StringBuffer.js.html">StringBuffer.js</a>, <a href="StringBuffer.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -127,17 +127,6 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="ReferenceType.html">ReferenceType</a>.&lt;string></li>
-    </ul>
-
-
-    
 
     
 
@@ -160,7 +149,7 @@
     
 
     
-    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(memoryManager, address, unmarshalledValue)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".fromAddress"><span class="type-signature">(static) </span>fromAddress<span class="signature">(memoryManager, address, finalize)</span><span class="type-signature"> &rarr; {<a href="StringBuffer.html">StringBuffer</a>}</span></h4>
     
 
     
@@ -168,7 +157,7 @@
 
 
 <div class="description">
-    <p>Free an allocated string</p>
+    <p>Create a string buffer from an address.</p>
 </div>
 
 
@@ -243,20 +232,20 @@
 
             
 
-            <td class="description last"><p>The address of the string in memory</p></td>
+            <td class="description last"><p>The address of the string</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>unmarshalledValue</code></td>
+                <td class="name"><code>finalize</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -266,7 +255,7 @@
 
             
 
-            <td class="description last"><p>The string to marshall</p></td>
+            <td class="description last"><p>If true register the string buffer for finalization.</p></td>
         </tr>
 
     
@@ -307,167 +296,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_StringType.js.html">types/StringType.js</a>, <a href="types_StringType.js.html#line17">line 17</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(memoryManager, unmarshalledValue)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Marshall a string into memory</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>memoryManager</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="MemoryManager.html">MemoryManager</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The memory manager</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>unmarshalledValue</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The string to marshall</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_StringType.js.html">types/StringType.js</a>, <a href="types_StringType.js.html#line27">line 27</a>
+        <a href="StringBuffer.js.html">StringBuffer.js</a>, <a href="StringBuffer.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -496,7 +325,7 @@
 
         
 <div class="param-desc">
-    <p>The address of the string in memory</p>
+    <p>The created string buffer.</p>
 </div>
 
 
@@ -507,7 +336,7 @@
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type"><a href="StringBuffer.html">StringBuffer</a></span>
 
 
     </dd>
@@ -525,7 +354,7 @@
     
 
     
-    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(memoryManager, address, unmarshalledValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".fromString"><span class="type-signature">(static) </span>fromString<span class="signature">(memoryManager, string, finalize)</span><span class="type-signature"> &rarr; {<a href="StringBuffer.html">StringBuffer</a>}</span></h4>
     
 
     
@@ -533,7 +362,7 @@
 
 
 <div class="description">
-    <p>Unmarshall a string</p>
+    <p>Create a string buffer from a string.</p>
 </div>
 
 
@@ -556,8 +385,6 @@
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
         
 
         
@@ -584,14 +411,6 @@
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
@@ -602,38 +421,7 @@
 
         <tr>
             
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The address of the string in memory</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>unmarshalledValue</code></td>
+                <td class="name"><code>string</code></td>
             
 
             <td class="type">
@@ -646,20 +434,33 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
+            
 
+            <td class="description last"><p>The string to encode</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>finalize</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
             
 
             
 
-            <td class="description last"><p>Optional unmarshalled value.</p></td>
+            <td class="description last"><p>If true free the memory through finalization.</p></td>
         </tr>
 
     
@@ -700,7 +501,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_StringType.js.html">types/StringType.js</a>, <a href="types_StringType.js.html#line39">line 39</a>
+        <a href="StringBuffer.js.html">StringBuffer.js</a>, <a href="StringBuffer.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -729,9 +530,115 @@
 
         
 <div class="param-desc">
-    <p>The unmarshalled string</p>
+    <p>The created string buffer.</p>
 </div>
 
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="StringBuffer.html">StringBuffer</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Decode the string buffer to a string</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="StringBuffer.js.html">StringBuffer.js</a>, <a href="StringBuffer.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
 
 
 <dl>
