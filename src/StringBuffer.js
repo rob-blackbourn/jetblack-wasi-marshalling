@@ -41,7 +41,7 @@ export class StringBuffer extends Uint8Array {
     buf.set(encodedString)
 
     if (finalize) {
-      memoryManager.registry.register(buf, address)
+      memoryManager.freeWhenFinalized(buf, address)
     }
 
     return buf
@@ -58,7 +58,7 @@ export class StringBuffer extends Uint8Array {
     let length = strlen(memoryManager, address)
     const array = new StringBuffer(memoryManager.memory.buffer, address, length)
     if (finalize) {
-      memoryManager.registry.register(array, address)
+      memoryManager.freeWhenFinalized(array, address)
     }
     return array
   }

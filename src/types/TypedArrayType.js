@@ -78,7 +78,7 @@ export class TypedArrayType extends ReferenceType {
         memoryManager.memory.buffer,
         address,
         this.length)
-      memoryManager.registry.register(typedArray, address)
+      memoryManager.freeWhenFinalized(typedArray, address)
       return typedArray
     }
   }

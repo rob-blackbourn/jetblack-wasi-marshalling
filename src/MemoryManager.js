@@ -45,13 +45,15 @@ export class MemoryManager {
   }
 
   /**
-   * @property {FinalizationRegistry}
+   * Free an address when finalized.
+   * @param {*} target The object that will be finalized
+   * @param {number} address The address to be freed
    */
-  get registry() {
+  freeWhenFinalized(target, address) {
     if (this._registry === null) {
       throw new Error('FinalizationRegistry is not implemented')
     }
-    return this._registry
+    this._registry.register(target, address)
   }
 
   /**
