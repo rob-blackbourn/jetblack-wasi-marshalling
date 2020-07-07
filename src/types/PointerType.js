@@ -1,6 +1,6 @@
 import { MemoryManager } from '../MemoryManager'
+import { Pointer } from '../Pointer'
 
-import { Pointer } from './Pointer'
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
