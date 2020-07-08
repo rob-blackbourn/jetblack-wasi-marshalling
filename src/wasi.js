@@ -188,14 +188,14 @@ export class Wasi {
     if (!(fd === 1 || fd === 2)) {
       return WASI.ERRNO.BADF
     }
-    if (this.memoryManager == null || this.memoryManager.dataView == undefined) {
+    if (this.memoryManager == null) {
       throw new Error('No memory')
     }
 
     this.memoryManager.dataView.setUint8(stat + 0, WASI.FILETYPE.CHARACTER_DEVICE)
     this.memoryManager.dataView.setUint32(stat + 2, WASI.FDFLAGS.APPEND, true)
-    this.memoryManager.dataView.setBigUint64(stat + 8, WASI.RIGHTS.FD_WRITE, true)
-    this.memoryManager.dataView.setBigUint64(stat + 16, WASI.RIGHTS.FD_WRITE, true)
+    this.memoryManager.dataView.setBigUint64(stat + 8, WASI.RIGHTS.FD.WRITE, true)
+    this.memoryManager.dataView.setBigUint64(stat + 16, WASI.RIGHTS.FD.WRITE, true)
     return WASI.ESUCCESS
   }
 

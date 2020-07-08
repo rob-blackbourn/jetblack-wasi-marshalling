@@ -141,6 +141,22 @@ async function main () {
   )
   console.log(result6.toString())
 
+  const proto7 = new FunctionPrototype(
+    [
+      new In(new StringType())
+    ]
+  )
+  proto7.invoke(
+    wasi.memoryManager,
+    wasi.instance.exports.sendToStdout,
+    "Hello, World!\n"
+  )
+
+  proto7.invoke(
+    wasi.memoryManager,
+    wasi.instance.exports.sendToStderr,
+    "Hello, World!\n"
+  )
 }
 
 main()
