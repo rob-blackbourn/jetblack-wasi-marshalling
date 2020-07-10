@@ -51,28 +51,29 @@ export class ArgumentDef {
    * Unmarshall a value
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number|T} addressOrValue The marshalled address or value 
-   * @param {T} [unmarshalledValue] The optional unmarshalled value. 
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshall args
    * @returns {number|T} The unmarshalled value.
    */
-  unmarshall (memoryManager, addressOrValue, unmarshalledValue) {
+  unmarshall (memoryManager, addressOrValue, unmarshalledIndex, unmarshalledArgs) {
     if (this.type instanceof ValueType) {
       return addressOrValue
     }
 
     if (this.isOutput) {
-      if (unmarshalledValue == null) {
+      if (unmarshalledIndex === -1) {
         throw new Error('Out put argument missing')
       }
       if (typeof addressOrValue !== 'number') {
-        throw new Error('Expected address to be a number')
+        throw new Error('Expected address or to be a number')
       }
-      const result = this.type.unmarshall(memoryManager, addressOrValue, unmarshalledValue)
-      this.type.copy(unmarshalledValue, result)
+      const result = this.type.unmarshall(memoryManager, addressOrValue, unmarshalledIndex, unmarshalledArgs)
+      this.type.copy(unmarshalledArgs[unmarshalledIndex], result)
     } else {
       if (typeof addressOrValue !== 'number') {
         throw new Error('Expected address to be a number')
       }
-      this.type.free(memoryManager, addressOrValue, unmarshalledValue)
+      this.type.free(memoryManager, addressOrValue, unmarshalledIndex === -1 ? null : unmarshalledArgs[unmarshalledIndex])
     }
   }
 }

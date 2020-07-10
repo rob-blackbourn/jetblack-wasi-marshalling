@@ -27,13 +27,14 @@ export class Uint8Type extends ValueType {
   }
 
   /**
-   * Unmarshal the value from a pointer.
+   * Unmarshall the value from a pointer.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer to the value
-   * @param {number} [unmarshalledValue] Optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
       return memoryManager.dataView.getUint8(address)
     } finally {

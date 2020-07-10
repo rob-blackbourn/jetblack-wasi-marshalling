@@ -4,6 +4,14 @@ import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
 /**
+ * Gets the length
+ * @callback lengthCallback
+ * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+ * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+ * @returns {number} The length of the array
+ */
+
+/**
  * An array type
  * @template T
  * @extends {ReferenceType<Array<T>>}
@@ -12,12 +20,31 @@ export class ArrayType extends ReferenceType {
   /**
    * Construct an array type
    * @param {Type<T>} type The type of the elements in the array
-   * @param {number} [length] The length of the array
+   * @param {number|lengthCallback} [length] The length of the array
    */
   constructor (type, length = null) {
     super()
     this.type = type
     this.length = length
+  }
+
+  /**
+   * Get the length of the array
+   * @param {number} unmarshalledIndex The index of the unmarshalled argument or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {number} The length of the array.
+   */
+  getLength (unmarshalledIndex, unmarshalledArgs) {
+    if (typeof this.length === 'number') {
+      return this.length
+    } else if (typeof this.length === 'function') {
+      return this.length(unmarshalledIndex, unmarshalledArgs)
+    } else if (unmarshalledIndex !== -1) {
+      const array = /** @type {Array<T>} */ (unmarshalledArgs[unmarshalledIndex])
+      return array.length
+    } else {
+      throw RangeError('Unable to establish the length of the array')
+    }
   }
 
   /**
@@ -27,14 +54,7 @@ export class ArrayType extends ReferenceType {
    * @returns {number} The address of the allocated memory.
    */
   alloc (memoryManager, unmarshalledValue) {
-    if (this.length != null && unmarshalledValue != null && this.length !== unmarshalledValue.length) {
-      throw new RangeError('Invalid array length')
-    }
-
-    const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
-    if (length == null) {
-      throw new RangeError('Unknown length')
-    }
+    const length = this.getLength(unmarshalledValue != null ? 0 : -1, [unmarshalledValue])
     return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
@@ -46,10 +66,7 @@ export class ArrayType extends ReferenceType {
    */
   free (memoryManager, address, unmarshalledValue) {
     try {
-      const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
-      if (length == null) {
-        throw new Error('Unknwon length for array')
-      }
+      const length = this.getLength(0, [unmarshalledValue])
       if (this.type instanceof ReferenceType) {
         const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
         typedArray.forEach(item => this.type.free(memoryManager, item, null))
@@ -85,22 +102,19 @@ export class ArrayType extends ReferenceType {
    * Unmarshall a possibly nested array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the marshalled array
-   * @param {Array<T>} unmarshalledValue AN optional unmarshalled array
+   * @param {number} unmarshalledIndex The index of the unmarshalled arg or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled args
    * @returns {Array<T>} The unmarshalled array
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
-      const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
-      if (length == null) {
-        throw new Error('Unknwon length for array')
-      }
+      const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-      // @ts-ignore
-      return this.type instanceof ReferenceType
-        // @ts-ignore
-        ? Array.from(typedArray, x => (this.type.unmarshall(memoryManager, x, null)))
-        // @ts-ignore
-        : Array.from(typedArray)
+      if (this.type instanceof ReferenceType) {
+        return Array.from(/** @type {Iterable<number>} */ (typedArray), x => (this.type.unmarshall(memoryManager, x, -1, [])))
+      } else {
+        return /** @type {Array<T>} */ (Array.from(/** @type {Iterable<*>} */ (typedArray)))
+      }
     } finally {
       memoryManager.free(address)
     }

@@ -1,3 +1,9 @@
 {
-    "standard.enable": false
+    "standard.enable": false,
+    "cSpell.words": [
+        "finalizer",
+        "malloc",
+        "unmarshall",
+        "unmarshalled"
+    ]
 }

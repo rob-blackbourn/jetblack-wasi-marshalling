@@ -22,24 +22,24 @@ export class FunctionPrototype {
    * Invoke a function
    * @param {MemoryManager} memoryManager The memory manager
    * @param {Function} func The function to invoke
-   * @param {Array<any>} args The function arguments
+   * @param {Array<any>} unmarshalledArgs The function arguments
    * @returns {T} An optional return value
    */
-  invoke (memoryManager, func, ...args) {
-    if (this.argDefs.length !== args.length) {
+  invoke (memoryManager, func, ...unmarshalledArgs) {
+    if (this.argDefs.length !== unmarshalledArgs.length) {
       throw new RangeError('Invalid number of arguments')
     }
 
-    const marshalledArgs = args.map((arg, i) =>
+    const marshalledArgs = unmarshalledArgs.map((arg, i) =>
       this.argDefs[i].marshall(memoryManager, arg))
 
     const result = func(...marshalledArgs)
 
-    args.forEach((arg, i) =>
-      this.argDefs[i].unmarshall(memoryManager, marshalledArgs[i], arg))
+    unmarshalledArgs.forEach((arg, i) =>
+      this.argDefs[i].unmarshall(memoryManager, marshalledArgs[i], i, unmarshalledArgs))
 
     if (this.returns != null) {
-      return this.returns.unmarshall(memoryManager, result)
+      return this.returns.unmarshall(memoryManager, result, -1, unmarshalledArgs)
     }
   }
 }
