@@ -30,7 +30,7 @@
 
 /**
  * The base class for representing types
- * @template T
+ * @template T The value type
  */
 export class Type {
   /**
@@ -45,11 +45,12 @@ export class Type {
    * Allocate memory for the type
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} unmarshalledValue An optional value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated value in memory
    */
-  alloc (memoryManager, unmarshalledValue) {
-    throw new Error('Not Implemented')
+  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    throw new TypeError('Not Implemented')
   }
 
   /**
@@ -57,21 +58,24 @@ export class Type {
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the value in memory
-   * @param {T} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {void}
    */
-  free (memoryManager, address, unmarshalledValue) {
-    throw new Error('Not Implemented')
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+    throw new TypeError('Not Implemented')
   }
 
   /**
    * Marshal a value.
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} unmarshalledValue The value to marshall
+   * @param {number} unmarshalledIndex The index of the value to marshall
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number|T} The marshalled value
    */
-  marshall (memoryManager, unmarshalledValue) {
-    throw new Error('Not Implemented')
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    throw new TypeError('Not Implemented')
   }
 
   /**
@@ -79,11 +83,12 @@ export class Type {
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the value in memory
-   * @param {T} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled args
    * @returns {T}
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
-    throw new Error('Not Implemented')
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+    throw new TypeError('Not Implemented')
   }
 
   /**
@@ -94,7 +99,7 @@ export class Type {
    * @returns {T} The destination value
    */
   copy (dest, source) {
-    throw new Error('Not Implemented')
+    throw new TypeError('Not Implemented')
   }
 }
 </code></pre>
@@ -107,13 +112,13 @@ export class Type {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li><li><a href="global.html#unmarshalledArgs%255Bundefined%255D">unmarshalledArgs[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 07 2020 08:05:07 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 10 2020 13:03:40 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

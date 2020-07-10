@@ -32,6 +32,14 @@ import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
 /**
+ * Gets the length
+ * @callback lengthCallback
+ * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+ * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
+ * @returns {number} The length of the array
+ */
+
+/**
  * An array type
  * @template T
  * @extends {ReferenceType&lt;Array&lt;T>>}
@@ -40,7 +48,7 @@ export class ArrayType extends ReferenceType {
   /**
    * Construct an array type
    * @param {Type&lt;T>} type The type of the elements in the array
-   * @param {number} [length] The length of the array
+   * @param {number|lengthCallback} [length] The length of the array
    */
   constructor (type, length = null) {
     super()
@@ -49,20 +57,33 @@ export class ArrayType extends ReferenceType {
   }
 
   /**
+   * Get the length of the array
+   * @param {number} unmarshalledIndex The index of the unmarshalled argument or -1
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {number} The length of the array.
+   */
+  getLength (unmarshalledIndex, unmarshalledArgs) {
+    if (typeof this.length === 'number') {
+      return this.length
+    } else if (typeof this.length === 'function') {
+      return this.length(unmarshalledIndex, unmarshalledArgs)
+    } else if (unmarshalledIndex !== -1) {
+      const array = /** @type {Array&lt;T>} */ (unmarshalledArgs[unmarshalledIndex])
+      return array.length
+    } else {
+      throw RangeError('Unable to establish the length of the array')
+    }
+  }
+
+  /**
    * Allocate memory for the array.
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Array&lt;T>} [unmarshalledValue] An optional unmarshalled array
+   * @param {number} unmarshalledIndex The index to the unmarshalled array
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory.
    */
-  alloc (memoryManager, unmarshalledValue) {
-    if (this.length != null &amp;&amp; unmarshalledValue != null &amp;&amp; this.length !== unmarshalledValue.length) {
-      throw new RangeError('Invalid array length')
-    }
-
-    const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
-    if (length == null) {
-      throw new RangeError('Unknown length')
-    }
+  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
     return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
@@ -70,17 +91,21 @@ export class ArrayType extends ReferenceType {
    * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {Array&lt;T>} [unmarshalledValue] An optional unmarshalled array
+   * @param {number} unmarshalledIndex The index of the unmarshalled array or -1
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled args
+   * @returns {void}
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
-      const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
-      if (length == null) {
-        throw new Error('Unknwon length for array')
-      }
+      const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       if (this.type instanceof ReferenceType) {
+        const unmarshalledValue = unmarshalledIndex == -1 ? null : unmarshalledArgs[unmarshalledIndex]
         const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-        typedArray.forEach(item => this.type.free(memoryManager, item, null))
+        typedArray.forEach((item, i) => {
+          const index = unmarshalledValue == null ? -1 : 0
+          const args = unmarshalledValue == null ? [] : unmarshalledValue[i]
+          this.type.free(memoryManager, item, index, args)
+        })
       }
     } finally {
       memoryManager.free(address)
@@ -90,16 +115,18 @@ export class ArrayType extends ReferenceType {
   /**
    * Marshall a possibly nested array.
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Array&lt;T>} unmarshalledValue The array to be marshalled
+   * @param {number} unmarshalledIndex The index of the unmarshalled value
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the marshalled array
    */
-  marshall (memoryManager, unmarshalledValue) {
-    const address = this.alloc(memoryManager, unmarshalledValue)
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
 
+    const unmarshalledValue = /** @type {Array&lt;T>} */ unmarshalledArgs[unmarshalledIndex]
     const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, unmarshalledValue.length)
     if (this.type instanceof ReferenceType) {
       unmarshalledValue.forEach((item, i) => {
-        typedArray[i] = /** @type {number} */ (this.type.marshall(memoryManager, item))
+        typedArray[i] = /** @type {number} */ (this.type.marshall(memoryManager, 0, [item]))
       })
     } else {
       // @ts-ignore
@@ -113,22 +140,19 @@ export class ArrayType extends ReferenceType {
    * Unmarshall a possibly nested array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the marshalled array
-   * @param {Array&lt;T>} unmarshalledValue AN optional unmarshalled array
+   * @param {number} unmarshalledIndex The index of the unmarshalled arg or -1
+   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled args
    * @returns {Array&lt;T>} The unmarshalled array
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
-      const length = unmarshalledValue != null ? unmarshalledValue.length : this.length
-      if (length == null) {
-        throw new Error('Unknwon length for array')
-      }
+      const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-      // @ts-ignore
-      return this.type instanceof ReferenceType
-        // @ts-ignore
-        ? Array.from(typedArray, x => (this.type.unmarshall(memoryManager, x, null)))
-        // @ts-ignore
-        : Array.from(typedArray)
+      if (this.type instanceof ReferenceType) {
+        return Array.from(/** @type {Iterable&lt;number>} */ (typedArray), x => (this.type.unmarshall(memoryManager, x, -1, [])))
+      } else {
+        return /** @type {Array&lt;T>} */ (Array.from(/** @type {Iterable&lt;*>} */ (typedArray)))
+      }
     } finally {
       memoryManager.free(address)
     }
@@ -155,13 +179,13 @@ export class ArrayType extends ReferenceType {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li><li><a href="global.html#unmarshalledArgs%255Bundefined%255D">unmarshalledArgs[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 07 2020 08:05:07 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 10 2020 13:03:40 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
