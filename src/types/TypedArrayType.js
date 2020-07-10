@@ -71,9 +71,10 @@ export class TypedArrayType extends ReferenceType {
    * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {TypedArray} [unmarshalledValue] An optional unmarshalled array
+   * @param {number} unmarshalledIndex The index to the unmarshalled array or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     // The finalizer handles freeing.
   }
 

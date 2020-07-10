@@ -10,13 +10,13 @@ import { Type } from './Type'
  */
 export class ArgumentDef {
   /**
-   * Construct an argument defintion. The {@link In}, {@link Out}, and {@link InOut}
+   * Construct an argument definition. The {@link In}, {@link Out}, and {@link InOut}
    * helper classes should be used to construct argument definitions as they are
    * semantically clearer and avoid the possibility of setting both `isInput` and
    * `isOutput` to `false`.
    * @param {Type<T>} type The argument type
    * @param {boolean} isInput If true the argument provides data to the function
-   * @param {boolean} isOutput If true the argument is poulated by the function
+   * @param {boolean} isOutput If true the argument is populated by the function
    */
   constructor (type, isInput, isOutput) {
     this.type = type
@@ -27,7 +27,7 @@ export class ArgumentDef {
   /**
    * Create a representation of the JavaScript value which can be passed to a
    * WebAssembly module instance. For value types this is typically the value
-   * itself. For refrence types memory will be allocated in the instance, and
+   * itself. For reference types memory will be allocated in the instance, and
    * the data will be copied.
    * @param {MemoryManager} memoryManager A class which provides methods to
    * @param {T} unmarshalledValue The value for which a WebAssembly value should be created
@@ -73,7 +73,7 @@ export class ArgumentDef {
       if (typeof addressOrValue !== 'number') {
         throw new Error('Expected address to be a number')
       }
-      this.type.free(memoryManager, addressOrValue, unmarshalledIndex === -1 ? null : unmarshalledArgs[unmarshalledIndex])
+      this.type.free(memoryManager, addressOrValue, unmarshalledIndex, unmarshalledArgs)
     }
   }
 }

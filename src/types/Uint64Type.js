@@ -17,7 +17,7 @@ export class Uint64Type extends ValueType {
   /**
    * Marshalls the value to a pointer
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {bigint} unmarshalledValue The value to marhsall
+   * @param {bigint} unmarshalledValue The value to marshall
    * @returns {number} The address of a pointer to the value
    */
   marshall (memoryManager, unmarshalledValue) {

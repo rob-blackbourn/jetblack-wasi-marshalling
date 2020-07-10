@@ -41,9 +41,10 @@ export class AddressType extends ReferenceType {
    * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {Pointer} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     // The finalizer handles freeing.
   }
 }

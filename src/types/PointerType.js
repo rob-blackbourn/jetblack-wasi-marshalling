@@ -23,12 +23,13 @@ export class PointerType extends ReferenceType {
    * Free an allocated pointer
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer to be freed
-   * @param {Pointer<T>} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
-      this.type.free(memoryManager, marshalledAddress, null)
+      this.type.free(memoryManager, marshalledAddress, unmarshalledIndex, unmarshalledArgs)
     } finally {
       memoryManager.free(address)
     }

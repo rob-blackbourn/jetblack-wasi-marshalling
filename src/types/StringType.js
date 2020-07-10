@@ -12,9 +12,10 @@ export class StringType extends ReferenceType {
    * Free an allocated string
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the string in memory
-   * @param {string} unmarshalledValue The string to marshall
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     memoryManager.free(address)
   }
 

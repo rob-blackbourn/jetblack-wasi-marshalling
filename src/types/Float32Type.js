@@ -17,7 +17,7 @@ export class Float32Type extends ValueType {
   /**
    * Marshalls the value to a pointer
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {number} unmarshalledValue The value to marhsall
+   * @param {number} unmarshalledValue The value to marshall
    * @returns {number} The address of a pointer to the value
    */
   marshall (memoryManager, unmarshalledValue) {

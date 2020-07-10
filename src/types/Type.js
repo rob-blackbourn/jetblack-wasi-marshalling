@@ -29,9 +29,10 @@ export class Type {
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the value in memory
-   * @param {T} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     throw new TypeError('Not Implemented')
   }
 

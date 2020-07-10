@@ -22,9 +22,10 @@ export class ValueType extends Type {
    * Free allocated memory
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {T} [unmarshalledValue] Optional unmarshalled value.
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     memoryManager.free(address)
   }
 }

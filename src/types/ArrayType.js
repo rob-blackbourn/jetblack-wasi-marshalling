@@ -62,14 +62,20 @@ export class ArrayType extends ReferenceType {
    * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {Array<T>} [unmarshalledValue] An optional unmarshalled array
+   * @param {number} unmarshalledIndex The index of the unmarshalled array or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled args
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
-      const length = this.getLength(0, [unmarshalledValue])
+      const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       if (this.type instanceof ReferenceType) {
+        const unmarshalledValue = unmarshalledIndex == -1 ? null : unmarshalledArgs[unmarshalledIndex]
         const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-        typedArray.forEach(item => this.type.free(memoryManager, item, null))
+        typedArray.forEach((item, i) => {
+          const index = unmarshalledValue == null ? -1 : 0
+          const args = unmarshalledValue == null ? [] : unmarshalledValue[i]
+          this.type.free(memoryManager, item, index, args)
+        })
       }
     } finally {
       memoryManager.free(address)
