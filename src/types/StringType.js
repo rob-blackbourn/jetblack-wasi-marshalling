@@ -22,10 +22,12 @@ export class StringType extends ReferenceType {
   /**
    * Marshall a string into memory
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {string} unmarshalledValue The string to marshall
+   * @param {number} unmarshalledIndex The index of the value to marshall
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, unmarshalledValue) {
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
     const stringBuffer = StringBuffer.fromString(memoryManager, unmarshalledValue, false)
     return stringBuffer.byteOffset
   }

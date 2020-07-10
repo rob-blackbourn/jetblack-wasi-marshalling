@@ -17,12 +17,13 @@ export class Uint64Type extends ValueType {
   /**
    * Marshalls the value to a pointer
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {bigint} unmarshalledValue The value to marshall
+   * @param {number} unmarshalledIndex The index of the value to marshall
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager, unmarshalledValue) {
-    const address = this.alloc(memoryManager)
-    memoryManager.dataView.setBigUint64(address, unmarshalledValue)
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
+    memoryManager.dataView.setBigUint64(address, unmarshalledArgs[unmarshalledIndex])
     return address
   }
 

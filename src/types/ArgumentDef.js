@@ -30,18 +30,18 @@ export class ArgumentDef {
    * itself. For reference types memory will be allocated in the instance, and
    * the data will be copied.
    * @param {MemoryManager} memoryManager A class which provides methods to
-   * @param {T} unmarshalledValue The value for which a WebAssembly value should be created
-   *    manage the memory of a WebAssembly module.
+   * @param {number} unmarshalledIndex The index of the unmarshalled value
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number|T} The address of the allocated memory or the marshalled value.
    * @throws {Error} If the argument is not input and/or output.
    */
-  marshall (memoryManager, unmarshalledValue) {
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
     if (this.type instanceof ValueType) {
-      return unmarshalledValue
+      return unmarshalledArgs[unmarshalledIndex]
     } else if (this.isInput) {
-      return this.type.marshall(memoryManager, unmarshalledValue)
+      return this.type.marshall(memoryManager, unmarshalledIndex, unmarshalledArgs)
     } else if (this.isOutput) {
-      return this.type.alloc(memoryManager, unmarshalledValue)
+      return this.type.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     } else {
       throw new Error('An argument must be input and/or output')
     }

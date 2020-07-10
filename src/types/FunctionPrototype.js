@@ -31,7 +31,7 @@ export class FunctionPrototype {
     }
 
     const marshalledArgs = unmarshalledArgs.map((arg, i) =>
-      this.argDefs[i].marshall(memoryManager, arg))
+      this.argDefs[i].marshall(memoryManager, i, unmarshalledArgs))
 
     const result = func(...marshalledArgs)
 

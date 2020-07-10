@@ -50,11 +50,12 @@ export class ArrayType extends ReferenceType {
   /**
    * Allocate memory for the array.
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Array<T>} [unmarshalledValue] An optional unmarshalled array
+   * @param {number} unmarshalledIndex The index to the unmarshalled array
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory.
    */
-  alloc (memoryManager, unmarshalledValue) {
-    const length = this.getLength(unmarshalledValue != null ? 0 : -1, [unmarshalledValue])
+  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
     return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
@@ -85,16 +86,18 @@ export class ArrayType extends ReferenceType {
   /**
    * Marshall a possibly nested array.
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Array<T>} unmarshalledValue The array to be marshalled
+   * @param {number} unmarshalledIndex The index of the unmarshalled value
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the marshalled array
    */
-  marshall (memoryManager, unmarshalledValue) {
-    const address = this.alloc(memoryManager, unmarshalledValue)
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
 
+    const unmarshalledValue = /** @type {Array<T>} */ unmarshalledArgs[unmarshalledIndex]
     const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, unmarshalledValue.length)
     if (this.type instanceof ReferenceType) {
       unmarshalledValue.forEach((item, i) => {
-        typedArray[i] = /** @type {number} */ (this.type.marshall(memoryManager, item))
+        typedArray[i] = /** @type {number} */ (this.type.marshall(memoryManager, 0, [item]))
       })
     } else {
       // @ts-ignore

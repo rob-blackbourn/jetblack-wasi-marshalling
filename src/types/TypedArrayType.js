@@ -55,14 +55,15 @@ export class TypedArrayType extends ReferenceType {
   /**
    * Allocate memory for the array.
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {TypedArray} [unmarshalledValue] An optional unmarshalled array
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory.
    */
-  alloc (memoryManager, unmarshalledValue) {
-    if (unmarshalledValue != null) {
-      return unmarshalledValue.byteOffset
+  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    if (unmarshalledIndex !== -1) {
+      return unmarshalledArgs[unmarshalledIndex].byteOffset
     } else {
-      const length = this.getLength(unmarshalledValue != null ? 0 : -1, [unmarshalledValue])
+      const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
     }
   }
@@ -81,11 +82,13 @@ export class TypedArrayType extends ReferenceType {
   /**
    * Marshall a typed array.
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {TypedArray} unmarshalledValue The array to be marshalled
+   * @param {number} unmarshalledIndex The index of the value to be marshalled
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the marshalled array
    */
-  marshall (memoryManager, unmarshalledValue) {
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
     // Simply return the address.
+    const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
     return unmarshalledValue.byteOffset
   }
 

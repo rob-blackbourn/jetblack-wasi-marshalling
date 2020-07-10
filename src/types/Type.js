@@ -17,10 +17,11 @@ export class Type {
    * Allocate memory for the type
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} unmarshalledValue An optional value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated value in memory
    */
-  alloc (memoryManager, unmarshalledValue) {
+  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
     throw new TypeError('Not Implemented')
   }
 
@@ -40,10 +41,11 @@ export class Type {
    * Marshal a value.
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} unmarshalledValue The value to marshall
+   * @param {number} unmarshalledIndex The index of the value to marshall
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number|T} The marshalled value
    */
-  marshall (memoryManager, unmarshalledValue) {
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
     throw new TypeError('Not Implemented')
   }
 

@@ -12,11 +12,12 @@ export class AddressType extends ReferenceType {
   /**
    * Marshall an address into memory
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Pointer<number>} unmarshalledValue The string buffer to marshall
+   * @param {number} unmarshalledIndex The index of the value to to marshall
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, unmarshalledValue) {
-    return unmarshalledValue.contents
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    return unmarshalledArgs[unmarshalledIndex].contents
   }
 
   /**

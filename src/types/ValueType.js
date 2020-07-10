@@ -11,10 +11,11 @@ export class ValueType extends Type {
   /**
    * Allocate memory for the type
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} [unmarshalledValue] An optional value.
+   * @param {number} unmarshalledIndex The index of the unmarshalled value
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory
    */
-  alloc (memoryManager, unmarshalledValue) {
+  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
     return memoryManager.malloc(this.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
