@@ -10,6 +10,14 @@ This library provides two things:
 The intention is to provide support to "drop in" publicly available libraries
 that can be compiled into a wasm module.
 
+## Installation
+
+The package can be installed from npm.
+
+```bash
+npm install --save @jetblack/wasi-marshalling
+```
+
 ## The WASI Layer
 
 Three WASI domains are implemented:
