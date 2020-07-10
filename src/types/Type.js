@@ -32,6 +32,7 @@ export class Type {
    * @param {number} address The address of the value in memory
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {void}
    */
   free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     throw new TypeError('Not Implemented')

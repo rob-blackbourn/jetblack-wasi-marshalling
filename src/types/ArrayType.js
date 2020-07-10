@@ -65,6 +65,7 @@ export class ArrayType extends ReferenceType {
    * @param {number} address The address of the memory to be freed
    * @param {number} unmarshalledIndex The index of the unmarshalled array or -1
    * @param {Array<*>} unmarshalledArgs The unmarshalled args
+   * @returns {void}
    */
   free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {

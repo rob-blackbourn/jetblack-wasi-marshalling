@@ -25,6 +25,7 @@ export class PointerType extends ReferenceType {
    * @param {number} address The address of the pointer to be freed
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {void}
    */
   free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {

@@ -14,6 +14,7 @@ export class StringType extends ReferenceType {
    * @param {number} address The address of the string in memory
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {void}
    */
   free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     memoryManager.free(address)
