@@ -7,7 +7,7 @@ This library provides two things:
 * A marshalling framework for calling WebAssembly functions in a wasm module
   from JavaScript.
 
-The intention is to provide support to "drop in" publically available libraries
+The intention is to provide support to "drop in" publicly available libraries
 that can be compiled into a wasm module.
 
 ## The WASI Layer
@@ -24,7 +24,7 @@ Three WASI domains are implemented:
   memory.
 
 The implementation of the WASI layer is provided through a class of the
-same name. Here is an example of initialising the library.
+same name. Here is an example of initializing the library.
 
 ```javascript
 import { Wasi } from '@jetblack/wasi-marshalling'
@@ -38,7 +38,7 @@ WebAssembly.instantiateStreaming(
     wasi_snapshot_preview1: wasi.imports()
   })
   .then(res => {
-    // Initialise the wasi instance
+    // Initialize the wasi instance
     wasi.init(res.instance)
 
     // Do something interesting ...
@@ -153,7 +153,7 @@ collected. We can use this to handle memory management in WebAssembly.
 
 The
 [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)
-family of objects provide transparant interoperability between Javascript and
+family of objects provide transparent interoperability between Javascript and
 WebAssembly. Rather than copying values (as with `ArrayType`) we can simply pass a
 `TypedArray` via `TypedArrayType". The prototype fot the above functions would
 look like this:
