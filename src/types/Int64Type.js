@@ -17,23 +17,25 @@ export class Int64Type extends ValueType {
   /**
    * Marshalls the value to a pointer
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {bigint} unmarshalledValue The value to marhsall
+   * @param {number} unmarshalledIndex The index of the value to marshall
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager, unmarshalledValue) {
-    const address = this.alloc(memoryManager, unmarshalledValue)
-    memoryManager.dataView.setBigInt64(address, unmarshalledValue)
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
+    memoryManager.dataView.setBigInt64(address, unmarshalledArgs[unmarshalledIndex])
     return address
   }
 
   /**
-   * Unmarshal the value from a pointer.
+   * Unmarshall the value from a pointer.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer to the value
-   * @param {bigint} [unmarshalledValue] Optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {bigint} The unmarshalled value.
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
       return memoryManager.dataView.getBigInt64(address)
     } finally {

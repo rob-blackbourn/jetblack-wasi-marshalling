@@ -12,23 +12,25 @@ export class AddressType extends ReferenceType {
   /**
    * Marshall an address into memory
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Pointer<number>} unmarshalledValue The string buffer to marshall
+   * @param {number} unmarshalledIndex The index of the value to to marshall
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, unmarshalledValue) {
-    return unmarshalledValue.contents
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    return unmarshalledArgs[unmarshalledIndex].contents
   }
 
   /**
    * Unmarshall an address
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the string buffer in memory
-   * @param {Pointer<number>} [unmarshalledValue] Optional unmarshalled value.
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments.
    * @returns {Pointer<number>} The unmarshalled string buffer
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
-    if (unmarshalledValue != null) {
-      return unmarshalledValue
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+    if (unmarshalledIndex !== -1) {
+      return /** @type {Pointer<number>} */ (unmarshalledArgs[unmarshalledIndex])
     } else {
       const pointer =  new Pointer(address)
       memoryManager.freeWhenFinalized(pointer, address)
@@ -40,9 +42,11 @@ export class AddressType extends ReferenceType {
    * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {Pointer} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {void}
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     // The finalizer handles freeing.
   }
 }

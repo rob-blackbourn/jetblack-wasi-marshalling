@@ -1,3 +1,17 @@
 {
-    "standard.enable": false
+    "standard.enable": false,
+    "cSpell.words": [
+        "Finalizers",
+        "WASI",
+        "deallocating",
+        "finalizer",
+        "jetblack",
+        "malloc",
+        "proto",
+        "setlocale",
+        "stdlib",
+        "unmarshall",
+        "unmarshalled",
+        "wasm"
+    ]
 }

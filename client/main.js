@@ -43,7 +43,7 @@ async function main () {
       new In(new ArrayType(new Float64Type())),
       new In(new Int32Type())
     ],
-    new ArrayType(new Float64Type(), 4)
+    new ArrayType(new Float64Type(), (i, args) => args[2])
   )
 
   const result1 = proto1.invoke(

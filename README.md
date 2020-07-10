@@ -103,6 +103,47 @@ console.log(result)
 The framework will take care of passing the data to the wasm module,
 unpacking the result and allocating/deallocating the memory.
 
+Note how a length of 4 was passed for the return type. This is because the
+function passes a pointer to the start of the result array, so the size is not
+known. However, the length of a return array is often guaranteed by the input
+arguments. In the above example the last parameter which specifies the length of
+the input arrays is also the length of the output arrays. We can use this by
+passing a callback function as the *length* argument. The function is provided
+with the index of the argument for which the length is being queried (or -1 for
+the result), and the unmarshalled input arguments.
+
+We can re-write the prototype as follows.
+
+```javascript
+import {
+  ArrayType,
+  Float64Type,
+  Int32Type,
+  FunctionPrototype,
+  In
+} from '@jetblack/wasi-marshalling.develop.js'
+
+const prototype = new FunctionPrototype(
+  // The arguments
+  [
+    new In(new ArrayType(new Float64Type())),
+    new In(new ArrayType(new Float64Type())),
+    new In(new Int32Type())
+  ],
+  // The return type
+  new ArrayType(new Float64Type(), (i, args) => args[2]))
+)
+
+const result = prototype.invoke(
+  wasi.memoryManager,
+  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  4)
+
+console.log(result)
+```
+
 ### Finalizers and Typed Arrays
 
 A recent introduction to JavaScript is the

@@ -2,7 +2,7 @@ import { MemoryManager } from '../MemoryManager'
 
 /**
  * The base class for representing types
- * @template T
+ * @template T The value type
  */
 export class Type {
   /**
@@ -17,11 +17,12 @@ export class Type {
    * Allocate memory for the type
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} unmarshalledValue An optional value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated value in memory
    */
-  alloc (memoryManager, unmarshalledValue) {
-    throw new Error('Not Implemented')
+  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    throw new TypeError('Not Implemented')
   }
 
   /**
@@ -29,21 +30,24 @@ export class Type {
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the value in memory
-   * @param {T} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {void}
    */
-  free (memoryManager, address, unmarshalledValue) {
-    throw new Error('Not Implemented')
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+    throw new TypeError('Not Implemented')
   }
 
   /**
    * Marshal a value.
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {T} unmarshalledValue The value to marshall
+   * @param {number} unmarshalledIndex The index of the value to marshall
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number|T} The marshalled value
    */
-  marshall (memoryManager, unmarshalledValue) {
-    throw new Error('Not Implemented')
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    throw new TypeError('Not Implemented')
   }
 
   /**
@@ -51,11 +55,12 @@ export class Type {
    * @abstract
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the value in memory
-   * @param {T} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled args
    * @returns {T}
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
-    throw new Error('Not Implemented')
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+    throw new TypeError('Not Implemented')
   }
 
   /**
@@ -66,6 +71,6 @@ export class Type {
    * @returns {T} The destination value
    */
   copy (dest, source) {
-    throw new Error('Not Implemented')
+    throw new TypeError('Not Implemented')
   }
 }

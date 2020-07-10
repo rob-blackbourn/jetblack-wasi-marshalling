@@ -18,8 +18,8 @@ describe('test the marshaller', () => {
 
     const value = 'Hello, World!'
     const type = new StringType()
-    const ptr = type.marshall(memoryManager, value)
-    const roundtrip = type.unmarshall(memoryManager, ptr)
+    const ptr = type.marshall(memoryManager, 0, [value])
+    const roundtrip = type.unmarshall(memoryManager, ptr, -1, [])
     assert.strictEqual(value, roundtrip)
     assert.strictEqual(memoryManager.usedCount(), 0)
   })
@@ -29,8 +29,8 @@ describe('test the marshaller', () => {
 
     const value = [1, 2, 3, 4]
     const type = new ArrayType(new Float64Type(), value.length)
-    const ptr = type.marshall(memoryManager, value)
-    const roundtrip = type.unmarshall(memoryManager, ptr, null)
+    const ptr = type.marshall(memoryManager, 0, [value])
+    const roundtrip = type.unmarshall(memoryManager, ptr, -1, [])
     console.log(value, roundtrip)
     assert.deepStrictEqual(value, roundtrip)
     assert.strictEqual(memoryManager.usedCount(), 0)
@@ -40,8 +40,8 @@ describe('test the marshaller', () => {
     const memoryManager = makeMockMemoryManager()
     const value = ['one', 'two', 'three', 'four']
     const type = new ArrayType(new StringType(), value.length)
-    const ptr = type.marshall(memoryManager, value)
-    const roundtrip = type.unmarshall(memoryManager, ptr, null)
+    const ptr = type.marshall(memoryManager, 0, [value])
+    const roundtrip = type.unmarshall(memoryManager, ptr, -1, [])
     assert.deepStrictEqual(value, roundtrip)
     assert.strictEqual(memoryManager.usedCount(), 0)
   })
@@ -53,8 +53,8 @@ describe('test the marshaller', () => {
       [4, 5, 6]
     ]
     const type = new ArrayType(new ArrayType(new Int32Type(), 3), 2)
-    const ptr = type.marshall(memoryManager, value)
-    const roundtrip = type.unmarshall(memoryManager, ptr, null)
+    const ptr = type.marshall(memoryManager, 0, [value])
+    const roundtrip = type.unmarshall(memoryManager, ptr, -1, [])
     assert.deepStrictEqual(value, roundtrip)
     assert.strictEqual(memoryManager.usedCount(), 0)
   })
@@ -63,8 +63,8 @@ describe('test the marshaller', () => {
     const memoryManager = makeMockMemoryManager()
     const value = new Pointer(42)
     const type = new PointerType(new Int32Type())
-    const ptr = type.marshall(memoryManager, value)
-    const roundtrip = type.unmarshall(memoryManager, ptr)
+    const ptr = type.marshall(memoryManager, 0, [value])
+    const roundtrip = type.unmarshall(memoryManager, ptr, -1, [])
     assert.deepStrictEqual(value, roundtrip)
     assert.strictEqual(memoryManager.usedCount(), 0)
   })
@@ -90,6 +90,40 @@ describe('test the marshaller', () => {
         new In(new Int32Type())
       ],
       new ArrayType(new Float64Type(), 4)
+    )
+
+    const result = proto.invoke(
+      memoryManager,
+      multipleFloat64ArraysReturningPtr,
+      [1, 2, 3, 4],
+      [5, 6, 7, 8],
+      4)
+
+    assert.deepStrictEqual(result, [5, 12, 21, 32])
+    assert.strictEqual(memoryManager.usedCount(), 0)
+  })
+
+  it('should capture function result with length callback', () => {
+    const memoryManager = makeMockMemoryManager()
+
+    function multipleFloat64ArraysReturningPtr (arrayPtr1, arrayPtr2, length) {
+      const array1 = new Float64Array(memoryManager.memory.buffer, arrayPtr1, length)
+      const array2 = new Float64Array(memoryManager.memory.buffer, arrayPtr2, length)
+      const resultPtr = memoryManager.malloc(length * Float64Array.BYTES_PER_ELEMENT)
+      const result = new Float64Array(memoryManager.memory.buffer, resultPtr, length)
+      for (let i = 0; i < length; ++i) {
+        result[i] = array1[i] * array2[i]
+      }
+      return resultPtr
+    }
+
+    const proto = new FunctionPrototype(
+      [
+        new In(new ArrayType(new Float64Type(), null)),
+        new In(new ArrayType(new Float64Type(), null)),
+        new In(new Int32Type())
+      ],
+      new ArrayType(new Float64Type(), (i, args) => args[2])
     )
 
     const result = proto.invoke(

@@ -12,23 +12,25 @@ export class StringBufferType extends ReferenceType {
   /**
    * Marshall a string buffer into memory
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {StringBuffer} unmarshalledValue The string buffer to marshall
+   * @param {number} unmarshalledIndex The index of the value to marshall
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, unmarshalledValue) {
-    return unmarshalledValue.byteOffset
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    return unmarshalledArgs[unmarshalledIndex].byteOffset
   }
 
   /**
    * Unmarshall a string buffer
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the string buffer in memory
-   * @param {StringBuffer} [unmarshalledValue] Optional unmarshalled value.
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {StringBuffer} The unmarshalled string buffer
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
-    if (unmarshalledValue != null) {
-      return unmarshalledValue
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+    if (unmarshalledIndex !== -1) {
+      return /** @type {StringBuffer} */ unmarshalledArgs[unmarshalledIndex]
     } else {
       return StringBuffer.fromAddress(memoryManager, address, true)
     }
@@ -38,9 +40,11 @@ export class StringBufferType extends ReferenceType {
    * Free allocated memory.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
-   * @param {StringBuffer} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {void}
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     // The finalizer handles freeing.
   }
 }

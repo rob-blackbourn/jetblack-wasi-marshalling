@@ -23,12 +23,14 @@ export class PointerType extends ReferenceType {
    * Free an allocated pointer
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer to be freed
-   * @param {Pointer<T>} [unmarshalledValue] An optional unmarshalled value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @returns {void}
    */
-  free (memoryManager, address, unmarshalledValue) {
+  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
-      this.type.free(memoryManager, marshalledAddress, null)
+      this.type.free(memoryManager, marshalledAddress, unmarshalledIndex, unmarshalledArgs)
     } finally {
       memoryManager.free(address)
     }
@@ -37,10 +39,11 @@ export class PointerType extends ReferenceType {
   /**
    * Allocate memory for a pointer
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Pointer<T>} [unmarshalledValue] The value
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns{number} The address of the allocated memory
    */
-  alloc (memoryManager, unmarshalledValue) {
+  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
     const address = memoryManager.malloc(Uint32Array.BYTES_PER_ELEMENT)
     return address
   }
@@ -48,12 +51,14 @@ export class PointerType extends ReferenceType {
   /**
    * Marshal a pointer
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {Pointer<T>} unmarshalledValue The value to marshall
+   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
+   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the pointer in memory
    */
-  marshall (memoryManager, unmarshalledValue) {
-    const address = this.alloc(memoryManager, unmarshalledValue)
-    const marshalledAddress = /** @type {number} */ (this.type.marshall(memoryManager, unmarshalledValue.contents))
+  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+    const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
+    const unmarshalledValue = /** @type {Pointer<T>} */ (unmarshalledArgs[unmarshalledIndex])
+    const marshalledAddress = /** @type {number} */ (this.type.marshall(memoryManager, 0, [unmarshalledValue.contents]))
     memoryManager.dataView.setUint32(address, marshalledAddress)
     return address
   }
@@ -62,13 +67,14 @@ export class PointerType extends ReferenceType {
    * Unmarshall a pointer.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer in memory
-   * @param {Pointer<T>} [unmarshalledValue] An optional value
+   * @param {number} unmarshalledIndex The index to the unmarshalled value of -1
+   * @param {Array<*>} unmarshalledArgs the unmarshalled arguments
    * @returns {Pointer<T>} The unmarshalled pointer
    */
-  unmarshall (memoryManager, address, unmarshalledValue) {
+  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
-      return new Pointer(this.type.unmarshall(memoryManager, marshalledAddress))
+      return new Pointer(this.type.unmarshall(memoryManager, marshalledAddress, -1, []))
     } finally {
       memoryManager.free(address)
     }

@@ -3,7 +3,7 @@ import { Type } from './Type'
 import { ArgumentDef } from './ArgumentDef'
 
 /**
- * An input arguent
+ * An input argument
  * @template T
  * @extends {ArgumentDef<T>}
  */
