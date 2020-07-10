@@ -49,4 +49,8 @@ export class AddressType extends ReferenceType {
   free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     // The finalizer handles freeing.
   }
+
+  get mangledName() {
+    return 'a32'
+  }
 }

@@ -42,4 +42,8 @@ export class Int16Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  get mangledName() {
+    return 'i16'
+  }
 }

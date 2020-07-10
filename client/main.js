@@ -54,6 +54,8 @@ async function main () {
     4)
   console.log(result1)
 
+  console.log(proto1.mangledName)
+
   // The second example takes in three arrays, multiplying the first
   // two are storing the output in the third.
   const proto2 = new FunctionPrototype(

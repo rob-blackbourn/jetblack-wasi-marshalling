@@ -73,4 +73,12 @@ export class Type {
   copy (dest, source) {
     throw new TypeError('Not Implemented')
   }
+
+  /**
+   * The mangled name
+   * @returns {string} The mangled name for the type.
+   */
+  get mangledName() {
+    throw new TypeError("Not Implemented")
+  }
 }

@@ -42,4 +42,8 @@ export class Int64Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  get mangledName() {
+    return 'i64'
+  }
 }

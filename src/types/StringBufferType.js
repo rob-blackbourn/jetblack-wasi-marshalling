@@ -47,4 +47,8 @@ export class StringBufferType extends ReferenceType {
   free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
     // The finalizer handles freeing.
   }
+
+  get mangledName() {
+    return 'b8'
+  }
 }

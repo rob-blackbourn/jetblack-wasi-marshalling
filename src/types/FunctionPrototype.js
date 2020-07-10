@@ -42,4 +42,14 @@ export class FunctionPrototype {
       return this.returns.unmarshall(memoryManager, result, -1, unmarshalledArgs)
     }
   }
+
+  /**
+   * The mangled function prototype
+   * @returns {string} The mangled function prototype
+   */
+  get mangledName() {
+    const returns = this.returns == null ? 'v' : this.returns.mangledName
+    const args = this.argDefs.map(x => x.type.mangledName).join('')
+    return `${returns}_${args}`
+  }
 }

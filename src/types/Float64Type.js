@@ -42,4 +42,8 @@ export class Float64Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  get mangledName () {
+    return 'f64'
+  }
 }

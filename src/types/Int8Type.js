@@ -42,4 +42,8 @@ export class Int8Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  get mangledName() {
+    return 'i8'
+  }
 }
