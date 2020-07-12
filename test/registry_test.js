@@ -117,12 +117,24 @@ describe('test the function registry', () => {
     const plusIntCallback = registry.match(
       plusName,
       [plusIntArg1, plusIntArg2, 4],
-      { defaultInt: 'u32', defaultFloat: 'f64' }
+      { defaultInt: Uint32Type.MANGLED_NAME, defaultFloat: Float64Type.MANGLED_NAME }
     )
     assert.ok(plusIntCallback != null)
     const plusIntResult = plusIntCallback(plusIntArg1, plusIntArg2, 4)
     assert.ok(plusIntResult instanceof Int32Array)
     assert.deepStrictEqual(plusIntResult, new Int32Array([2,4,6,8]))
+
+    const minusIntArg1 = new Int32Array([1,2,3,4])
+    const minusIntArg2 = new Int32Array([1,2,3,4])
+    const minusIntCallback = registry.match(
+      minusName,
+      [minusIntArg1, minusIntArg2, 4],
+      { defaultInt: Uint32Type.MANGLED_NAME, defaultFloat: Float64Type.MANGLED_NAME }
+    )
+    assert.ok(minusIntCallback != null)
+    const minusIntResult = minusIntCallback(minusIntArg1, minusIntArg2, 4)
+    assert.ok(minusIntResult instanceof Int32Array)
+    assert.deepStrictEqual(minusIntResult, new Int32Array([0,0,0,0]))
   })
 
 })
