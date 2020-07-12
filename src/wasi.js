@@ -107,7 +107,7 @@ export class Wasi {
    */
   invokeImpliedFunction (name, values, options) {
     const callback = this.functionRegistry.match(name, values, options)
-    return callback(values)
+    return callback(...values)
   }
 
   /**
@@ -120,6 +120,16 @@ export class Wasi {
   invokeExplicitFunction(name, values, mangledArgs) {
     const callback = this.functionRegistry.find(name, mangledArgs)
     return callback(values)
+  }
+
+  /**
+   * Invoke a function with defaults
+   * @param {string|symbol} name The function name
+   * @param  {...any} values The function values
+   * @returns {*}
+   */
+  invoke(name, ...values) {
+    return this.invokeImpliedFunction(name, values, {})
   }
 
   /**

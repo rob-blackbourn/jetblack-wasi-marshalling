@@ -112,19 +112,19 @@ describe('test the function registry', () => {
       new TypedArrayType(new Float64Type(), (i, args) => args[2])
     )
 
-    registry.register(
+    wasi.registerFunction(
       plusName,
       plusIntProto,
       wasi.instance.exports.add_int32
     )
 
-    registry.register(
+    wasi.registerFunction(
       plusName,
       plusFloatProto,
       wasi.instance.exports.add_float32
     )
 
-    registry.register(
+    wasi.registerFunction(
       plusName,
       plusDoubleProto,
       wasi.instance.exports.add_float64
@@ -157,49 +157,37 @@ describe('test the function registry', () => {
       new TypedArrayType(new Float64Type(), (i, args) => args[2])
     )
 
-    registry.register(
+    wasi.registerFunction(
       minusName,
       minusIntProto,
       wasi.instance.exports.minus_int32
     )
 
-    registry.register(
+    wasi.registerFunction(
       minusName,
       minusFloatProto,
       wasi.instance.exports.minus_float32
     )
 
-    registry.register(
+    wasi.registerFunction(
       minusName,
       minusDoubleProto,
       wasi.instance.exports.minus_float64
     )
 
-    const plusIntArg1 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
-    plusIntArg1.set([1,2,3,4])
-    const plusIntArg2 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
-    plusIntArg2.set([1,2,3,4])
-    const plusIntCallback = registry.match(
+    const plusIntResult = wasi.invoke(
       plusName,
-      [plusIntArg1, plusIntArg2, 4],
-      { defaultInt: Uint32Type.MANGLED_NAME, defaultFloat: Float64Type.MANGLED_NAME }
-    )
-    assert.ok(plusIntCallback != null)
-    const plusIntResult = plusIntCallback(plusIntArg1, plusIntArg2, 4)
+      memoryManager.createTypedArray(Int32Array, [1,2,3,4]),
+      memoryManager.createTypedArray(Int32Array, [1,2,3,4]),
+      4)
     assert.ok(plusIntResult instanceof Int32Array)
     assert.deepStrictEqual(plusIntResult, new Int32Array([2,4,6,8]))
 
-    const minusIntArg1 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
-    minusIntArg1.set([1,2,3,4])
-    const minusIntArg2 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
-    minusIntArg2.set([1,2,3,4])
-    const minusIntCallback = registry.match(
+    const minusIntResult = wasi.invoke(
       minusName,
-      [minusIntArg1, minusIntArg2, 4],
-      { defaultInt: Uint32Type.MANGLED_NAME, defaultFloat: Float64Type.MANGLED_NAME }
-    )
-    assert.ok(minusIntCallback != null)
-    const minusIntResult = minusIntCallback(minusIntArg1, minusIntArg2, 4)
+      memoryManager.createTypedArray(Int32Array, [1,2,3,4]),
+      memoryManager.createTypedArray(Int32Array, [1,2,3,4]),
+      4)
     assert.ok(minusIntResult instanceof Int32Array)
     assert.deepStrictEqual(minusIntResult, new Int32Array([0,0,0,0]))
   })
