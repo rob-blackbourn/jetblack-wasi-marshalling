@@ -1,12 +1,7 @@
 import { MemoryManager } from './MemoryManager'
 import { FunctionPrototype } from './types/FunctionPrototype'
 
-/**
- * WASM Callback
- * @callback wasmCallback
- * @param {...*} args The function arguments
- * @returns {*} The function result.
- */
+// @filename: types.d.ts
 
  /**
   * A function registry
@@ -27,11 +22,15 @@ export class FunctionRegistry {
    * @param {FunctionPrototype} prototype The function prototype
    * @param {wasmCallback} callback The wasm callback
    */
-  register (name, prototype, callback) {
+  registerImplied (name, prototype, callback) {
+    this.registerExplicit(name, prototype.mangledArgs, prototype, callback)
+  }
+
+  registerExplicit(name, mangledArgs, prototype, callback) {
     if (!(name in this._registry)) {
       this._registry[name] = {}
     }
-    this._registry[name][prototype.mangledArgs] = (...args) => prototype.invoke(this.memoryManager, callback, ...args)
+    this._registry[name][mangledArgs] = (...args) => prototype.invoke(this.memoryManager, callback, ...args)
   }
 
   /**
@@ -41,9 +40,9 @@ export class FunctionRegistry {
    * @param {object} options Options for the mangler
    * @returns {wasmCallback|null} The wasm callback or null
    */
-  match (name, values, options) {
+  findImplied (name, values, options) {
     if (name in this._registry) {
-      return this.find(name, FunctionPrototype.mangleValues(values, options))
+      return this.findExplicit(name, FunctionPrototype.mangleValues(values, options))
     } else {
       return null
     }
@@ -55,7 +54,7 @@ export class FunctionRegistry {
    * @param {string} mangledValues The value mangle
    * @returns {wasmCallback|null}
    */
-  find (name, mangledValues) {
+  findExplicit (name, mangledValues) {
     return this._registry[name][mangledValues] || null
   }
 }

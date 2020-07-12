@@ -11,13 +11,6 @@ import { FunctionPrototype } from './types/FunctionPrototype'
  * @param {string} text 
  */
 
- /**
- * WASM Callback
- * @callback wasmCallback
- * @param {...*} args The function arguments
- * @returns {*} The function result.
- */
-
 /**
  * Drain the write if a newline is in the latest test.
  * @private
@@ -95,7 +88,7 @@ export class Wasi {
    * @param {wasmCallback} callback The wasm callback
    */
   registerFunction (name, prototype, callback) {
-    this.functionRegistry.register(name, prototype, callback)
+    this.functionRegistry.registerImplied(name, prototype, callback)
   }
 
   /**
@@ -106,7 +99,7 @@ export class Wasi {
    * @returns {*} The return value if any
    */
   invokeImpliedFunction (name, values, options) {
-    const callback = this.functionRegistry.match(name, values, options)
+    const callback = this.functionRegistry.findImplied(name, values, options)
     return callback(...values)
   }
 
@@ -118,7 +111,7 @@ export class Wasi {
    * @returns {*} The return value if any
    */
   invokeExplicitFunction(name, values, mangledArgs) {
-    const callback = this.functionRegistry.find(name, mangledArgs)
+    const callback = this.functionRegistry.findExplicit(name, mangledArgs)
     return callback(values)
   }
 

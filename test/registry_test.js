@@ -50,7 +50,7 @@ describe('test the function registry', () => {
       new TypedArrayType(new Float64Type(), (i, args) => args[2])
     )
 
-    registry.register(
+    registry.registerImplied(
       plusName,
       plusIntProto,
       (a, b, len) => {
@@ -64,7 +64,7 @@ describe('test the function registry', () => {
       }
     )
 
-    registry.register(
+    registry.registerImplied(
       plusName,
       plusFloatProto,
       (a, b, len) => {
@@ -78,7 +78,7 @@ describe('test the function registry', () => {
       }
     )
 
-    registry.register(
+    registry.registerImplied(
       plusName,
       plusDoubleProto,
       (a, b, len) => {
@@ -119,7 +119,7 @@ describe('test the function registry', () => {
       new TypedArrayType(new Float64Type(), (i, args) => args[2])
     )
 
-    registry.register(
+    registry.registerImplied(
       minusName,
       minusIntProto,
       (a, b, len) => {
@@ -133,7 +133,7 @@ describe('test the function registry', () => {
       }
     )
 
-    registry.register(
+    registry.registerImplied(
       minusName,
       minusFloatProto,
       (a, b, len) => {
@@ -147,7 +147,7 @@ describe('test the function registry', () => {
       }
     )
 
-    registry.register(
+    registry.registerImplied(
       minusName,
       minusDoubleProto,
       (a, b, len) => {
@@ -165,7 +165,7 @@ describe('test the function registry', () => {
     plusIntArg1.set([1,2,3,4])
     const plusIntArg2 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
     plusIntArg2.set([1,2,3,4])
-    const plusIntCallback = registry.match(
+    const plusIntCallback = registry.findImplied(
       plusName,
       [plusIntArg1, plusIntArg2, 4],
       { defaultInt: Uint32Type.MANGLED_NAME, defaultFloat: Float64Type.MANGLED_NAME }
@@ -179,7 +179,7 @@ describe('test the function registry', () => {
     minusIntArg1.set([1,2,3,4])
     const minusIntArg2 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
     minusIntArg2.set([1,2,3,4])
-    const minusIntCallback = registry.match(
+    const minusIntCallback = registry.findImplied(
       minusName,
       [minusIntArg1, minusIntArg2, 4],
       { defaultInt: Uint32Type.MANGLED_NAME, defaultFloat: Float64Type.MANGLED_NAME }
