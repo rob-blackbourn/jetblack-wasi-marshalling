@@ -30,4 +30,5 @@ export {
   FunctionPrototype
 } from './types/index'
 
+export { FunctionRegistry } from './FunctionRegistry'
 export { Wasi } from './wasi'

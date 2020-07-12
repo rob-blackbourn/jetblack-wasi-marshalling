@@ -77,52 +77,94 @@ export class FunctionPrototype {
     return `${this.mangleReturns}_${this.mangledArgs}`
   }
 
-  static mangleValue(arg) {
-    if (arg == null) {
-      return VoidType.MANGLED_NAME
-    } else if (typeof arg === 'number') {
-      if (Number.isInteger(arg)) {
-        return Uint32Type.MANGLED_NAME
+  static mangleNumber(value, options) {
+    if ('defaultNumber' in options) {
+      return options['defaultNumber']
+    } else if (Number.isInteger(value)) {
+      if ('defaultInt' in options) {
+        return options['defaultInt']
       } else {
-        return Float64Type.MANGLED_NAME
+        return Uint32Type.MANGLED_NAME
       }
-    } else if (typeof arg === 'string') {
-      return StringBufferType.MANGLED_NAME // Prefer StringBuffer
-    } else if (arg instanceof Float32Array) {
-      return `t(${Float32Type.MANGLED_NAME})`
-    } else if (arg instanceof Float64Array) {
-      return `t(${Float64Type.MANGLED_NAME})`
-    } else if (arg instanceof Int8Array) {
-      return `t(${Int8Type.MANGLED_NAME})`
-    } else if (arg instanceof Int16Array) {
-      return `t(${Int16Type.MANGLED_NAME})`
-    } else if (arg instanceof Int32Array) {
-      return `t(${Int32Type.MANGLED_NAME})`
-    } else if (arg instanceof BigInt64Array) {
-      return `t(${Int64Type.MANGLED_NAME})`
-    } else if (arg instanceof Uint8Array) {
-      return `t(${Uint8Type.MANGLED_NAME})`
-    } else if (arg instanceof Uint16Array) {
-      return `t(${Uint16Type.MANGLED_NAME})`
-    } else if (arg instanceof Uint32Array) {
-      return `t(${Uint32Type.MANGLED_NAME})`
-    } else if (arg instanceof BigUint64Array) {
-      return `t(${Uint64Type.MANGLED_NAME})`
-    } else if (arg instanceof StringBuffer) {
+    } else if ('defaultFloat' in options) {
+      return options['defaultFloat']
+    } else {
+      return Float64Type.MANGLED_NAME
+    }
+  }
+
+  static mangleString(value, options) {
+    if ('defaultString' in options) {
+      return options['defaultString']
+    } else {
       return StringBufferType.MANGLED_NAME
-    } else if (arg instanceof Array) {
-      if (arg.every(x => typeof x === 'string')) {
-        return `a(${StringType.MANGLED_NAME})`
-      } else if (arg.every(x => x instanceof StringBuffer)) {
+    }
+  }
+
+  /**
+   * Mangle the value.
+   * @param {any} value The value to mangle
+   * @param {object} options Mangling options
+   * @returns {string} The mangled value
+   */
+  static mangleValue(value, options) {
+    if (value == null) {
+      return VoidType.MANGLED_NAME
+    } else if (typeof value === 'number') {
+      return FunctionPrototype.mangleNumber(value, options)
+    } else if (typeof value === 'string') {
+      return FunctionPrototype.mangleString(value, options)
+    } else if (value instanceof Float32Array) {
+      return `t(${Float32Type.MANGLED_NAME})`
+    } else if (value instanceof Float64Array) {
+      return `t(${Float64Type.MANGLED_NAME})`
+    } else if (value instanceof Int8Array) {
+      return `t(${Int8Type.MANGLED_NAME})`
+    } else if (value instanceof Int16Array) {
+      return `t(${Int16Type.MANGLED_NAME})`
+    } else if (value instanceof Int32Array) {
+      return `t(${Int32Type.MANGLED_NAME})`
+    } else if (value instanceof BigInt64Array) {
+      return `t(${Int64Type.MANGLED_NAME})`
+    } else if (value instanceof Uint8Array) {
+      return `t(${Uint8Type.MANGLED_NAME})`
+    } else if (value instanceof Uint16Array) {
+      return `t(${Uint16Type.MANGLED_NAME})`
+    } else if (value instanceof Uint32Array) {
+      return `t(${Uint32Type.MANGLED_NAME})`
+    } else if (value instanceof BigUint64Array) {
+      return `t(${Uint64Type.MANGLED_NAME})`
+    } else if (value instanceof StringBuffer) {
+      return StringBufferType.MANGLED_NAME
+    } else if (value instanceof Int8Array) {
+      return `t(${Int8Type.MANGLED_NAME})`
+    } else if (value instanceof Int16Array) {
+      return `t(${Int16Type.MANGLED_NAME})`
+    } else if (value instanceof Int32Array) {
+      return `t(${Int32Type.MANGLED_NAME})`
+    } else if (value instanceof BigInt64Array) {
+      return `t(${Int64Type.MANGLED_NAME})`
+    } else if (value instanceof Int8Array) {
+      return `t(${Uint8Type.MANGLED_NAME})`
+    } else if (value instanceof Uint16Array) {
+      return `t(${Uint16Type.MANGLED_NAME})`
+    } else if (value instanceof Uint32Array) {
+      return `t(${Uint32Type.MANGLED_NAME})`
+    } else if (value instanceof BigUint64Array) {
+      return `t(${Uint64Type.MANGLED_NAME})`
+    } else if (value instanceof Float32Array) {
+      return `t(${Float32Type.MANGLED_NAME})`
+    } else if (value instanceof Float64Array) {
+      return `t(${Float64Type.MANGLED_NAME})`
+    } else if (value instanceof Array) {
+      if (value.every(x => typeof x === 'string')) {
+        return `a(${FunctionPrototype.mangleString(value, options)})`
+      } else if (value.every(x => x instanceof StringBuffer)) {
         return `a(${StringBufferType.MANGLED_NAME})`
-      } else if (arg.every(x => typeof x  === 'number')) {
-        if (arg.every(x => Number.isInteger(x))) {
-          return `a(${Int32Type.MANGLED_NAME})`
-        } else {
-          return `a(${Float64Type.MANGLED_NAME})`
-        }
-      } else if (arg.every(x => x instanceof Array)) {
-        return `a(${FunctionPrototype.mangleValue(arg[0])})`
+      } else if (value.every(x => typeof x  === 'number')) {
+        return `a(${FunctionPrototype.mangleNumber(value, options)})`
+      } else if (value.every(x => x instanceof Array)) {
+        return `a(${FunctionPrototype.mangleValue(value[0], options)})`
       } else {
         throw new TypeError('Unknown array element type')
       }
@@ -131,7 +173,12 @@ export class FunctionPrototype {
     }
   }
 
-  static mangleValues(...args) {
-    return args.map(x => FunctionPrototype.mangleValue(x)).join('')
+  /**
+   * 
+   * @param {Array<any>} values The values to mangle
+   * @param {object} options Mangling options
+   */
+  static mangleValues(values, options) {
+    return values.map(x => FunctionPrototype.mangleValue(x, options)).join('')
   }
 }
