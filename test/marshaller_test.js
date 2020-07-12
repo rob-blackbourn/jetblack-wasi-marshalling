@@ -14,6 +14,7 @@ import {
   StringType,
   TypedArrayType
 } from '../src'
+import { VoidType } from '../src/types/VoidType'
 
 describe('test the marshaller', () => {
   it('should convert a string to a pointer and back', () => {
@@ -158,7 +159,8 @@ describe('test the marshaller', () => {
         new In(new ArrayType(new Float64Type(), null)),
         new Out(new ArrayType(new Float64Type(), null)),
         new In(new Int32Type())
-      ]
+      ],
+      new VoidType()
     )
 
     const input1 = [1, 2, 3, 4]
@@ -196,10 +198,11 @@ describe('test the marshaller', () => {
         new In(new ArrayType(new Float64Type(), null)),
         new Out(new ArrayType(new Float64Type(), null)),
         new In(new Int32Type())
-      ]
+      ],
+      new VoidType()
     )
 
-    assert.strictEqual(proto.mangledName, 'v_a(f64)a(f64)a(f64)i32')
+    assert.strictEqual(proto.mangledName, 'v0_a(f64)a(f64)a(f64)i32')
   }),
 
   it('should mangle nested arrays', () => {
@@ -210,10 +213,11 @@ describe('test the marshaller', () => {
         new Out(new ArrayType(new ArrayType(new Float64Type(), null))),
         new In(new Int32Type()),
         new In(new Int32Type())
-      ]
+      ],
+      new VoidType()
     )
 
-    assert.strictEqual(proto.mangledName, 'v_a(a(f64))a(a(f64))a(a(f64))i32i32')
+    assert.strictEqual(proto.mangledName, 'v0_a(a(f64))a(a(f64))a(a(f64))i32i32')
   }),
 
   it('should mangle typed arrays', () => {
@@ -223,9 +227,10 @@ describe('test the marshaller', () => {
         new In(new TypedArrayType(new Float32Type(), null)),
         new Out(new TypedArrayType(new Float32Type(), null)),
         new In(new Uint64Type())
-      ]
+      ],
+      new VoidType()
     )
 
-    assert.strictEqual(proto.mangledName, "v_t(f32)t(f32)t(f32)u64")
+    assert.strictEqual(proto.mangledName, "v0_t(f32)t(f32)t(f32)u64")
   })
 })

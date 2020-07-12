@@ -43,7 +43,9 @@ export class Int8Type extends ValueType {
     }
   }
 
+  static MANGLED_NAME = 'i8'
+
   get mangledName() {
-    return 'i8'
+    return Int8Type.MANGLED_NAME
   }
 }

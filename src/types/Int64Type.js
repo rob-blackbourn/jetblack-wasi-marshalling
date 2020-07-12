@@ -43,7 +43,9 @@ export class Int64Type extends ValueType {
     }
   }
 
+  static MANGLED_NAME = 'i64'
+
   get mangledName() {
-    return 'i64'
+    return Int64Type.MANGLED_NAME
   }
 }

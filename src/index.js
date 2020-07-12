@@ -15,6 +15,7 @@ export {
   Uint64Type,
   Float32Type,
   Float64Type,
+  VoidType,
   ReferenceType,
   StringType,
   StringBufferType,

@@ -43,7 +43,9 @@ export class Uint32Type extends ValueType {
     }
   }
 
+  static MANGLED_NAME = 'u32'
+
   get mangledName() {
-    return 'u32'
+    return Uint32Type.MANGLED_NAME
   }
 }

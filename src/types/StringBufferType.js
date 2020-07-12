@@ -48,7 +48,9 @@ export class StringBufferType extends ReferenceType {
     // The finalizer handles freeing.
   }
 
+  static MANGLED_NAME = 'b8'
+
   get mangledName() {
-    return 'b8'
+    return StringBufferType.MANGLED_NAME
   }
 }

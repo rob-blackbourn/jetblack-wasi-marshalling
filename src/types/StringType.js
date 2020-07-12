@@ -51,7 +51,9 @@ export class StringType extends ReferenceType {
     }
   }
 
+  static MANGLED_NAME = 's8'
+
   get mangledName() {
-    return 's8'
+    return StringType.MANGLED_NAME
   }
 }

@@ -43,7 +43,9 @@ export class Float64Type extends ValueType {
     }
   }
 
+  static MANGLED_NAME = 'f64'
+
   get mangledName () {
-    return 'f64'
+    return Float64Type.MANGLED_NAME
   }
 }

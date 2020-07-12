@@ -43,7 +43,9 @@ export class Float32Type extends ValueType {
     }
   }
 
+  static MANGLED_NAME = 'f32'
+
   get mangledName () {
-    return 'f32'
+    return Float32Type.MANGLED_NAME
   }
 }

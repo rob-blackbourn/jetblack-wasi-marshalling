@@ -43,7 +43,9 @@ export class Int16Type extends ValueType {
     }
   }
 
+  static MANGLED_NAME = 'i16'
+
   get mangledName() {
-    return 'i16'
+    return Int16Type.MANGLED_NAME
   }
 }

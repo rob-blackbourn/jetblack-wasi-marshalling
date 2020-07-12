@@ -43,7 +43,9 @@ export class Uint8Type extends ValueType {
     }
   }
 
+  static MANGLED_NAME = 'u8'
+
   get mangledName() {
-    return 'u8'
+    return Uint8Type.MANGLED_NAME
   }
 }

@@ -43,7 +43,9 @@ export class Uint64Type extends ValueType {
     }
   }
 
+  static MANGLED_NAME = 'u64'
+
   get mangledName() {
-    return 'u64'
+    return Uint64Type.MANGLED_NAME
   }
 }
