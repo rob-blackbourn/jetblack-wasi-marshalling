@@ -26,7 +26,7 @@ export function makeMockMemoryManager() {
   inspect.bind(allocator)
   usedCount.bind(allocator)
   
-  const memoryManager = new MemoryManager({ buffer: heap }, malloc, free)
+  const memoryManager = new MemoryManager({ buffer: heap, grow: null }, malloc, free)
   memoryManager.inspect = inspect
   memoryManager.usedCount = usedCount
 

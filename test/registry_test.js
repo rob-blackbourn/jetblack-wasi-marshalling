@@ -20,7 +20,8 @@ import {
 describe('test the function registry', () => {
 
   it('should register functions', () => {
-    const registry = new FunctionRegistry()
+    const memoryManager = makeMockMemoryManager()
+    const registry = new FunctionRegistry(memoryManager)
 
     // Plus
     const plusName = Symbol.for('+')
@@ -52,19 +53,43 @@ describe('test the function registry', () => {
     registry.register(
       plusName,
       plusIntProto,
-      (a, b, len) => new Int32Array(a.map((v, i) => v + b[i]))
+      (a, b, len) => {
+        const array1 = new Int32Array(memoryManager.memory.buffer, a, len)
+        const array2 = new Int32Array(memoryManager.memory.buffer, b, len)
+        const result = memoryManager.createTypedArray(Int32Array, len)
+        for (let i = 0; i < len; ++i) {
+          result[i] = array1[i] + array2[i]
+        }
+        return result.byteOffset
+      }
     )
 
     registry.register(
       plusName,
       plusFloatProto,
-      (a, b, len) => new Float32Array(a.map((v, i) => v + b[i]))
+      (a, b, len) => {
+        const array1 = new Float32Array(memoryManager.memory.buffer, a, len)
+        const array2 = new Float32Array(memoryManager.memory.buffer, b, len)
+        const result = memoryManager.createTypedArray(Float32Array, len)
+        for (let i = 0; i < len; ++i) {
+          result[i] = array1[i] + array2[i]
+        }
+        return result.byteOffset
+      }
     )
 
     registry.register(
       plusName,
       plusDoubleProto,
-      (a, b, len) => new Float64Array(a.map((v, i) => v + b[i]))
+      (a, b, len) => {
+        const array1 = new Float64Array(memoryManager.memory.buffer, a, len)
+        const array2 = new Float64Array(memoryManager.memory.buffer, b, len)
+        const result = memoryManager.createTypedArray(Float64Array, len)
+        for (let i = 0; i < len; ++i) {
+          result[i] = array1[i] + array2[i]
+        }
+        return result.byteOffset
+      }
     )
 
     // Minus
@@ -97,23 +122,49 @@ describe('test the function registry', () => {
     registry.register(
       minusName,
       minusIntProto,
-      (a, b, len) => new Int32Array(a.map((v, i) => v - b[i]))
+      (a, b, len) => {
+        const array1 = new Int32Array(memoryManager.memory.buffer, a, len)
+        const array2 = new Int32Array(memoryManager.memory.buffer, b, len)
+        const result = memoryManager.createTypedArray(Int32Array, len)
+        for (let i = 0; i < len; ++i) {
+          result[i] = array1[i] - array2[i]
+        }
+        return result.byteOffset
+      }
     )
 
     registry.register(
       minusName,
       minusFloatProto,
-      (a, b, len) => new Float32Array(a.map((v, i) => v - b[i]))
+      (a, b, len) => {
+        const array1 = new Float32Array(memoryManager.memory.buffer, a, len)
+        const array2 = new Float32Array(memoryManager.memory.buffer, b, len)
+        const result = memoryManager.createTypedArray(Float32Array, len)
+        for (let i = 0; i < len; ++i) {
+          result[i] = array1[i] - array2[i]
+        }
+        return result.byteOffset
+      }
     )
 
     registry.register(
       minusName,
       minusDoubleProto,
-      (a, b, len) => new Float64Array(a.map((v, i) => v - b[i]))
+      (a, b, len) => {
+        const array1 = new Float64Array(memoryManager.memory.buffer, a, len)
+        const array2 = new Float64Array(memoryManager.memory.buffer, b, len)
+        const result = memoryManager.createTypedArray(Float64Array, len)
+        for (let i = 0; i < len; ++i) {
+          result[i] = array1[i] - array2[i]
+        }
+        return result.byteOffset
+      }
     )
 
-    const plusIntArg1 = new Int32Array([1,2,3,4])
-    const plusIntArg2 = new Int32Array([1,2,3,4])
+    const plusIntArg1 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
+    plusIntArg1.set([1,2,3,4])
+    const plusIntArg2 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
+    plusIntArg2.set([1,2,3,4])
     const plusIntCallback = registry.match(
       plusName,
       [plusIntArg1, plusIntArg2, 4],
@@ -124,8 +175,10 @@ describe('test the function registry', () => {
     assert.ok(plusIntResult instanceof Int32Array)
     assert.deepStrictEqual(plusIntResult, new Int32Array([2,4,6,8]))
 
-    const minusIntArg1 = new Int32Array([1,2,3,4])
-    const minusIntArg2 = new Int32Array([1,2,3,4])
+    const minusIntArg1 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
+    minusIntArg1.set([1,2,3,4])
+    const minusIntArg2 =  /** @type {Int32Array} */ (memoryManager.createTypedArray(Int32Array, 4))
+    minusIntArg2.set([1,2,3,4])
     const minusIntCallback = registry.match(
       minusName,
       [minusIntArg1, minusIntArg2, 4],

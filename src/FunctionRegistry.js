@@ -1,3 +1,4 @@
+import { MemoryManager } from './MemoryManager'
 import { FunctionPrototype } from './types/FunctionPrototype'
 
 /**
@@ -13,8 +14,10 @@ import { FunctionPrototype } from './types/FunctionPrototype'
 export class FunctionRegistry {
   /**
    * Construct a function registry
+   * @param {MemoryManager} memoryManager The memory manager
    */
-  constructor () {
+  constructor (memoryManager) {
+    this.memoryManager = memoryManager
     this._registry = {}
   }
 
@@ -28,7 +31,7 @@ export class FunctionRegistry {
     if (!(name in this._registry)) {
       this._registry[name] = {}
     }
-    this._registry[name][prototype.mangledArgs] = callback
+    this._registry[name][prototype.mangledArgs] = (...args) => prototype.invoke(this.memoryManager, callback, ...args)
   }
 
   /**
