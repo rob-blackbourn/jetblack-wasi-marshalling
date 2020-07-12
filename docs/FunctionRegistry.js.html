@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: types/AddressType.js</title>
+    <title>JSDoc: Source: FunctionRegistry.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: types/AddressType.js</h1>
+    <h1 class="page-title">Source: FunctionRegistry.js</h1>
 
     
 
@@ -26,63 +26,73 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { MemoryManager } from '../MemoryManager'
-import { Pointer } from '../Pointer'
+            <pre class="prettyprint source linenums"><code>import { MemoryManager } from './MemoryManager'
+import { FunctionPrototype } from './types/FunctionPrototype'
 
-import { ReferenceType } from './ReferenceType'
+// @filename: types.d.ts
 
-/**
- * A class representing a string buffer type
- * @extends {ReferenceType&lt;Pointer&lt;number>>}
- */
-export class AddressType extends ReferenceType {
-
+ /**
+  * A function registry
+  */
+export class FunctionRegistry {
   /**
-   * Marshall an address into memory
+   * Construct a function registry
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {number} unmarshalledIndex The index of the value to to marshall
-   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
-   * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
-    return unmarshalledArgs[unmarshalledIndex].contents
+  constructor (memoryManager) {
+    this.memoryManager = memoryManager
+    this._registry = {}
   }
 
   /**
-   * Unmarshall an address
-   * @param {MemoryManager} memoryManager The memory manager
-   * @param {number} address The address of the string buffer in memory
-   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments.
-   * @returns {Pointer&lt;number>} The unmarshalled string buffer
+   * Register a function implied by the arguments.
+   * @param {string|symbol} name The name of the function
+   * @param {FunctionPrototype} prototype The function prototype
+   * @param {wasmCallback} callback The wasm callback
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
-    if (unmarshalledIndex !== -1) {
-      return /** @type {Pointer&lt;number>} */ (unmarshalledArgs[unmarshalledIndex])
+  registerImplied (name, prototype, callback) {
+    this.registerExplicit(name, prototype.mangledArgs, prototype, callback)
+  }
+
+  /**
+   * Register a function with an explicit mangle.
+   * @param {string|symbol} name The function name
+   * @param {string} mangledArgs An explicit mangling of the function prototype
+   * @param {FunctionPrototype} prototype The function prototype
+   * @param {wasmCallback} callback The function to call
+   */
+  registerExplicit(name, mangledArgs, prototype, callback) {
+    if (!(name in this._registry)) {
+      this._registry[name] = {}
+    }
+    this._registry[name][mangledArgs] = (...args) => prototype.invoke(this.memoryManager, callback, ...args)
+  }
+
+  /**
+   * Find a function which matches the arguments
+   * @param {string|symbol} name The common name of the function
+   * @param {Array&lt;any>} values The arguments that will be applied to the function
+   * @param {object} options Options for the mangler
+   * @returns {wasmCallback|null} The wasm callback or null
+   */
+  findImplied (name, values, options) {
+    if (name in this._registry) {
+      return this.findExplicit(name, FunctionPrototype.mangleValues(values, options))
     } else {
-      const pointer =  new Pointer(address)
-      memoryManager.freeWhenFinalized(pointer, address)
-      return pointer
+      return null
     }
   }
 
   /**
-   * Free allocated memory.
-   * @param {MemoryManager} memoryManager The memory manager
-   * @param {number} address The address of the memory to be freed
-   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
-   * @returns {void}
+   * Find a function that matches the value mangle
+   * @param {string|symbol} name The common name
+   * @param {string} mangledValues The value mangle
+   * @returns {wasmCallback|null}
    */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
-    // The finalizer handles freeing.
+  findExplicit (name, mangledValues) {
+    return this._registry[name][mangledValues] || null
   }
-
-  get mangledName() {
-    return 'a32'
-  }
-}
-</code></pre>
+}</code></pre>
         </article>
     </section>
 

@@ -42,4 +42,10 @@ export class Uint64Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  static MANGLED_NAME = 'u64'
+
+  get mangledName() {
+    return Uint64Type.MANGLED_NAME
+  }
 }

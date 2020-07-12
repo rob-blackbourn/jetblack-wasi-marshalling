@@ -50,4 +50,10 @@ export class StringType extends ReferenceType {
       memoryManager.free(address)
     }
   }
+
+  static MANGLED_NAME = 's8'
+
+  get mangledName() {
+    return StringType.MANGLED_NAME
+  }
 }

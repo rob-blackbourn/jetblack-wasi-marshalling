@@ -129,4 +129,8 @@ export class TypedArrayType extends ReferenceType {
     // Nothing to do.
     return dest
   }
+
+  get mangledName() {
+    return `t(${this.type.mangledName})`
+  }
 }

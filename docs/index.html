@@ -51,8 +51,12 @@ and strings.</li>
 <li>A marshalling framework for calling WebAssembly functions in a wasm module
 from JavaScript.</li>
 </ul>
-<p>The intention is to provide support to &quot;drop in&quot; publically available libraries
+<p>The intention is to provide support to &quot;drop in&quot; publicly available libraries
 that can be compiled into a wasm module.</p>
+<h2>Installation</h2>
+<p>The package can be installed from npm.</p>
+<pre class="prettyprint source lang-bash"><code>npm install --save @jetblack/wasi-marshalling
+</code></pre>
 <h2>The WASI Layer</h2>
 <p>Three WASI domains are implemented:</p>
 <ul>
@@ -66,7 +70,7 @@ variables.</li>
 memory.</li>
 </ul>
 <p>The implementation of the WASI layer is provided through a class of the
-same name. Here is an example of initialising the library.</p>
+same name. Here is an example of initializing the library.</p>
 <pre class="prettyprint source lang-javascript"><code>import { Wasi } from '@jetblack/wasi-marshalling'
 
 // Create the Wasi instance passing in environment variables.
@@ -78,7 +82,7 @@ WebAssembly.instantiateStreaming(
     wasi_snapshot_preview1: wasi.imports()
   })
   .then(res => {
-    // Initialise the wasi instance
+    // Initialize the wasi instance
     wasi.init(res.instance)
 
     // Do something interesting ...
@@ -177,7 +181,7 @@ This allows us to register a function to call when an object is garbage
 collected. We can use this to handle memory management in WebAssembly.</p>
 <p>The
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray">TypedArray</a>
-family of objects provide transparant interoperability between Javascript and
+family of objects provide transparent interoperability between Javascript and
 WebAssembly. Rather than copying values (as with <code>ArrayType</code>) we can simply pass a
 <code>TypedArray</code> via `TypedArrayType&quot;. The prototype fot the above functions would
 look like this:</p>
@@ -241,13 +245,13 @@ npm run exec:browser
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li><li><a href="global.html#unmarshalledArgs%255Bundefined%255D">unmarshalledArgs[undefined]</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="FunctionRegistry.html">FunctionRegistry</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="VoidType.html">VoidType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li><li><a href="global.html#unmarshalledArgs%255Bundefined%255D">unmarshalledArgs[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 10 2020 14:26:41 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jul 12 2020 15:10:41 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

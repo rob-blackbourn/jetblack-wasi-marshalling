@@ -42,4 +42,10 @@ export class Int16Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  static MANGLED_NAME = 'i16'
+
+  get mangledName() {
+    return Int16Type.MANGLED_NAME
+  }
 }

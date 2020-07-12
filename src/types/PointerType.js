@@ -90,4 +90,8 @@ export class PointerType extends ReferenceType {
     dest.contents = source.contents
     return dest
   }
+
+  get mangledName() {
+    return `p(${this.type.mangledName})`
+  }
 }

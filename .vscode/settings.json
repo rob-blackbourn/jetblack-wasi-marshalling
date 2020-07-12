@@ -1,12 +1,17 @@
 {
     "standard.enable": false,
     "cSpell.words": [
+        "ESUCCESS",
+        "FDFLAGS",
         "Finalizers",
         "WASI",
         "deallocating",
+        "fdstat",
         "finalizer",
+        "iovs",
         "jetblack",
         "malloc",
+        "nwritten",
         "proto",
         "setlocale",
         "stdlib",

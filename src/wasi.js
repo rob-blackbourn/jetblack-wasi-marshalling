@@ -1,5 +1,7 @@
-import { MemoryManager } from './MemoryManager'
 import { WASI, STDOUT, STDERR } from './constants'
+import { MemoryManager } from './MemoryManager'
+import { FunctionRegistry } from './FunctionRegistry'
+import { FunctionPrototype } from './types/FunctionPrototype'
 
 // @filename: types.d.ts
 
@@ -33,23 +35,32 @@ function drainWriter(write, prev, current) {
 export class Wasi {
   /**
    * Create a Wasi class
-   * @param {Object.<string, string>} env The environmanet variables
+   * @param {Object.<string, string>} env The environment variables
    */
   constructor(env) {
     this.env = env
+    
     /**
      * @property {WebAssembly.Instance} [instance] The WebAssembly instance.
      */
     this.instance = null
+    
     /**
      * @property {MemoryManager} [memoryManager] The WebAssembly memory manager
      */
     this.memoryManager = null
+
+    /**
+     * @property {FunctionRegistry} [functionRegistry] The function registry
+     */
+    this.functionRegistry = null
+
     /**
      * @private
      * @property {string} Text sent to stdout before a newline has een received.
      */
     this.stdoutText = ''
+
     /**
      * @private
      * @property {string} Text sent to stderr before a newline has een received.
@@ -57,9 +68,8 @@ export class Wasi {
     this.stderrText = ''
   }
 
-  // Initialise the instance from the WebAssembly.
   /**
-   * Initialise the WASI class with a WebAssembly instance.
+   * Initialize the WASI class with a WebAssembly instance.
    * @param {WebAssembly.Instance} instance A WebAssembly instance
    */
   init(instance) {
@@ -68,6 +78,51 @@ export class Wasi {
       /** @type {WebAssembly.Memory} */ (instance.exports.memory),
       /** @type {malloc} */ (instance.exports.malloc),
       /** @type {free} */ (instance.exports.free))
+    this.functionRegistry = new FunctionRegistry(this.memoryManager)
+  }
+
+  /**
+   * Register a function
+   * @param {string|symbol} name The function name
+   * @param {FunctionPrototype} prototype The function prototype
+   * @param {wasmCallback} callback The wasm callback
+   */
+  registerFunction (name, prototype, callback) {
+    this.functionRegistry.registerImplied(name, prototype, callback)
+  }
+
+  /**
+   * Invoke a function implied by the arguments
+   * @param {string|symbol} name The function name
+   * @param {Array<any>} values The values with which to call the function
+   * @param {object} options Name mangling options
+   * @returns {*} The return value if any
+   */
+  invokeImpliedFunction (name, values, options) {
+    const callback = this.functionRegistry.findImplied(name, values, options)
+    return callback(...values)
+  }
+
+  /**
+   * Invoke a function given an explicit argument mangle
+   * @param {string|symbol} name The function name
+   * @param {Array<any>} values The values with which to call the function
+   * @param {string} mangledArgs The mangled arguments
+   * @returns {*} The return value if any
+   */
+  invokeExplicitFunction(name, values, mangledArgs) {
+    const callback = this.functionRegistry.findExplicit(name, mangledArgs)
+    return callback(values)
+  }
+
+  /**
+   * Invoke a function with defaults
+   * @param {string|symbol} name The function name
+   * @param  {...any} values The function values
+   * @returns {*}
+   */
+  invoke(name, ...values) {
+    return this.invokeImpliedFunction(name, values, {})
   }
 
   /**
@@ -94,7 +149,7 @@ export class Wasi {
   /**
    * Get the size required to store the environment variables.
    * @param {number} environCount The number of environment variables
-   * @param {number} environBufSize The size of the environment variables bufer
+   * @param {number} environBufSize The size of the environment variables buffer
    */
   environ_sizes_get(environCount, environBufSize) {
     const encoder = new TextEncoder()
@@ -122,7 +177,7 @@ export class Wasi {
   }
 
   /**
-   * Open the file desriptor
+   * Open the file descriptor
    * @param {number} fd The file descriptor
    */
   fd_close(fd) {

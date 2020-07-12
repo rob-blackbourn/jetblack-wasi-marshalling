@@ -8,6 +8,7 @@ const {
   StringType,
   StringBuffer,
   StringBufferType,
+  VoidType,
   FunctionPrototype,
   In,
   Out,
@@ -32,6 +33,20 @@ async function setupWasi (fileName, envVars) {
   return wasi
 }
 
+function mangleExample() {
+  const proto1 = new FunctionPrototype(
+    [
+      new In(new TypedArrayType(new Float64Type())),
+      new In(new TypedArrayType(new Float64Type())),
+      new In(new Int32Type())
+    ],
+    new ArrayType(new Float64Type(), (i, args) => args[2])
+  )
+
+  console.log(proto1.mangledName)
+  console.log(FunctionPrototype.mangleValues(new Float64Array([1,2,3,4]), new Float64Array([1,2,3,4]), 4))
+}
+
 async function main () {
   const wasi = await setupWasi('./client/example.wasm', {})
 
@@ -54,6 +69,8 @@ async function main () {
     4)
   console.log(result1)
 
+  mangleExample()
+
   // The second example takes in three arrays, multiplying the first
   // two are storing the output in the third.
   const proto2 = new FunctionPrototype(
@@ -62,7 +79,8 @@ async function main () {
       new In(new ArrayType(new Float64Type())),
       new Out(new ArrayType(new Float64Type())),
       new In(new Int32Type())
-    ]
+    ],
+    new VoidType()
   )
 
   const output = new Array(4)
@@ -113,7 +131,8 @@ async function main () {
       new In(new TypedArrayType(new Float64Type())),
       new Out(new TypedArrayType(new Float64Type())),
       new In(new Int32Type())
-    ]
+    ],
+    new VoidType()
   )
 
   const output2 = wasi.memoryManager.createTypedArray(Float64Array, 4)
@@ -144,7 +163,8 @@ async function main () {
   const proto7 = new FunctionPrototype(
     [
       new In(new StringType())
-    ]
+    ],
+    new VoidType()
   )
   proto7.invoke(
     wasi.memoryManager,

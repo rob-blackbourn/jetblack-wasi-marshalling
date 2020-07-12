@@ -42,4 +42,10 @@ export class Float32Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  static MANGLED_NAME = 'f32'
+
+  get mangledName () {
+    return Float32Type.MANGLED_NAME
+  }
 }

@@ -140,4 +140,8 @@ export class ArrayType extends ReferenceType {
     dest.splice(0, dest.length, ...source)
     return dest
   }
+
+  get mangledName() {
+    return `a(${this.type.mangledName})`
+  }
 }

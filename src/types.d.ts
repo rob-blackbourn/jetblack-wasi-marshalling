@@ -7,3 +7,5 @@ declare class FinalizationRegistry {
   
     register(item: any, tag: any): void;
 }
+
+declare function wasmCallback(...args: any): any;

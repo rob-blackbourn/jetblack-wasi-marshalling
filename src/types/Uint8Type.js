@@ -42,4 +42,10 @@ export class Uint8Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  static MANGLED_NAME = 'u8'
+
+  get mangledName() {
+    return Uint8Type.MANGLED_NAME
+  }
 }

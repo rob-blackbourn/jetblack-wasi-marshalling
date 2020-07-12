@@ -42,4 +42,10 @@ export class Float64Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  static MANGLED_NAME = 'f64'
+
+  get mangledName () {
+    return Float64Type.MANGLED_NAME
+  }
 }

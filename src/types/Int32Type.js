@@ -42,4 +42,10 @@ export class Int32Type extends ValueType {
       memoryManager.free(address)
     }
   }
+
+  static MANGLED_NAME = 'i32'
+
+  get mangledName() {
+    return Int32Type.MANGLED_NAME
+  }
 }

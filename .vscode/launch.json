@@ -19,16 +19,11 @@
             "request": "launch",
             "name": "Mocha Tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-            "runtimeArgs": [],
+            "runtimeArgs": ["--harmony-weak-refs"],
             "args": [
-              "${workspaceFolder}/test/**/*.js",
-              "--require",
-              "@babel/register",
-              "-u",
-              "bdd",
-              "--timeout",
-              "999999",
-              "--colors"
+              "--harmony-weak-refs",
+              "-r", "esm",
+              "${workspaceFolder}/test/**/*test*.js",
             ],
             "env": {
               "NODE_ENV": "test",

@@ -15,6 +15,7 @@ export {
   Uint64Type,
   Float32Type,
   Float64Type,
+  VoidType,
   ReferenceType,
   StringType,
   StringBufferType,
@@ -29,4 +30,5 @@ export {
   FunctionPrototype
 } from './types/index'
 
+export { FunctionRegistry } from './FunctionRegistry'
 export { Wasi } from './wasi'
