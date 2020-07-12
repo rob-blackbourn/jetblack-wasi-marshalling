@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: AddressType</title>
+    <title>JSDoc: Class: FunctionRegistry</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: AddressType</h1>
+    <h1 class="page-title">Class: FunctionRegistry</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>AddressType<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>FunctionRegistry<span class="signature">(memoryManager)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>A class representing a string buffer type</p></div>
+            <div class="class-description"><p>A function registry</p></div>
         
     
 </header>
@@ -45,19 +45,72 @@
     
 
     
-    <h4 class="name" id="AddressType"><span class="type-signature"></span>new AddressType<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="FunctionRegistry"><span class="type-signature"></span>new FunctionRegistry<span class="signature">(memoryManager)</span><span class="type-signature"></span></h4>
     
 
     
 
 
 
+<div class="description">
+    <p>Construct a function registry</p>
+</div>
 
 
 
 
 
 
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>memoryManager</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MemoryManager.html">MemoryManager</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The memory manager</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -93,7 +146,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_AddressType.js.html">types/AddressType.js</a>, <a href="types_AddressType.js.html#line10">line 10</a>
+        <a href="FunctionRegistry.js.html">FunctionRegistry.js</a>, <a href="FunctionRegistry.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -127,20 +180,16 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="ReferenceType.html">ReferenceType</a>.&lt;<a href="Pointer.html">Pointer</a>.&lt;number>></li>
-    </ul>
-
 
     
 
     
+        <h3 class="subsection-title">Classes</h3>
 
+        <dl>
+            <dt><a href="FunctionRegistry.html">FunctionRegistry</a></dt>
+            <dd></dd>
+        </dl>
     
 
     
@@ -160,7 +209,7 @@
     
 
     
-    <h4 class="name" id="free"><span class="type-signature"></span>free<span class="signature">(memoryManager, address, unmarshalledIndex, unmarshalledArgs)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="findExplicit"><span class="type-signature"></span>findExplicit<span class="signature">(name, mangledValues)</span><span class="type-signature"> &rarr; {wasmCallback|null}</span></h4>
     
 
     
@@ -168,7 +217,7 @@
 
 
 <div class="description">
-    <p>Free allocated memory.</p>
+    <p>Find a function that matches the value mangle</p>
 </div>
 
 
@@ -204,13 +253,16 @@
 
         <tr>
             
-                <td class="name"><code>memoryManager</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="MemoryManager.html">MemoryManager</a></span>
+<span class="param-type">string</span>
+|
+
+<span class="param-type">symbol</span>
 
 
             
@@ -220,20 +272,20 @@
 
             
 
-            <td class="description last"><p>The memory manager</p></td>
+            <td class="description last"><p>The common name</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>address</code></td>
+                <td class="name"><code>mangledValues</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -243,53 +295,7 @@
 
             
 
-            <td class="description last"><p>The address of the memory to be freed</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>unmarshalledIndex</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The index of the unmarshalled value or -1</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>unmarshalledArgs</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;*></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The unmarshalled arguments</p></td>
+            <td class="description last"><p>The value mangle</p></td>
         </tr>
 
     
@@ -330,7 +336,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_AddressType.js.html">types/AddressType.js</a>, <a href="types_AddressType.js.html#line49">line 49</a>
+        <a href="FunctionRegistry.js.html">FunctionRegistry.js</a>, <a href="FunctionRegistry.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -366,7 +372,10 @@
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">wasmCallback</span>
+|
+
+<span class="param-type">null</span>
 
 
     </dd>
@@ -384,7 +393,7 @@
     
 
     
-    <h4 class="name" id="marshall"><span class="type-signature"></span>marshall<span class="signature">(memoryManager, unmarshalledIndex, unmarshalledArgs)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id="findImplied"><span class="type-signature"></span>findImplied<span class="signature">(name, values, options)</span><span class="type-signature"> &rarr; {wasmCallback|null}</span></h4>
     
 
     
@@ -392,7 +401,7 @@
 
 
 <div class="description">
-    <p>Marshall an address into memory</p>
+    <p>Find a function which matches the arguments</p>
 </div>
 
 
@@ -428,13 +437,16 @@
 
         <tr>
             
-                <td class="name"><code>memoryManager</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="MemoryManager.html">MemoryManager</a></span>
+<span class="param-type">string</span>
+|
+
+<span class="param-type">symbol</span>
 
 
             
@@ -444,20 +456,20 @@
 
             
 
-            <td class="description last"><p>The memory manager</p></td>
+            <td class="description last"><p>The common name of the function</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>unmarshalledIndex</code></td>
+                <td class="name"><code>values</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Array.&lt;any></span>
 
 
             
@@ -467,20 +479,20 @@
 
             
 
-            <td class="description last"><p>The index of the value to to marshall</p></td>
+            <td class="description last"><p>The arguments that will be applied to the function</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>unmarshalledArgs</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;*></span>
+<span class="param-type">object</span>
 
 
             
@@ -490,7 +502,7 @@
 
             
 
-            <td class="description last"><p>The unmarshalled arguments</p></td>
+            <td class="description last"><p>Options for the mangler</p></td>
         </tr>
 
     
@@ -531,7 +543,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_AddressType.js.html">types/AddressType.js</a>, <a href="types_AddressType.js.html#line19">line 19</a>
+        <a href="FunctionRegistry.js.html">FunctionRegistry.js</a>, <a href="FunctionRegistry.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -560,7 +572,7 @@
 
         
 <div class="param-desc">
-    <p>The address of the string in memory</p>
+    <p>The wasm callback or null</p>
 </div>
 
 
@@ -571,7 +583,10 @@
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type">wasmCallback</span>
+|
+
+<span class="param-type">null</span>
 
 
     </dd>
@@ -589,7 +604,7 @@
     
 
     
-    <h4 class="name" id="unmarshall"><span class="type-signature"></span>unmarshall<span class="signature">(memoryManager, address, unmarshalledIndex, unmarshalledArgs)</span><span class="type-signature"> &rarr; {<a href="Pointer.html">Pointer</a>.&lt;number>}</span></h4>
+    <h4 class="name" id="registerExplicit"><span class="type-signature"></span>registerExplicit<span class="signature">(name, mangledArgs, prototype, callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -597,7 +612,7 @@
 
 
 <div class="description">
-    <p>Unmarshall an address</p>
+    <p>Register a function with an explicit mangle.</p>
 </div>
 
 
@@ -633,13 +648,16 @@
 
         <tr>
             
-                <td class="name"><code>memoryManager</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="MemoryManager.html">MemoryManager</a></span>
+<span class="param-type">string</span>
+|
+
+<span class="param-type">symbol</span>
 
 
             
@@ -649,20 +667,20 @@
 
             
 
-            <td class="description last"><p>The memory manager</p></td>
+            <td class="description last"><p>The function name</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>address</code></td>
+                <td class="name"><code>mangledArgs</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -672,20 +690,20 @@
 
             
 
-            <td class="description last"><p>The address of the string buffer in memory</p></td>
+            <td class="description last"><p>An explicit mangling of the function prototype</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>unmarshalledIndex</code></td>
+                <td class="name"><code>prototype</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><a href="FunctionPrototype.html">FunctionPrototype</a></span>
 
 
             
@@ -695,20 +713,20 @@
 
             
 
-            <td class="description last"><p>The index of the unmarshalled value or -1</p></td>
+            <td class="description last"><p>The function prototype</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>unmarshalledArgs</code></td>
+                <td class="name"><code>callback</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;*></span>
+<span class="param-type">wasmCallback</span>
 
 
             
@@ -718,7 +736,7 @@
 
             
 
-            <td class="description last"><p>The unmarshalled arguments.</p></td>
+            <td class="description last"><p>The function to call</p></td>
         </tr>
 
     
@@ -759,7 +777,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="types_AddressType.js.html">types/AddressType.js</a>, <a href="types_AddressType.js.html#line31">line 31</a>
+        <a href="FunctionRegistry.js.html">FunctionRegistry.js</a>, <a href="FunctionRegistry.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -784,28 +802,192 @@
 
 
 
-<h5>Returns:</h5>
+
+
+
+
 
         
-<div class="param-desc">
-    <p>The unmarshalled string buffer</p>
+            
+
+    
+
+    
+    <h4 class="name" id="registerImplied"><span class="type-signature"></span>registerImplied<span class="signature">(name, prototype, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Register a function implied by the arguments.</p>
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
         
-<span class="param-type"><a href="Pointer.html">Pointer</a>.&lt;number></span>
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">symbol</span>
 
 
-    </dd>
-</dl>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the function</p></td>
+        </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>prototype</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="FunctionPrototype.html">FunctionPrototype</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function prototype</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">wasmCallback</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The wasm callback</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="FunctionRegistry.js.html">FunctionRegistry.js</a>, <a href="FunctionRegistry.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: types/AddressType.js</title>
+    <title>JSDoc: Source: types/VoidType.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: types/AddressType.js</h1>
+    <h1 class="page-title">Source: types/VoidType.js</h1>
 
     
 
@@ -26,63 +26,22 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { MemoryManager } from '../MemoryManager'
-import { Pointer } from '../Pointer'
-
-import { ReferenceType } from './ReferenceType'
+            <pre class="prettyprint source linenums"><code>import { Type } from './Type'
 
 /**
- * A class representing a string buffer type
- * @extends {ReferenceType&lt;Pointer&lt;number>>}
+ * A class representing no value
  */
-export class AddressType extends ReferenceType {
-
-  /**
-   * Marshall an address into memory
-   * @param {MemoryManager} memoryManager The memory manager
-   * @param {number} unmarshalledIndex The index of the value to to marshall
-   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
-   * @returns {number} The address of the string in memory
-   */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
-    return unmarshalledArgs[unmarshalledIndex].contents
+export class VoidType extends Type {
+  constructor() {
+    super(Uint32Array)
   }
-
-  /**
-   * Unmarshall an address
-   * @param {MemoryManager} memoryManager The memory manager
-   * @param {number} address The address of the string buffer in memory
-   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments.
-   * @returns {Pointer&lt;number>} The unmarshalled string buffer
-   */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
-    if (unmarshalledIndex !== -1) {
-      return /** @type {Pointer&lt;number>} */ (unmarshalledArgs[unmarshalledIndex])
-    } else {
-      const pointer =  new Pointer(address)
-      memoryManager.freeWhenFinalized(pointer, address)
-      return pointer
-    }
-  }
-
-  /**
-   * Free allocated memory.
-   * @param {MemoryManager} memoryManager The memory manager
-   * @param {number} address The address of the memory to be freed
-   * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array&lt;*>} unmarshalledArgs The unmarshalled arguments
-   * @returns {void}
-   */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
-    // The finalizer handles freeing.
-  }
+  
+  static MANGLED_NAME = 'v0'
 
   get mangledName() {
-    return 'a32'
+    return VoidType.MANGLED_NAME
   }
-}
-</code></pre>
+}</code></pre>
         </article>
     </section>
 

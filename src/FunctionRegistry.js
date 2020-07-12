@@ -17,7 +17,7 @@ export class FunctionRegistry {
   }
 
   /**
-   * 
+   * Register a function implied by the arguments.
    * @param {string|symbol} name The name of the function
    * @param {FunctionPrototype} prototype The function prototype
    * @param {wasmCallback} callback The wasm callback
@@ -26,6 +26,13 @@ export class FunctionRegistry {
     this.registerExplicit(name, prototype.mangledArgs, prototype, callback)
   }
 
+  /**
+   * Register a function with an explicit mangle.
+   * @param {string|symbol} name The function name
+   * @param {string} mangledArgs An explicit mangling of the function prototype
+   * @param {FunctionPrototype} prototype The function prototype
+   * @param {wasmCallback} callback The function to call
+   */
   registerExplicit(name, mangledArgs, prototype, callback) {
     if (!(name in this._registry)) {
       this._registry[name] = {}

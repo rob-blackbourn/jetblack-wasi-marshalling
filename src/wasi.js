@@ -149,7 +149,7 @@ export class Wasi {
   /**
    * Get the size required to store the environment variables.
    * @param {number} environCount The number of environment variables
-   * @param {number} environBufSize The size of the environment variables bufer
+   * @param {number} environBufSize The size of the environment variables buffer
    */
   environ_sizes_get(environCount, environBufSize) {
     const encoder = new TextEncoder()
@@ -177,7 +177,7 @@ export class Wasi {
   }
 
   /**
-   * Open the file desriptor
+   * Open the file descriptor
    * @param {number} fd The file descriptor
    */
   fd_close(fd) {

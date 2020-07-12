@@ -26,8 +26,10 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { MemoryManager } from './MemoryManager'
-import { WASI, STDOUT, STDERR } from './constants'
+            <pre class="prettyprint source linenums"><code>import { WASI, STDOUT, STDERR } from './constants'
+import { MemoryManager } from './MemoryManager'
+import { FunctionRegistry } from './FunctionRegistry'
+import { FunctionPrototype } from './types/FunctionPrototype'
 
 // @filename: types.d.ts
 
@@ -61,23 +63,32 @@ function drainWriter(write, prev, current) {
 export class Wasi {
   /**
    * Create a Wasi class
-   * @param {Object.&lt;string, string>} env The environmanet variables
+   * @param {Object.&lt;string, string>} env The environment variables
    */
   constructor(env) {
     this.env = env
+    
     /**
      * @property {WebAssembly.Instance} [instance] The WebAssembly instance.
      */
     this.instance = null
+    
     /**
      * @property {MemoryManager} [memoryManager] The WebAssembly memory manager
      */
     this.memoryManager = null
+
+    /**
+     * @property {FunctionRegistry} [functionRegistry] The function registry
+     */
+    this.functionRegistry = null
+
     /**
      * @private
      * @property {string} Text sent to stdout before a newline has een received.
      */
     this.stdoutText = ''
+
     /**
      * @private
      * @property {string} Text sent to stderr before a newline has een received.
@@ -85,9 +96,8 @@ export class Wasi {
     this.stderrText = ''
   }
 
-  // Initialise the instance from the WebAssembly.
   /**
-   * Initialise the WASI class with a WebAssembly instance.
+   * Initialize the WASI class with a WebAssembly instance.
    * @param {WebAssembly.Instance} instance A WebAssembly instance
    */
   init(instance) {
@@ -96,6 +106,51 @@ export class Wasi {
       /** @type {WebAssembly.Memory} */ (instance.exports.memory),
       /** @type {malloc} */ (instance.exports.malloc),
       /** @type {free} */ (instance.exports.free))
+    this.functionRegistry = new FunctionRegistry(this.memoryManager)
+  }
+
+  /**
+   * Register a function
+   * @param {string|symbol} name The function name
+   * @param {FunctionPrototype} prototype The function prototype
+   * @param {wasmCallback} callback The wasm callback
+   */
+  registerFunction (name, prototype, callback) {
+    this.functionRegistry.registerImplied(name, prototype, callback)
+  }
+
+  /**
+   * Invoke a function implied by the arguments
+   * @param {string|symbol} name The function name
+   * @param {Array&lt;any>} values The values with which to call the function
+   * @param {object} options Name mangling options
+   * @returns {*} The return value if any
+   */
+  invokeImpliedFunction (name, values, options) {
+    const callback = this.functionRegistry.findImplied(name, values, options)
+    return callback(...values)
+  }
+
+  /**
+   * Invoke a function given an explicit argument mangle
+   * @param {string|symbol} name The function name
+   * @param {Array&lt;any>} values The values with which to call the function
+   * @param {string} mangledArgs The mangled arguments
+   * @returns {*} The return value if any
+   */
+  invokeExplicitFunction(name, values, mangledArgs) {
+    const callback = this.functionRegistry.findExplicit(name, mangledArgs)
+    return callback(values)
+  }
+
+  /**
+   * Invoke a function with defaults
+   * @param {string|symbol} name The function name
+   * @param  {...any} values The function values
+   * @returns {*}
+   */
+  invoke(name, ...values) {
+    return this.invokeImpliedFunction(name, values, {})
   }
 
   /**
@@ -122,7 +177,7 @@ export class Wasi {
   /**
    * Get the size required to store the environment variables.
    * @param {number} environCount The number of environment variables
-   * @param {number} environBufSize The size of the environment variables bufer
+   * @param {number} environBufSize The size of the environment variables buffer
    */
   environ_sizes_get(environCount, environBufSize) {
     const encoder = new TextEncoder()
@@ -150,7 +205,7 @@ export class Wasi {
   }
 
   /**
-   * Open the file desriptor
+   * Open the file descriptor
    * @param {number} fd The file descriptor
    */
   fd_close(fd) {
@@ -249,13 +304,13 @@ export class Wasi {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li><li><a href="global.html#unmarshalledArgs%255Bundefined%255D">unmarshalledArgs[undefined]</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddressType.html">AddressType</a></li><li><a href="ArgumentDef.html">ArgumentDef</a></li><li><a href="ArrayType.html">ArrayType</a></li><li><a href="Float32Type.html">Float32Type</a></li><li><a href="Float64Type.html">Float64Type</a></li><li><a href="FunctionPrototype.html">FunctionPrototype</a></li><li><a href="FunctionRegistry.html">FunctionRegistry</a></li><li><a href="In.html">In</a></li><li><a href="InOut.html">InOut</a></li><li><a href="Int8Type.html">Int8Type</a></li><li><a href="Int16Type.html">Int16Type</a></li><li><a href="Int32Type.html">Int32Type</a></li><li><a href="Int64Type.html">Int64Type</a></li><li><a href="MemoryManager.html">MemoryManager</a></li><li><a href="Out.html">Out</a></li><li><a href="Pointer.html">Pointer</a></li><li><a href="PointerType.html">PointerType</a></li><li><a href="ReferenceType.html">ReferenceType</a></li><li><a href="StringBuffer.html">StringBuffer</a></li><li><a href="StringBufferType.html">StringBufferType</a></li><li><a href="StringType.html">StringType</a></li><li><a href="Type.html">Type</a></li><li><a href="global.html#TypedArrayType">TypedArrayType</a></li><li><a href="Uint8Type.html">Uint8Type</a></li><li><a href="Uint16Type.html">Uint16Type</a></li><li><a href="Uint32Type.html">Uint32Type</a></li><li><a href="Uint64Type.html">Uint64Type</a></li><li><a href="ValueType.html">ValueType</a></li><li><a href="VoidType.html">VoidType</a></li><li><a href="Wasi.html">Wasi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#strlen">strlen</a></li><li><a href="global.html#unmarshalledArgs%255Bundefined%255D">unmarshalledArgs[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 10 2020 14:26:41 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jul 12 2020 15:10:41 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
