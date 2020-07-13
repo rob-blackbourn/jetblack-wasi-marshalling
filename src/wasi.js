@@ -92,6 +92,15 @@ export class Wasi {
   }
 
   /**
+   * Find if a function is registered
+   * @param {string|symbol} name The function name
+   * @returns {boolean} Returns true if the function has been registered.
+   */
+  hasFunction (name) {
+    return this.functionRegistry.has(name)
+  }
+
+  /**
    * Invoke a function implied by the arguments
    * @param {string|symbol} name The function name
    * @param {Array<any>} values The values with which to call the function

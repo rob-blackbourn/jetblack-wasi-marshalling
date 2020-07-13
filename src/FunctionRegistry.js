@@ -34,7 +34,7 @@ export class FunctionRegistry {
    * @param {wasmCallback} callback The function to call
    */
   registerExplicit(name, mangledArgs, prototype, callback) {
-    if (!(name in this._registry)) {
+    if (!this.has(name)) {
       this._registry[name] = {}
     }
     this._registry[name][mangledArgs] = (...args) => prototype.invoke(this.memoryManager, callback, ...args)
@@ -48,7 +48,7 @@ export class FunctionRegistry {
    * @returns {wasmCallback|null} The wasm callback or null
    */
   findImplied (name, values, options) {
-    if (name in this._registry) {
+    if (this.has(name)) {
       return this.findExplicit(name, FunctionPrototype.mangleValues(values, options))
     } else {
       return null
@@ -63,5 +63,14 @@ export class FunctionRegistry {
    */
   findExplicit (name, mangledValues) {
     return this._registry[name][mangledValues] || null
+  }
+
+  /**
+   * Check if a function exists.
+   * @param {string|symbol} name The name of the function
+   * @returns {boolean} Returns true if the function exists.
+   */
+  has (name) {
+    return name in this._registry
   }
 }
