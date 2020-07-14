@@ -134,6 +134,17 @@ export class Wasi {
     return this.invokeImpliedFunction(name, values, {})
   }
 
+  uint8Array = (lengthOrArray) => this.memoryManager.createTypedArray(Uint8Array, lengthOrArray)
+  uint16Array = (lengthOrArray) => this.memoryManager.createTypedArray(Uint16Array, lengthOrArray)
+  uint32Array = (lengthOrArray) => this.memoryManager.createTypedArray(Uint32Array, lengthOrArray)
+  uint64Array = (lengthOrArray) => this.memoryManager.createTypedArray(BigUint64Array, lengthOrArray)
+  int8Array = (lengthOrArray) => this.memoryManager.createTypedArray(Int8Array, lengthOrArray)
+  int16Array = (lengthOrArray) => this.memoryManager.createTypedArray(Int16Array, lengthOrArray)
+  int32Array = (lengthOrArray) => this.memoryManager.createTypedArray(Int32Array, lengthOrArray)
+  int64Array = (lengthOrArray) => this.memoryManager.createTypedArray(BigInt64Array, lengthOrArray)
+  float32Array = (lengthOrArray) => this.memoryManager.createTypedArray(Float32Array, lengthOrArray)
+  float64Array = (lengthOrArray) => this.memoryManager.createTypedArray(Float64Array, lengthOrArray)
+
   /**
    * Get the environment variables.
    * @param {number} environ The environment
