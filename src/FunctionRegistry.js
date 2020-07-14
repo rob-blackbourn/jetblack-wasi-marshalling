@@ -40,6 +40,13 @@ export class FunctionRegistry {
     this._registry[name][mangledArgs] = (...args) => prototype.invoke(this.memoryManager, callback, ...args)
   }
 
+  registerUnmarshalled(name, callback) {
+    if (!this.has(name)) {
+      this._registry[name] = {}
+    }
+    this._registry[name]['*'] = callback
+  }
+
   /**
    * Find a function which matches the arguments
    * @param {string|symbol} name The common name of the function
@@ -62,7 +69,7 @@ export class FunctionRegistry {
    * @returns {wasmCallback|null}
    */
   findExplicit (name, mangledValues) {
-    return this._registry[name][mangledValues] || null
+    return this._registry[name][mangledValues] || this._registry[name]['*'] || null
   }
 
   /**

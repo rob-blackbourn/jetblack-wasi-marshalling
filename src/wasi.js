@@ -88,7 +88,11 @@ export class Wasi {
    * @param {wasmCallback} callback The wasm callback
    */
   registerFunction (name, prototype, callback) {
-    this.functionRegistry.registerImplied(name, prototype, callback)
+    if (prototype == null) {
+      this.functionRegistry.registerUnmarshalled(name, callback)
+    } else {
+      this.functionRegistry.registerImplied(name, prototype, callback)
+    }
   }
 
   /**
