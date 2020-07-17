@@ -6,7 +6,7 @@ export default {
     {
       file: 'lib/index.js',
       format: 'umd',
-      name: 'wasiMarshalling',
+      name: 'WasiMarshalling',
       sourcemap: true
     },
     {
