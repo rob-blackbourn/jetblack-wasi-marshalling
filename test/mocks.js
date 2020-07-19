@@ -1,6 +1,14 @@
 import Allocator from 'malloc'
 import { MemoryManager, } from '../src/MemoryManager'
 
+class MockMemoryManager extends MemoryManager {
+  constructor(memory, malloc, free, inspect, usedCount) {
+    super(memory, malloc, free)
+    this.inspect = inspect
+    this.usedCount = usedCount
+  }
+}
+
 export function makeMockMemoryManager() {
   const heap = new ArrayBuffer(1024 * 1024)
   const allocator = new Allocator(heap)
@@ -26,9 +34,7 @@ export function makeMockMemoryManager() {
   inspect.bind(allocator)
   usedCount.bind(allocator)
   
-  const memoryManager = new MemoryManager({ buffer: heap, grow: null }, malloc, free)
-  memoryManager.inspect = inspect
-  memoryManager.usedCount = usedCount
+  const memoryManager = new MockMemoryManager({ buffer: heap, grow: null }, malloc, free, inspect, usedCount)
 
   return memoryManager  
 }
