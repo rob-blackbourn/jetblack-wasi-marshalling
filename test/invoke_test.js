@@ -1,19 +1,13 @@
-import assert from 'assert'
+const assert = require('assert')
 import { makeMockMemoryManager } from './mocks'
 import {
   ArrayType,
-  Float32Type,
   Float64Type,
   FunctionPrototype,
   In,
   Int32Type,
-  Uint64Type,
   Out,
-  Pointer,
-  PointerType,
-  StringType,
-  TypedArrayType
-} from '../src'
+} from '../src/index'
 import { VoidType } from '../src/types/VoidType'
 
 describe('test invoking functions', () => {
