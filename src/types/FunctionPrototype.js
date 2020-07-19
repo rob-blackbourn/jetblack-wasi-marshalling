@@ -158,11 +158,11 @@ export class FunctionPrototype {
       return `t(${Float64Type.MANGLED_NAME})`
     } else if (value instanceof Array) {
       if (value.every(x => typeof x === 'string')) {
-        return `a(${FunctionPrototype.mangleString(value, options)})`
+        return `a(${FunctionPrototype.mangleString(value[0], options)})`
       } else if (value.every(x => x instanceof StringBuffer)) {
         return `a(${StringBufferType.MANGLED_NAME})`
       } else if (value.every(x => typeof x  === 'number')) {
-        return `a(${FunctionPrototype.mangleNumber(value, options)})`
+        return `a(${FunctionPrototype.mangleNumber(value[0], options)})`
       } else if (value.every(x => x instanceof Array)) {
         return `a(${FunctionPrototype.mangleValue(value[0], options)})`
       } else {

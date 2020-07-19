@@ -44,7 +44,7 @@ function mangleExample() {
   )
 
   console.log(proto1.mangledName)
-  console.log(FunctionPrototype.mangleValues(new Float64Array([1,2,3,4]), new Float64Array([1,2,3,4]), 4))
+  console.log(FunctionPrototype.mangleValues([new Float64Array([1,2,3,4]), new Float64Array([1,2,3,4]), 4], {}))
 }
 
 async function main () {
