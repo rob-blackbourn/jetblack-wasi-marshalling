@@ -17,23 +17,27 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "build": "rollup -c",
+    "build": "babel src/ -d lib/",
+    "prepublish": "npm run build",
+    "flow": "flow",
     "exec:prepare": "npm run build && cp lib/index.js client/index.js",
     "exec:nodejs": "npm run exec:prepare && node --harmony-weak-refs client/main.js",
     "exec:browser": "npm run exec:prepare && npx serve client",
-    "test": "mocha --harmony-weak-refs -r esm test/**/*test*.js",
+    "test": "mocha --harmony-weak-refs -r @babel/register test/**/*test*.js",
     "jsdoc": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^14.0.23",
-    "esm": "^3.2.25",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-flow": "^7.10.4",
+    "@babel/register": "^7.10.5",
+    "flow-bin": "^0.129.0",
     "jsdoc": "^3.6.4",
     "jsdoc-typeof-plugin": "^1.0.0",
     "malloc": "^1.1.0",
-    "mocha": "^8.0.1",
-    "rollup": "^2.18.2",
-    "rollup-plugin-terser": "^6.1.0"
+    "mocha": "^8.0.1"
   },
   "dependencies": {}
 }

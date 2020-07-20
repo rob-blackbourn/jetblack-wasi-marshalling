@@ -1,12 +1,16 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
+
+import { float32, void_ptr } from '../wasiLibDef'
 
 /**
  * A type representing a 64 bit float
  * @extends {ValueType<number>}
  */
-export class Float32Type extends ValueType {
+export class Float32Type extends ValueType<float32> {
   /**
    * Construct a 32 bit float type
    */
@@ -21,7 +25,7 @@ export class Float32Type extends ValueType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     memoryManager.dataView.setFloat32(address, unmarshalledArgs[unmarshalledIndex])
     return address
@@ -35,7 +39,7 @@ export class Float32Type extends ValueType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): float32 {
     try {
       return memoryManager.dataView.getFloat32(address)
     } finally {
@@ -45,7 +49,7 @@ export class Float32Type extends ValueType {
 
   static MANGLED_NAME = 'f32'
 
-  get mangledName () {
+  get mangledName(): string {
     return Float32Type.MANGLED_NAME
   }
 }

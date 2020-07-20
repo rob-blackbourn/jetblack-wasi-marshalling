@@ -1,3 +1,5 @@
+// @flow
+
 import { Type } from './Type'
 
 /**
@@ -5,7 +7,7 @@ import { Type } from './Type'
  * @template T
  * @extends {Type<T>}
  */
-export class ReferenceType extends Type {
+export class ReferenceType<T> extends Type<T> {
   /**
    * Construct a reference type.
    */

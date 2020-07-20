@@ -1,3 +1,5 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 import { StringBuffer } from '../StringBuffer'
 
@@ -17,17 +19,22 @@ import { StringBufferType } from './StringBufferType'
 import { StringType } from './StringType'
 import { VoidType } from './VoidType'
 
+import type { wasmCallback, BigInt64Array, BigUint64Array } from '../wasiLibDef'
+
 /**
  * A function prototype
  * @template T
  */
-export class FunctionPrototype {
+export class FunctionPrototype<TResult> {
+  argDefs: Array<ArgumentDef<any>>
+  returns: Type<TResult>
+
   /**
    * Construct a function prototype.
    * @param {Array<ArgumentDef<any>>} argDefs The argument definitions
    * @param {Type<T>} returns An optional return type
    */
-  constructor (argDefs, returns) {
+  constructor (argDefs: Array<ArgumentDef<any>>, returns: Type<TResult>) {
     this.argDefs = argDefs
     this.returns = returns
   }
@@ -39,7 +46,7 @@ export class FunctionPrototype {
    * @param {Array<any>} unmarshalledArgs The function arguments
    * @returns {T} An optional return value
    */
-  invoke (memoryManager, func, ...unmarshalledArgs) {
+  invoke (memoryManager: MemoryManager, func: wasmCallback, ...unmarshalledArgs: any): TResult|any {
     if (this.argDefs.length !== unmarshalledArgs.length) {
       throw new RangeError('Invalid number of arguments')
     }
@@ -61,11 +68,11 @@ export class FunctionPrototype {
    * Gets the mangling of the arguments.
    * @returns {string} The mangled args
    */
-  get mangledArgs() {
+  get mangledArgs(): string {
     return this.argDefs.map(x => x.type.mangledName).join('')
   }
 
-  get mangleReturns() {
+  get mangleReturns(): string {
     return this.returns == null ? 'v0' : this.returns.mangledName
   }
 
@@ -73,11 +80,11 @@ export class FunctionPrototype {
    * The mangled function prototype
    * @returns {string} The mangled function prototype
    */
-  get mangledName() {
+  get mangledName(): string {
     return `${this.mangleReturns}_${this.mangledArgs}`
   }
 
-  static mangleNumber(value, options) {
+  static mangleNumber(value: number, options: any): string {
     if ('defaultNumber' in options) {
       return options['defaultNumber']
     } else if (Number.isInteger(value)) {
@@ -93,7 +100,7 @@ export class FunctionPrototype {
     }
   }
 
-  static mangleString(value, options) {
+  static mangleString(value: string, options: any): string {
     if ('defaultString' in options) {
       return options['defaultString']
     } else {
@@ -107,7 +114,7 @@ export class FunctionPrototype {
    * @param {object} options Mangling options
    * @returns {string} The mangled value
    */
-  static mangleValue(value, options) {
+  static mangleValue(value: any, options: any): string {
     if (value == null) {
       return VoidType.MANGLED_NAME
     } else if (typeof value === 'number') {
@@ -124,7 +131,8 @@ export class FunctionPrototype {
       return `t(${Int16Type.MANGLED_NAME})`
     } else if (value instanceof Int32Array) {
       return `t(${Int32Type.MANGLED_NAME})`
-    } else if (value instanceof BigInt64Array) {
+    } else //$FlowFixMe
+      if (value instanceof BigInt64Array) {
       return `t(${Int64Type.MANGLED_NAME})`
     } else if (value instanceof Uint8Array) {
       return `t(${Uint8Type.MANGLED_NAME})`
@@ -132,30 +140,11 @@ export class FunctionPrototype {
       return `t(${Uint16Type.MANGLED_NAME})`
     } else if (value instanceof Uint32Array) {
       return `t(${Uint32Type.MANGLED_NAME})`
-    } else if (value instanceof BigUint64Array) {
+    } else // $FlowFixMe
+      if (value instanceof BigUint64Array) {
       return `t(${Uint64Type.MANGLED_NAME})`
     } else if (value instanceof StringBuffer) {
       return StringBufferType.MANGLED_NAME
-    } else if (value instanceof Int8Array) {
-      return `t(${Int8Type.MANGLED_NAME})`
-    } else if (value instanceof Int16Array) {
-      return `t(${Int16Type.MANGLED_NAME})`
-    } else if (value instanceof Int32Array) {
-      return `t(${Int32Type.MANGLED_NAME})`
-    } else if (value instanceof BigInt64Array) {
-      return `t(${Int64Type.MANGLED_NAME})`
-    } else if (value instanceof Int8Array) {
-      return `t(${Uint8Type.MANGLED_NAME})`
-    } else if (value instanceof Uint16Array) {
-      return `t(${Uint16Type.MANGLED_NAME})`
-    } else if (value instanceof Uint32Array) {
-      return `t(${Uint32Type.MANGLED_NAME})`
-    } else if (value instanceof BigUint64Array) {
-      return `t(${Uint64Type.MANGLED_NAME})`
-    } else if (value instanceof Float32Array) {
-      return `t(${Float32Type.MANGLED_NAME})`
-    } else if (value instanceof Float64Array) {
-      return `t(${Float64Type.MANGLED_NAME})`
     } else if (value instanceof Array) {
       if (value.every(x => typeof x === 'string')) {
         return `a(${FunctionPrototype.mangleString(value[0], options)})`
@@ -178,7 +167,7 @@ export class FunctionPrototype {
    * @param {Array<any>} values The values to mangle
    * @param {object} options Mangling options
    */
-  static mangleValues(values, options) {
+  static mangleValues(values: Array<any>, options: any): string {
     return values.map(x => FunctionPrototype.mangleValue(x, options)).join('')
   }
 }

@@ -1,12 +1,16 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
+
+import { int32, void_ptr } from '../wasiLibDef'
 
 /**
  * A type representing a 32 bit integer
  * @extends {ValueType<number>}
  */
-export class Int32Type extends ValueType {
+export class Int32Type extends ValueType<int32> {
   /**
    * Construct a 32 bit integer type
    */
@@ -21,7 +25,7 @@ export class Int32Type extends ValueType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     memoryManager.dataView.setInt32(address, unmarshalledArgs[unmarshalledIndex])
     return address
@@ -35,7 +39,7 @@ export class Int32Type extends ValueType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled args
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int32 {
     try {
       return memoryManager.dataView.getInt32(address)
     } finally {
@@ -45,7 +49,7 @@ export class Int32Type extends ValueType {
 
   static MANGLED_NAME = 'i32'
 
-  get mangledName() {
+  get mangledName(): string {
     return Int32Type.MANGLED_NAME
   }
 }

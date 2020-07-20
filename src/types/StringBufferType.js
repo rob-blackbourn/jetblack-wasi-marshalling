@@ -1,13 +1,17 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 import { StringBuffer } from '../StringBuffer'
 
 import { ReferenceType } from './ReferenceType'
 
+import type { void_ptr } from '../wasiLibDef'
+
 /**
  * A class representing a string buffer type
  * @extends {ReferenceType<StringBuffer>}
  */
-export class StringBufferType extends ReferenceType {
+export class StringBufferType extends ReferenceType<StringBuffer> {
 
   /**
    * Marshall a string buffer into memory
@@ -16,7 +20,7 @@ export class StringBufferType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
     return unmarshalledArgs[unmarshalledIndex].byteOffset
   }
 
@@ -28,7 +32,7 @@ export class StringBufferType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {StringBuffer} The unmarshalled string buffer
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): StringBuffer {
     if (unmarshalledIndex !== -1) {
       return /** @type {StringBuffer} */ unmarshalledArgs[unmarshalledIndex]
     } else {
@@ -44,13 +48,13 @@ export class StringBufferType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     // The finalizer handles freeing.
   }
 
   static MANGLED_NAME = 'b8'
 
-  get mangledName() {
+  get mangledName(): string {
     return StringBufferType.MANGLED_NAME
   }
 }

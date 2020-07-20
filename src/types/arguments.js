@@ -1,3 +1,5 @@
+// @flow
+
 import { Type } from './Type'
 
 import { ArgumentDef } from './ArgumentDef'
@@ -7,12 +9,12 @@ import { ArgumentDef } from './ArgumentDef'
  * @template T
  * @extends {ArgumentDef<T>}
  */
-export class In extends ArgumentDef {
+export class In<T> extends ArgumentDef<T> {
   /**
    * Construct an input argument
    * @param {Type<T>} type The argument type
    */
-  constructor (type) {
+  constructor (type: Type<T>) {
     super(type, true, false)
   }
 }
@@ -22,12 +24,12 @@ export class In extends ArgumentDef {
  * @template T
  * @extends {ArgumentDef<T>}
  */
-export class Out extends ArgumentDef {
+export class Out<T> extends ArgumentDef<T> {
   /**
    * Construct an output argument
    * @param {Type<T>} type The argument type
    */
-  constructor (type) {
+  constructor (type: Type<T>) {
     super(type, false, true)
   }
 }
@@ -37,12 +39,12 @@ export class Out extends ArgumentDef {
  * @template T
  * @extends {ArgumentDef<T>}
  */
-export class InOut extends ArgumentDef {
+export class InOut<T> extends ArgumentDef<T> {
   /**
    * Construct an input/output argument
    * @param {Type<T>} type The argument type
    */
-  constructor (type) {
+  constructor (type: Type<T>) {
     super(type, true, true)
   }
 }

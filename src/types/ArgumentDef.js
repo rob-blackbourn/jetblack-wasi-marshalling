@@ -1,14 +1,22 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 import { Type } from './Type'
+
+import type { void_ptr } from '../wasiLibDef'
 
 /**
  * An argument definition is used by {@link FunctionPrototype} to define the
  * arguments to a function.
  * @template T
  */
-export class ArgumentDef {
+export class ArgumentDef<T> {
+  type: Type<T>
+  isInput: boolean
+  isOutput: boolean
+
   /**
    * Construct an argument definition. The {@link In}, {@link Out}, and {@link InOut}
    * helper classes should be used to construct argument definitions as they are
@@ -18,7 +26,7 @@ export class ArgumentDef {
    * @param {boolean} isInput If true the argument provides data to the function
    * @param {boolean} isOutput If true the argument is populated by the function
    */
-  constructor (type, isInput, isOutput) {
+  constructor (type: Type<T>, isInput: boolean, isOutput: boolean) {
     this.type = type
     this.isInput = isInput
     this.isOutput = isOutput
@@ -35,7 +43,7 @@ export class ArgumentDef {
    * @returns {number|T} The address of the allocated memory or the marshalled value.
    * @throws {Error} If the argument is not input and/or output.
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number|T {
     if (this.type instanceof ValueType) {
       return unmarshalledArgs[unmarshalledIndex]
     } else if (this.isInput) {
@@ -55,7 +63,7 @@ export class ArgumentDef {
    * @param {Array<*>} unmarshalledArgs The unmarshall args
    * @returns {number|T} The unmarshalled value.
    */
-  unmarshall (memoryManager, addressOrValue, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, addressOrValue: void_ptr|T, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr|T {
     if (this.type instanceof ValueType) {
       return addressOrValue
     }

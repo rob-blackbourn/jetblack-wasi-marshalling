@@ -1,4 +1,6 @@
-// @filename: types.d.ts
+// @flow
+
+import type { malloc, free, FinalizationRegistry, void_ptr, uint32 } from './wasiLibDef'
 
 /**
  * TypedArrayType
@@ -14,19 +16,27 @@
  * The memory manager
  */
 export class MemoryManager {
+  memory: WebAssembly.Memory
+  malloc: malloc
+  free: free
+  #dataView: ?DataView
+  #registry: ?FinalizationRegistry
+
   /**
    * Construct a memory manager.
    * @param {WebAssembly.Memory} memory The memory fro the WebAssembly instance.
    * @param {malloc} malloc Allocate memory
    * @param {free} free Free memory
    */
-  constructor (memory, malloc, free) {
+  constructor (memory: WebAssembly.Memory, malloc: malloc, free: free) {
     this.memory = memory
     this.malloc = malloc
     this.free = free
-    this._dataView = null
-    this._registry = typeof FinalizationRegistry === 'undefined'
+    this.#dataView = null
+    // $FlowFixMe
+    this.#registry = typeof FinalizationRegistry === 'undefined'
       ? null
+      // $FlowFixMe
       : new FinalizationRegistry(addresses => {
           for (const address of addresses) {
             free(address)
@@ -35,13 +45,13 @@ export class MemoryManager {
   }
 
   /**
-   * @poperty {DataView}
+   * @property {DataView}
    */
-  get dataView() {
-    if (this._dataView == null || this._dataView.byteLength === 0) {
-      this._dataView = new DataView(this.memory.buffer)
+  get dataView(): DataView {
+    if (this.#dataView == null || this.#dataView.byteLength === 0) {
+      this.#dataView = new DataView(this.memory.buffer)
     }
-    return this._dataView
+    return this.#dataView
   }
 
   /**
@@ -49,11 +59,11 @@ export class MemoryManager {
    * @param {*} target The object that will be finalized
    * @param {number} address The address to be freed
    */
-  freeWhenFinalized(target, address) {
-    if (this._registry === null) {
+  freeWhenFinalized(target: any, address: void_ptr) {
+    if (this.#registry == null) {
       throw new Error('FinalizationRegistry is not implemented')
     }
-    this._registry.register(target, address)
+    this.#registry.register(target, address)
   }
 
   /**
@@ -63,7 +73,7 @@ export class MemoryManager {
    * @param {number|Array<T>} lengthOrArray Either an array to be copied or the required length
    * @returns {TypedArray} The typed array
    */
-  createTypedArray (typedArrayType, lengthOrArray) {
+  createTypedArray (typedArrayType: Class<$TypedArray>, lengthOrArray: uint32|Array<any>): $TypedArray {
     const length = lengthOrArray instanceof Array ? lengthOrArray.length : lengthOrArray
     const address = this.malloc(length * typedArrayType.BYTES_PER_ELEMENT)
     const typedArray = new typedArrayType(this.memory.buffer, address, length)

@@ -1,13 +1,17 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 import { StringBuffer } from '../StringBuffer'
 
 import { ReferenceType } from './ReferenceType'
 
+import type { void_ptr } from '../wasiLibDef'
+
 /**
  * A class representing a string type
  * @extends {ReferenceType<string>}
  */
-export class StringType extends ReferenceType {
+export class StringType extends ReferenceType<string> {
   /**
    * Free an allocated string
    * @param {MemoryManager} memoryManager The memory manager
@@ -16,7 +20,7 @@ export class StringType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     memoryManager.free(address)
   }
 
@@ -27,7 +31,7 @@ export class StringType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
     const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
     const stringBuffer = StringBuffer.fromString(memoryManager, unmarshalledValue, false)
     return stringBuffer.byteOffset
@@ -41,7 +45,7 @@ export class StringType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {string} The unmarshalled string
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): string {
     try {
       const stringBuffer = StringBuffer.fromAddress(memoryManager, address, false)
       return stringBuffer.toString()
@@ -53,7 +57,7 @@ export class StringType extends ReferenceType {
 
   static MANGLED_NAME = 's8'
 
-  get mangledName() {
+  get mangledName(): string {
     return StringType.MANGLED_NAME
   }
 }

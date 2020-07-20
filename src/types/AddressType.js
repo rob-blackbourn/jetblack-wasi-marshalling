@@ -1,13 +1,17 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 import { Pointer } from '../Pointer'
 
 import { ReferenceType } from './ReferenceType'
 
+import type { void_ptr } from '../wasiLibDef'
+
 /**
  * A class representing a string buffer type
  * @extends {ReferenceType<Pointer<number>>}
  */
-export class AddressType extends ReferenceType {
+export class AddressType extends ReferenceType<Pointer<void_ptr>> {
 
   /**
    * Marshall an address into memory
@@ -16,7 +20,7 @@ export class AddressType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
     return unmarshalledArgs[unmarshalledIndex].contents
   }
 
@@ -28,9 +32,9 @@ export class AddressType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments.
    * @returns {Pointer<number>} The unmarshalled string buffer
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Pointer<void_ptr> {
     if (unmarshalledIndex !== -1) {
-      return /** @type {Pointer<number>} */ (unmarshalledArgs[unmarshalledIndex])
+      return unmarshalledArgs[unmarshalledIndex]
     } else {
       const pointer =  new Pointer(address)
       memoryManager.freeWhenFinalized(pointer, address)
@@ -46,11 +50,13 @@ export class AddressType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     // The finalizer handles freeing.
   }
 
-  get mangledName() {
-    return 'a32'
+  static MANGLED_NAME = 'a32'
+
+  get mangledName(): string {
+    return AddressType.MANGLED_NAME
   }
 }

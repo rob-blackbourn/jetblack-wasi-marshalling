@@ -1,7 +1,11 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
+
+import type { void_ptr, lengthCallback } from '../wasiLibDef'
 
  /**
  * TypedArray
@@ -21,13 +25,16 @@ import { Type } from './Type'
  * @template T
  * @extends {ReferenceType<TypedArray>}
  */
-export class TypedArrayType extends ReferenceType {
+export class TypedArrayType<T> extends ReferenceType<$TypedArray> {
+  type: Type<T>
+  length: number|lengthCallback|null
+
   /**
    * Construct an array type
    * @param {Type<T>} type The type of the elements in the array
    * @param {number|lengthCallback} [length] The optional length of the array
    */
-  constructor (type, length = null) {
+  constructor (type: Type<T>, length: number|lengthCallback|null = null) {
     super()
     this.type = type
     this.length = length
@@ -39,13 +46,14 @@ export class TypedArrayType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The length of the array.
    */
-  getLength (unmarshalledIndex, unmarshalledArgs) {
+  getLength (unmarshalledIndex: number, unmarshalledArgs: Array<T>): number {
     if (typeof this.length === 'number') {
       return this.length
     } else if (typeof this.length === 'function') {
       return this.length(unmarshalledIndex, unmarshalledArgs)
     } else if (unmarshalledIndex !== -1) {
-      const array = /** @type {TypedArray} */ (unmarshalledArgs[unmarshalledIndex])
+      const array = unmarshalledArgs[unmarshalledIndex]
+      // $FlowFixMe
       return array.length
     } else {
       throw RangeError('Unable to establish the length of the array')
@@ -59,7 +67,7 @@ export class TypedArrayType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory.
    */
-  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
     if (unmarshalledIndex !== -1) {
       return unmarshalledArgs[unmarshalledIndex].byteOffset
     } else {
@@ -76,7 +84,7 @@ export class TypedArrayType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     // The finalizer handles freeing.
   }
 
@@ -87,7 +95,7 @@ export class TypedArrayType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the marshalled array
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
     // Simply return the address.
     const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
     return unmarshalledValue.byteOffset
@@ -101,11 +109,11 @@ export class TypedArrayType extends ReferenceType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments.
    * @returns {TypedArray} The unmarshalled array
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): $TypedArray {
     if (unmarshalledIndex !== -1) {
       // We assume typed arrays are references to memory in the WebAssembly, so
       // the unmarshalled value and the marshalled values are the same,
-      return /** @type {TypedArray} */ unmarshalledArgs[unmarshalledIndex]
+      return unmarshalledArgs[unmarshalledIndex]
     } else {
       // Create the typed array. Note this is just a view into the WebAssembly
       // memory buffer.
@@ -125,12 +133,12 @@ export class TypedArrayType extends ReferenceType {
    * @param {TypedArray} source The source array
    * @returns {TypedArray} The array to which the data was copied.
    */
-  copy (dest, source) {
+  copy (dest: $TypedArray, source: $TypedArray): $TypedArray {
     // Nothing to do.
     return dest
   }
 
-  get mangledName() {
+  get mangledName(): string {
     return `t(${this.type.mangledName})`
   }
 }
