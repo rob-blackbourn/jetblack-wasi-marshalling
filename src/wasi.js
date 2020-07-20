@@ -1,9 +1,14 @@
+// @flow
+
 import { WASI, STDOUT, STDERR } from './constants'
 import { MemoryManager } from './MemoryManager'
 import { FunctionRegistry } from './FunctionRegistry'
 import { FunctionPrototype } from './types/FunctionPrototype'
 
-// @filename: types.d.ts
+import type { wasmCallback } from './wasiLibDef'
+
+interface writeCallback {(text: string):void}
+type lengthOrArray = number|Array<any>
 
 /**
  * Write
@@ -18,7 +23,7 @@ import { FunctionPrototype } from './types/FunctionPrototype'
  * @param {string} prev The previous text
  * @param {string} current The latest text
  */
-function drainWriter(write, prev, current) {
+function drainWriter(write: writeCallback, prev: string, current: string): string {
   let text = prev + current
   while (text.includes('\n')) {
     const [line, rest] = text.split('\n', 2)
@@ -33,52 +38,81 @@ function drainWriter(write, prev, current) {
  * allocation, stdio and multi byte (UTF-8) characters.
  */
 export class Wasi {
+  env: { [string]: string }
+  #instance: WebAssembly.Instance|null
+  #memoryManager: MemoryManager|null
+  #functionRegistry: FunctionRegistry|null
+  #stdoutText: string
+  #stderrText: string
+
   /**
    * Create a Wasi class
    * @param {Object.<string, string>} env The environment variables
    */
-  constructor(env) {
+  constructor(env: { [string]: string }) {
     this.env = env
     
     /**
      * @property {WebAssembly.Instance} [instance] The WebAssembly instance.
      */
-    this.instance = null
+    this.#instance = null
     
     /**
      * @property {MemoryManager} [memoryManager] The WebAssembly memory manager
      */
-    this.memoryManager = null
+    this.#memoryManager = null
 
     /**
      * @property {FunctionRegistry} [functionRegistry] The function registry
      */
-    this.functionRegistry = null
+    this.#functionRegistry = null
 
     /**
      * @private
      * @property {string} Text sent to stdout before a newline has een received.
      */
-    this.stdoutText = ''
+    this.#stdoutText = ''
 
     /**
      * @private
      * @property {string} Text sent to stderr before a newline has een received.
      */
-    this.stderrText = ''
+    this.#stderrText = ''
+  }
+
+  get memoryManager(): MemoryManager {
+    if (this.#memoryManager == null) {
+      throw new Error('Not initialised')
+    }
+    return this.#memoryManager
+  }
+
+  get instance(): WebAssembly.Instance {
+    if (this.#instance == null) {
+      throw new Error('Not initialised')
+    }
+    return this.#instance
+  }
+
+  get functionRegistry(): FunctionRegistry {
+    if (this.#functionRegistry == null) {
+      throw new Error('Not initialised')
+    }
+    return this.#functionRegistry
   }
 
   /**
    * Initialize the WASI class with a WebAssembly instance.
    * @param {WebAssembly.Instance} instance A WebAssembly instance
    */
-  init(instance) {
-    this.instance = instance
-    this.memoryManager = new MemoryManager(
-      /** @type {WebAssembly.Memory} */ (instance.exports.memory),
-      /** @type {malloc} */ (instance.exports.malloc),
-      /** @type {free} */ (instance.exports.free))
-    this.functionRegistry = new FunctionRegistry(this.memoryManager)
+  init(instance: WebAssembly.Instance) {
+    this.#instance = instance
+    this.#memoryManager = new MemoryManager(
+      // $FlowFixMe
+      instance.exports.memory,
+      instance.exports.malloc,
+      instance.exports.free)
+    this.#functionRegistry = new FunctionRegistry(this.memoryManager)
   }
 
   /**
@@ -87,7 +121,7 @@ export class Wasi {
    * @param {FunctionPrototype} prototype The function prototype
    * @param {wasmCallback} callback The wasm callback
    */
-  registerFunction (name, prototype, callback) {
+  registerFunction<TResult> (name: string|symbol, prototype: FunctionPrototype<TResult>|null, callback: wasmCallback) {
     if (prototype == null) {
       this.functionRegistry.registerUnmarshalled(name, callback)
     } else {
@@ -100,7 +134,7 @@ export class Wasi {
    * @param {string|symbol} name The function name
    * @returns {boolean} Returns true if the function has been registered.
    */
-  hasFunction (name) {
+  hasFunction (name: string|symbol): boolean {
     return this.functionRegistry.has(name)
   }
 
@@ -111,8 +145,11 @@ export class Wasi {
    * @param {object} options Name mangling options
    * @returns {*} The return value if any
    */
-  invokeImpliedFunction (name, values, options) {
+  invokeImpliedFunction (name: string|symbol, values: Array<any>, options: {}): any {
     const callback = this.functionRegistry.findImplied(name, values, options)
+    if (callback == null) {
+      throw new Error('Function not found')
+    }
     return callback(...values)
   }
 
@@ -123,8 +160,11 @@ export class Wasi {
    * @param {string} mangledArgs The mangled arguments
    * @returns {*} The return value if any
    */
-  invokeExplicitFunction(name, values, mangledArgs) {
+  invokeExplicitFunction(name: string|symbol, values: Array<any>, mangledArgs: string): any {
     const callback = this.functionRegistry.findExplicit(name, mangledArgs)
+    if (callback == null) {
+      throw new Error('Function not found')
+    }
     return callback(values)
   }
 
@@ -134,30 +174,20 @@ export class Wasi {
    * @param  {...any} values The function values
    * @returns {*}
    */
-  invoke(name, ...values) {
+  invoke(name: string|symbol, ...values: any): any {
     return this.invokeImpliedFunction(name, values, {})
   }
-
-  uint8Array = (lengthOrArray) => this.memoryManager.createTypedArray(Uint8Array, lengthOrArray)
-  uint16Array = (lengthOrArray) => this.memoryManager.createTypedArray(Uint16Array, lengthOrArray)
-  uint32Array = (lengthOrArray) => this.memoryManager.createTypedArray(Uint32Array, lengthOrArray)
-  uint64Array = (lengthOrArray) => this.memoryManager.createTypedArray(BigUint64Array, lengthOrArray)
-  int8Array = (lengthOrArray) => this.memoryManager.createTypedArray(Int8Array, lengthOrArray)
-  int16Array = (lengthOrArray) => this.memoryManager.createTypedArray(Int16Array, lengthOrArray)
-  int32Array = (lengthOrArray) => this.memoryManager.createTypedArray(Int32Array, lengthOrArray)
-  int64Array = (lengthOrArray) => this.memoryManager.createTypedArray(BigInt64Array, lengthOrArray)
-  float32Array = (lengthOrArray) => this.memoryManager.createTypedArray(Float32Array, lengthOrArray)
-  float64Array = (lengthOrArray) => this.memoryManager.createTypedArray(Float64Array, lengthOrArray)
 
   /**
    * Get the environment variables.
    * @param {number} environ The environment
    * @param {number} environBuf The address of the buffer
    */
-  environ_get(environ, environBuf) {
+  environ_get(environ: number, environBuf: number): number {
     const encoder = new TextEncoder()
 
     Object.entries(this.env).map(
+      // $FlowFixMe
       ([key, value]) => `${key}=${value}`
     ).forEach(envVar => {
       this.memoryManager.dataView.setUint32(environ, environBuf, true)
@@ -175,10 +205,11 @@ export class Wasi {
    * @param {number} environCount The number of environment variables
    * @param {number} environBufSize The size of the environment variables buffer
    */
-  environ_sizes_get(environCount, environBufSize) {
+  environ_sizes_get(environCount: number, environBufSize: number): number {
     const encoder = new TextEncoder()
 
     const envVars = Object.entries(this.env).map(
+      // $FlowFixMe
       ([key, value]) => `${key}=${value}`
     )
     const size = envVars.reduce(
@@ -196,7 +227,7 @@ export class Wasi {
    * anything to stop!
    * @param {number} rval The return value
    */
-  proc_exit(rval) {
+  proc_exit(rval: number): number {
     return WASI.ESUCCESS
   }
 
@@ -204,7 +235,7 @@ export class Wasi {
    * Open the file descriptor
    * @param {number} fd The file descriptor
    */
-  fd_close(fd) {
+  fd_close(fd: number) {
     return WASI.ESUCCESS
   }
 
@@ -216,7 +247,7 @@ export class Wasi {
    * @param {number} whence Whence
    * @param {number} newOffset The new offset
    */
-  fd_seek(fd, offset_low, offset_high, whence, newOffset) {
+  fd_seek(fd: number, offset_low: number, offset_high: number, whence: number, newOffset: number): number {
     return WASI.ESUCCESS
   }
 
@@ -227,7 +258,7 @@ export class Wasi {
    * @param {number} iovsLen The length of the scatter vector
    * @param {number} nwritten The number of items written
    */
-  fd_write(fd, iovs, iovsLen, nwritten) {
+  fd_write(fd: number, iovs: number, iovsLen: number, nwritten: number) {
     if (!(fd === 1 || fd === 2)) {
       return WASI.ERRNO.BADF
     }
@@ -250,9 +281,9 @@ export class Wasi {
     this.memoryManager.dataView.setUint32(nwritten, written, true)
 
     if (fd === STDOUT) {
-      this.stdoutText = drainWriter(console.log, this.stdoutText, text)
+      this.#stdoutText = drainWriter(console.log, this.#stdoutText, text)
     } else if (fd === STDERR) {
-      this.stderrText = drainWriter(console.error, this.stderrText, text)
+      this.#stderrText = drainWriter(console.error, this.#stderrText, text)
     }
 
     return WASI.ESUCCESS
@@ -263,7 +294,7 @@ export class Wasi {
    * @param {number} fd The file descriptor
    * @param {number} stat The status
    */
-  fd_fdstat_get(fd, stat) {
+  fd_fdstat_get(fd: number, stat: number): number {
     if (!(fd === 1 || fd === 2)) {
       return WASI.ERRNO.BADF
     }
@@ -273,12 +304,14 @@ export class Wasi {
 
     this.memoryManager.dataView.setUint8(stat + 0, WASI.FILETYPE.CHARACTER_DEVICE)
     this.memoryManager.dataView.setUint32(stat + 2, WASI.FDFLAGS.APPEND, true)
+    // $FlowFixMe
     this.memoryManager.dataView.setBigUint64(stat + 8, WASI.RIGHTS.FD.WRITE, true)
+    // $FlowFixMe
     this.memoryManager.dataView.setBigUint64(stat + 16, WASI.RIGHTS.FD.WRITE, true)
     return WASI.ESUCCESS
   }
 
-  imports() {
+  imports(): {} {
     return {
       environ_get: (environ, environBuf) => this.environ_get(environ, environBuf),
       environ_sizes_get: (environCount, environBufSize) => this.environ_sizes_get(environCount, environBufSize),

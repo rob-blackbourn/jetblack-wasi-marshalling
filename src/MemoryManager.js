@@ -19,8 +19,8 @@ export class MemoryManager {
   memory: WebAssembly.Memory
   malloc: malloc
   free: free
-  #dataView: ?DataView
-  #registry: ?FinalizationRegistry
+  #dataView: DataView|null
+  #registry: FinalizationRegistry|null
 
   /**
    * Construct a memory manager.

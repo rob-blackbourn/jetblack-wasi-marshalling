@@ -30,7 +30,7 @@ export class FunctionRegistry {
    * @param {FunctionPrototype} prototype The function prototype
    * @param {wasmCallback} callback The wasm callback
    */
-  registerImplied<TResult> (name: string, prototype: FunctionPrototype<TResult>, callback: wasmCallback): void {
+  registerImplied<TResult> (name: string|symbol, prototype: FunctionPrototype<TResult>, callback: wasmCallback): void {
     this.registerExplicit(name, prototype.mangledArgs, prototype, callback)
   }
 
