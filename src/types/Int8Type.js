@@ -4,13 +4,11 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { int8, number } from '../wasiLibDef'
-
 /**
  * A type representing an 8 bit integer
  * @extends {ValueType<number>}
  */
-export class Int8Type extends ValueType<int8> {
+export class Int8Type extends ValueType<number> {
   /**
    * Construct an 8 bit integer type
    */
@@ -39,7 +37,7 @@ export class Int8Type extends ValueType<int8> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int8 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     try {
       return memoryManager.dataView.getInt8(address)
     } finally {

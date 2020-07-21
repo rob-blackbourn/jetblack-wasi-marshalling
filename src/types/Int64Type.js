@@ -4,13 +4,13 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { int64, number, BigInt64Array } from '../wasiLibDef'
+import { BigInt, BigInt64Array } from '../wasiLibDef'
 
 /**
  * A type representing a 64 bit integer
  * @extends {ValueType<bigint>}
  */
-export class Int64Type extends ValueType<int64> {
+export class Int64Type extends ValueType<BigInt> {
   /**
    * Construct a 16 bit integer type
    */
@@ -40,7 +40,7 @@ export class Int64Type extends ValueType<int64> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {bigint} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int64 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): BigInt {
     try {
       // $FlowFixMe
       return memoryManager.dataView.getBigInt64(address)

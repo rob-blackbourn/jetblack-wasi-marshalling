@@ -4,13 +4,11 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { int16, number } from '../wasiLibDef'
-
 /**
  * A type representing a 16 bit integer
  * @extends {ValueType<number>}
  */
-export class Int16Type extends ValueType<int16> {
+export class Int16Type extends ValueType<number> {
   /**
    * Construct a 16 bit integer type
    */
@@ -39,7 +37,7 @@ export class Int16Type extends ValueType<int16> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int16 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     try {
       return memoryManager.dataView.getInt16(address)
     } finally {

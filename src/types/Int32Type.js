@@ -4,13 +4,11 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { int32, number } from '../wasiLibDef'
-
 /**
  * A type representing a 32 bit integer
  * @extends {ValueType<number>}
  */
-export class Int32Type extends ValueType<int32> {
+export class Int32Type extends ValueType<number> {
   /**
    * Construct a 32 bit integer type
    */
@@ -39,7 +37,7 @@ export class Int32Type extends ValueType<int32> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled args
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int32 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     try {
       return memoryManager.dataView.getInt32(address)
     } finally {

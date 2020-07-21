@@ -4,13 +4,11 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { float32, number } from '../wasiLibDef'
-
 /**
  * A type representing a 64 bit float
  * @extends {ValueType<number>}
  */
-export class Float32Type extends ValueType<float32> {
+export class Float32Type extends ValueType<number> {
   /**
    * Construct a 32 bit float type
    */
@@ -22,7 +20,7 @@ export class Float32Type extends ValueType<float32> {
    * Marshalls the value to a pointer
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index of value to marshall
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
   marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
@@ -36,10 +34,10 @@ export class Float32Type extends ValueType<float32> {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer to the value
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): float32 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     try {
       return memoryManager.dataView.getFloat32(address)
     } finally {

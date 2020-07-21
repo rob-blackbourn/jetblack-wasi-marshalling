@@ -4,13 +4,11 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { float64, number } from '../wasiLibDef'
-
 /**
  * A type representing a 64 bit float
  * @extends {ValueType<number>}
  */
-export class Float64Type extends ValueType<float64> {
+export class Float64Type extends ValueType<number> {
   /**
    * Construct a 64 bit float type
    */
@@ -39,7 +37,7 @@ export class Float64Type extends ValueType<float64> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): float64 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     try {
       return memoryManager.dataView.getFloat64(address)
     } finally {

@@ -37,7 +37,7 @@ export class ArgumentDef<T> {
    * the data will be copied.
    * @param {MemoryManager} memoryManager A class which provides methods to
    * @param {number} unmarshalledIndex The index of the unmarshalled value
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number|T} The address of the allocated memory or the marshalled value.
    * @throws {Error} If the argument is not input and/or output.
    */
@@ -58,7 +58,7 @@ export class ArgumentDef<T> {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} addressOrValue The marshalled address or value 
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshall args
+   * @param {Array<any>} unmarshalledArgs The unmarshall args
    * @returns {number} The unmarshalled value.
    */
   unmarshall (memoryManager: MemoryManager, addressOrValue: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): ?number {

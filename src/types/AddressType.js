@@ -15,7 +15,7 @@ export class AddressType extends ReferenceType<Pointer<number>> {
    * Marshall an address into memory
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index of the value to to marshall
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
   marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
@@ -27,7 +27,7 @@ export class AddressType extends ReferenceType<Pointer<number>> {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the string buffer in memory
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments.
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments.
    * @returns {Pointer<number>} The unmarshalled string buffer
    */
   unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Pointer<number> {
@@ -45,7 +45,7 @@ export class AddressType extends ReferenceType<Pointer<number>> {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
   free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {

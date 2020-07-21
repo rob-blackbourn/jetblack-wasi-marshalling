@@ -1,6 +1,6 @@
 // @flow
 
-import type { malloc, free, FinalizationRegistry, uint32 } from './wasiLibDef'
+import type { malloc, free, FinalizationRegistry } from './wasiLibDef'
 
 /**
  * TypedArrayType
@@ -73,7 +73,7 @@ export class MemoryManager {
    * @param {number|Array<T>} lengthOrArray Either an array to be copied or the required length
    * @returns {TypedArray} The typed array
    */
-  createTypedArray (typedArrayType: Class<$TypedArray>, lengthOrArray: uint32|Array<any>): $TypedArray {
+  createTypedArray (typedArrayType: Class<$TypedArray>, lengthOrArray: number|Array<any>): $TypedArray {
     const length = lengthOrArray instanceof Array ? lengthOrArray.length : lengthOrArray
     const address = this.malloc(length * typedArrayType.BYTES_PER_ELEMENT)
     const typedArray = new typedArrayType(this.memory.buffer, address, length)

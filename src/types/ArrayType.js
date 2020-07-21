@@ -12,7 +12,7 @@ import type { lengthCallback } from '../wasiLibDef'
  * Gets the length
  * @callback lengthCallback
  * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
- * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+ * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
  * @returns {number} The length of the array
  */
 
@@ -39,7 +39,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
   /**
    * Get the length of the array
    * @param {number} unmarshalledIndex The index of the unmarshalled argument or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The length of the array.
    */
   getLength (unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
@@ -59,7 +59,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    * Allocate memory for the array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index to the unmarshalled array
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory.
    */
   alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
@@ -76,7 +76,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
    * @param {number} unmarshalledIndex The index of the unmarshalled array or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled args
+   * @param {Array<any>} unmarshalledArgs The unmarshalled args
    * @returns {void}
    */
   free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
@@ -100,7 +100,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    * Marshall a possibly nested array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index of the unmarshalled value
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the marshalled array
    */
   marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
@@ -126,7 +126,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the marshalled array
    * @param {number} unmarshalledIndex The index of the unmarshalled arg or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled args
+   * @param {Array<any>} unmarshalledArgs The unmarshalled args
    * @returns {Array<T>} The unmarshalled array
    */
   unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Array<T> {
@@ -157,6 +157,10 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     return dest
   }
 
+  /**
+   * Gets the mangled name.
+   * @returns {string} The mangled name.
+   */
   get mangledName(): string {
     return `a(${this.type.mangledName})`
   }
