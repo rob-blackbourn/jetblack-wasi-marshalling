@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { BigInt, BigInt64Array } from '../wasiLibDef'
+import type { BigInt, BigInt64Array } from '../wasiLibDef'
 
 /**
  * A type representing a 64 bit integer
