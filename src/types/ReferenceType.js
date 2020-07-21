@@ -8,10 +8,4 @@ import { Type } from './Type'
  * @extends {Type<T>}
  */
 export class ReferenceType<T> extends Type<T> {
-  /**
-   * Construct a reference type.
-   */
-  constructor () {
-    super(Uint32Array)
-  }
 }

@@ -4,6 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
+import { ValueType } from './ValueType'
 
 import type { lengthCallback } from '../wasiLibDef'
 
@@ -63,7 +64,11 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    */
   alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
-    return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
+    if (this.type instanceof ValueType) {
+      return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
+    } else {
+      return memoryManager.malloc(length * Uint32Array.BYTES_PER_ELEMENT)
+    }
   }
 
   /**
@@ -79,7 +84,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
       const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       if (this.type instanceof ReferenceType) {
         const unmarshalledValue = unmarshalledIndex == -1 ? null : unmarshalledArgs[unmarshalledIndex]
-        const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
+        const typedArray = new Uint32Array(memoryManager.memory.buffer, address, length)
         typedArray.forEach((item, i) => {
           const index = unmarshalledValue == null ? -1 : 0
           const args = unmarshalledValue == null ? [] : unmarshalledValue[i]
@@ -102,14 +107,15 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
 
     const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
-    const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, unmarshalledValue.length)
-    if (this.type instanceof ReferenceType) {
+    if (this.type instanceof ValueType) {
+      const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, unmarshalledValue.length)
+      typedArray.set(unmarshalledValue)
+    } else {
+      const typedArray = new Uint32Array(memoryManager.memory.buffer, address, unmarshalledValue.length)
       unmarshalledValue.forEach((item, i) => {
         // $FlowFixMe
         typedArray[i] = this.type.marshall(memoryManager, 0, [item])
       })
-    } else {
-      typedArray.set(unmarshalledValue)
     }
 
     return address
@@ -126,13 +132,14 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
   unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Array<T> {
     try {
       const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
-      const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-      if (this.type instanceof ReferenceType) {
+      if (this.type instanceof ValueType) {
+        const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
         // $FlowFixMe
-        return Array.from(typedArray), x => (this.type.unmarshall(memoryManager, x, -1, []))
+        return Array.from(typedArray)
       } else {
+        const typedArray = new Uint32Array(memoryManager.memory.buffer, address, length)
         // $FlowFixMe
-        return Array.from(/** @type {Iterable<*>} */ (typedArray))
+        return Array.from(typedArray, x => this.type.unmarshall(memoryManager, x, -1, []))
       }
     } finally {
       memoryManager.free(address)

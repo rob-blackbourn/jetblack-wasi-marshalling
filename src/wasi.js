@@ -87,6 +87,10 @@ export class Wasi {
     return this.#memoryManager
   }
 
+  set memoryManager(value: MemoryManager): void {
+    this.#memoryManager = value
+  }
+
   get instance(): WebAssembly.Instance {
     if (this.#instance == null) {
       throw new Error('Not initialised')
@@ -94,11 +98,19 @@ export class Wasi {
     return this.#instance
   }
 
+  set instance(value: WebAssembly.Instance): void {
+    this.#instance = value
+  }
+
   get functionRegistry(): FunctionRegistry {
     if (this.#functionRegistry == null) {
       throw new Error('Not initialised')
     }
     return this.#functionRegistry
+  }
+
+  set functionRegistry(value: FunctionRegistry): void {
+    this.#functionRegistry = value
   }
 
   /**

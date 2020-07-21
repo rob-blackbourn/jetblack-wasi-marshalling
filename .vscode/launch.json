@@ -22,7 +22,7 @@
             "runtimeArgs": ["--harmony-weak-refs"],
             "args": [
               "--harmony-weak-refs",
-              "-r", "esm",
+              "-r", "@babel/register",
               "${workspaceFolder}/test/**/*test*.js",
             ],
             "env": {

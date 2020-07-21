@@ -1,6 +1,6 @@
 // @flow
 
-import type { malloc, free, FinalizationRegistry, number, uint32 } from './wasiLibDef'
+import type { malloc, free, FinalizationRegistry, uint32 } from './wasiLibDef'
 
 /**
  * TypedArrayType

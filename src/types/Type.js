@@ -9,15 +9,6 @@ import type { malloc, free } from '../wasiLibDef'
  * @template T The value type
  */
 export class Type<T> {
-  TypedArrayType: Class<$TypedArray>
-
-  /**
-   * The abstract constructor for a type.
-   * @param {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} typedArrayType The typed array for the type
-   */
-  constructor (typedArrayType: Class<$TypedArray>) {
-    this.TypedArrayType = typedArrayType
-  }
 
   /**
    * Allocate memory for the type

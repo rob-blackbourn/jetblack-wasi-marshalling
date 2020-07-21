@@ -10,6 +10,17 @@ import { Type } from './Type'
  * @extends {Type<T>}
  */
 export class ValueType<T> extends Type<T> {
+  TypedArrayType: Class<$TypedArray>
+
+  /**
+   * The abstract constructor for a type.
+   * @param {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} typedArrayType The typed array for the type
+   */
+  constructor (typedArrayType: Class<$TypedArray>) {
+    super()
+    this.TypedArrayType = typedArrayType
+  }
+
   /**
    * Allocate memory for the type
    * @param {MemoryManager} memoryManager The memory manager

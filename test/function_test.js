@@ -12,7 +12,7 @@ import {
   Wasi
 } from '../src/index'
 
-describe('test the function registry', () => {
+describe('test the function invoking', () => {
 
   it('should invoke wasm functions', () => {
     const memoryManager = makeMockMemoryManager()

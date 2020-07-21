@@ -3,7 +3,7 @@
 import { MemoryManager } from '../MemoryManager'
 
 import { ReferenceType } from './ReferenceType'
-import { Type } from './Type'
+import { ValueType } from './ValueType'
 
 import type { lengthCallback } from '../wasiLibDef'
 
@@ -26,15 +26,15 @@ import type { lengthCallback } from '../wasiLibDef'
  * @extends {ReferenceType<TypedArray>}
  */
 export class TypedArrayType<T> extends ReferenceType<$TypedArray> {
-  type: Type<T>
+  type: ValueType<T>
   length: number|lengthCallback|null
 
   /**
    * Construct an array type
-   * @param {Type<T>} type The type of the elements in the array
+   * @param {ValueType<T>} type The type of the elements in the array
    * @param {number|lengthCallback} [length] The optional length of the array
    */
-  constructor (type: Type<T>, length: number|lengthCallback|null = null) {
+  constructor (type: ValueType<T>, length: number|lengthCallback|null = null) {
     super()
     this.type = type
     this.length = length

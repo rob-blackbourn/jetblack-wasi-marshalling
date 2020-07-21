@@ -2,8 +2,6 @@
 
 import { MemoryManager } from './MemoryManager'
 
-import type { number } from './wasiLibDef'
-
 /**
  * Find the length of a null terminated string.
  * @param {MemoryManager} memoryManager The memory manager.
