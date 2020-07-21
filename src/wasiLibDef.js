@@ -1,4 +1,4 @@
-declare type void_ptr = number
+declare type number = number
 
 declare type int8 = number
 declare type int16 = number
@@ -16,8 +16,8 @@ declare type float64 = number
 declare class BigInt64Array extends $TypedArray {}
 declare class BigUint64Array extends $TypedArray {}
 
-declare function malloc(byteLength: uint32): void_ptr
-declare function free(address: void_ptr): void
+declare function malloc(byteLength: uint32): number
+declare function free(address: number): void
 
 declare class FinalizationRegistry {
     constructor(cleanup: (held: Array<any>) => void): FinalizationRegistry;

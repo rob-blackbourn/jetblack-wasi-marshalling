@@ -6,8 +6,6 @@ import { Pointer } from '../Pointer'
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
-import type { void_ptr } from '../wasiLibDef'
-
 /**
  * A pointer type
  * @template T
@@ -33,7 +31,7 @@ export class PointerType<T> extends ReferenceType<Pointer<T>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
       this.type.free(memoryManager, marshalledAddress, unmarshalledIndex, unmarshalledArgs)
@@ -49,7 +47,7 @@ export class PointerType<T> extends ReferenceType<Pointer<T>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns{number} The address of the allocated memory
    */
-  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = memoryManager.malloc(Uint32Array.BYTES_PER_ELEMENT)
     return address
   }
@@ -61,7 +59,7 @@ export class PointerType<T> extends ReferenceType<Pointer<T>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the pointer in memory
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
     const marshalledAddress = this.type.marshall(memoryManager, 0, [unmarshalledValue.contents])
@@ -80,7 +78,7 @@ export class PointerType<T> extends ReferenceType<Pointer<T>> {
    * @param {Array<*>} unmarshalledArgs the unmarshalled arguments
    * @returns {Pointer<T>} The unmarshalled pointer
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Pointer<T> {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Pointer<T> {
     try {
       const marshalledAddress = memoryManager.dataView.getUint32(address)
       return new Pointer(this.type.unmarshall(memoryManager, marshalledAddress, -1, []))

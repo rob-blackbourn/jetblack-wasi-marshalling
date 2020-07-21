@@ -5,8 +5,6 @@ import { StringBuffer } from '../StringBuffer'
 
 import { ReferenceType } from './ReferenceType'
 
-import type { void_ptr } from '../wasiLibDef'
-
 /**
  * A class representing a string type
  * @extends {ReferenceType<string>}
@@ -20,7 +18,7 @@ export class StringType extends ReferenceType<string> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     memoryManager.free(address)
   }
 
@@ -31,7 +29,7 @@ export class StringType extends ReferenceType<string> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
     const stringBuffer = StringBuffer.fromString(memoryManager, unmarshalledValue, false)
     return stringBuffer.byteOffset
@@ -45,7 +43,7 @@ export class StringType extends ReferenceType<string> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {string} The unmarshalled string
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): string {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): string {
     try {
       const stringBuffer = StringBuffer.fromAddress(memoryManager, address, false)
       return stringBuffer.toString()

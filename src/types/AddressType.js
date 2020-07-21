@@ -5,13 +5,11 @@ import { Pointer } from '../Pointer'
 
 import { ReferenceType } from './ReferenceType'
 
-import type { void_ptr } from '../wasiLibDef'
-
 /**
  * A class representing a string buffer type
  * @extends {ReferenceType<Pointer<number>>}
  */
-export class AddressType extends ReferenceType<Pointer<void_ptr>> {
+export class AddressType extends ReferenceType<Pointer<number>> {
 
   /**
    * Marshall an address into memory
@@ -20,7 +18,7 @@ export class AddressType extends ReferenceType<Pointer<void_ptr>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     return unmarshalledArgs[unmarshalledIndex].contents
   }
 
@@ -32,7 +30,7 @@ export class AddressType extends ReferenceType<Pointer<void_ptr>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments.
    * @returns {Pointer<number>} The unmarshalled string buffer
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Pointer<void_ptr> {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Pointer<number> {
     if (unmarshalledIndex !== -1) {
       return unmarshalledArgs[unmarshalledIndex]
     } else {
@@ -50,7 +48,7 @@ export class AddressType extends ReferenceType<Pointer<void_ptr>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     // The finalizer handles freeing.
   }
 

@@ -2,7 +2,7 @@
 
 import { MemoryManager } from './MemoryManager'
 
-import type { void_ptr } from './wasiLibDef'
+import type { number } from './wasiLibDef'
 
 /**
  * Find the length of a null terminated string.
@@ -58,7 +58,7 @@ export class StringBuffer extends Uint8Array {
    * @param {boolean} finalize If true register the string buffer for finalization.
    * @returns {StringBuffer} The created string buffer.
    */
-  static fromAddress (memoryManager: MemoryManager, address: void_ptr, finalize: boolean): StringBuffer {
+  static fromAddress (memoryManager: MemoryManager, address: number, finalize: boolean): StringBuffer {
     let length = strlen(memoryManager, address)
     const array = new StringBuffer(memoryManager.memory.buffer, address, length)
     if (finalize) {

@@ -4,8 +4,6 @@ import { MemoryManager } from '../MemoryManager'
 
 import { Type } from './Type'
 
-import type { void_ptr } from '../wasiLibDef'
-
 /**
  * A base class representing a value type
  * @template T
@@ -19,7 +17,7 @@ export class ValueType<T> extends Type<T> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory
    */
-  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     return memoryManager.malloc(this.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
@@ -31,7 +29,7 @@ export class ValueType<T> extends Type<T> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     memoryManager.free(address)
   }
 }

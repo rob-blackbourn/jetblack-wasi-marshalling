@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { int64, void_ptr, BigInt64Array } from '../wasiLibDef'
+import { int64, number, BigInt64Array } from '../wasiLibDef'
 
 /**
  * A type representing a 64 bit integer
@@ -25,7 +25,7 @@ export class Int64Type extends ValueType<int64> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     // $FlowFixMe
     memoryManager.dataView.setBigInt64(address, unmarshalledArgs[unmarshalledIndex])
@@ -40,7 +40,7 @@ export class Int64Type extends ValueType<int64> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {bigint} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int64 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int64 {
     try {
       // $FlowFixMe
       return memoryManager.dataView.getBigInt64(address)

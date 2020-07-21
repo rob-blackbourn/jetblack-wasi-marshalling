@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { int8, void_ptr } from '../wasiLibDef'
+import { int8, number } from '../wasiLibDef'
 
 /**
  * A type representing an 8 bit integer
@@ -25,7 +25,7 @@ export class Int8Type extends ValueType<int8> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     memoryManager.dataView.setInt8(address, unmarshalledArgs[unmarshalledIndex])
     return address
@@ -39,7 +39,7 @@ export class Int8Type extends ValueType<int8> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int8 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): int8 {
     try {
       return memoryManager.dataView.getInt8(address)
     } finally {

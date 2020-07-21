@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import { float32, void_ptr } from '../wasiLibDef'
+import { float32, number } from '../wasiLibDef'
 
 /**
  * A type representing a 64 bit float
@@ -25,7 +25,7 @@ export class Float32Type extends ValueType<float32> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     memoryManager.dataView.setFloat32(address, unmarshalledArgs[unmarshalledIndex])
     return address
@@ -39,7 +39,7 @@ export class Float32Type extends ValueType<float32> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): float32 {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): float32 {
     try {
       return memoryManager.dataView.getFloat32(address)
     } finally {

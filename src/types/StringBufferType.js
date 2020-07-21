@@ -5,8 +5,6 @@ import { StringBuffer } from '../StringBuffer'
 
 import { ReferenceType } from './ReferenceType'
 
-import type { void_ptr } from '../wasiLibDef'
-
 /**
  * A class representing a string buffer type
  * @extends {ReferenceType<StringBuffer>}
@@ -20,7 +18,7 @@ export class StringBufferType extends ReferenceType<StringBuffer> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the string in memory
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     return unmarshalledArgs[unmarshalledIndex].byteOffset
   }
 
@@ -32,7 +30,7 @@ export class StringBufferType extends ReferenceType<StringBuffer> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {StringBuffer} The unmarshalled string buffer
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): StringBuffer {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): StringBuffer {
     if (unmarshalledIndex !== -1) {
       return /** @type {StringBuffer} */ unmarshalledArgs[unmarshalledIndex]
     } else {
@@ -48,7 +46,7 @@ export class StringBufferType extends ReferenceType<StringBuffer> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     // The finalizer handles freeing.
   }
 

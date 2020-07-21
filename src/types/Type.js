@@ -2,7 +2,7 @@
 
 import { MemoryManager } from '../MemoryManager'
 
-import type { malloc, free, void_ptr } from '../wasiLibDef'
+import type { malloc, free } from '../wasiLibDef'
 
 /**
  * The base class for representing types
@@ -27,7 +27,7 @@ export class Type<T> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated value in memory
    */
-  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     throw new TypeError('Not Implemented')
   }
 
@@ -40,7 +40,7 @@ export class Type<T> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     throw new TypeError('Not Implemented')
   }
 
@@ -50,9 +50,9 @@ export class Type<T> {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index of the value to marshall
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
-   * @returns {number|T} The marshalled value
+   * @returns {number} The marshalled value
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr|T {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     throw new TypeError('Not Implemented')
   }
 
@@ -65,7 +65,7 @@ export class Type<T> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled args
    * @returns {T}
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): T {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): T {
     throw new TypeError('Not Implemented')
   }
 

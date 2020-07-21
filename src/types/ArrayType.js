@@ -5,7 +5,7 @@ import { MemoryManager } from '../MemoryManager'
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
-import type { void_ptr, lengthCallback } from '../wasiLibDef'
+import type { lengthCallback } from '../wasiLibDef'
 
 /**
  * Gets the length
@@ -61,7 +61,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory.
    */
-  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
     return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
   }
@@ -74,7 +74,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled args
    * @returns {void}
    */
-  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     try {
       const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       if (this.type instanceof ReferenceType) {
@@ -98,7 +98,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the marshalled array
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
 
     const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
@@ -123,7 +123,7 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled args
    * @returns {Array<T>} The unmarshalled array
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Array<T> {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Array<T> {
     try {
       const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)

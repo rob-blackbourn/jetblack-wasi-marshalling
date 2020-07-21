@@ -1,6 +1,6 @@
 // @flow
 
-import type { malloc, free, FinalizationRegistry, void_ptr, uint32 } from './wasiLibDef'
+import type { malloc, free, FinalizationRegistry, number, uint32 } from './wasiLibDef'
 
 /**
  * TypedArrayType
@@ -59,7 +59,7 @@ export class MemoryManager {
    * @param {*} target The object that will be finalized
    * @param {number} address The address to be freed
    */
-  freeWhenFinalized(target: any, address: void_ptr) {
+  freeWhenFinalized(target: any, address: number) {
     if (this.#registry == null) {
       throw new Error('FinalizationRegistry is not implemented')
     }

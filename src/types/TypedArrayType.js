@@ -5,7 +5,7 @@ import { MemoryManager } from '../MemoryManager'
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 
-import type { void_ptr, lengthCallback } from '../wasiLibDef'
+import type { lengthCallback } from '../wasiLibDef'
 
  /**
  * TypedArray
@@ -67,7 +67,7 @@ export class TypedArrayType<T> extends ReferenceType<$TypedArray> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory.
    */
-  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     if (unmarshalledIndex !== -1) {
       return unmarshalledArgs[unmarshalledIndex].byteOffset
     } else {
@@ -84,7 +84,7 @@ export class TypedArrayType<T> extends ReferenceType<$TypedArray> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     // The finalizer handles freeing.
   }
 
@@ -95,7 +95,7 @@ export class TypedArrayType<T> extends ReferenceType<$TypedArray> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the marshalled array
    */
-  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     // Simply return the address.
     const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
     return unmarshalledValue.byteOffset
@@ -109,7 +109,7 @@ export class TypedArrayType<T> extends ReferenceType<$TypedArray> {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments.
    * @returns {TypedArray} The unmarshalled array
    */
-  unmarshall (memoryManager: MemoryManager, address: void_ptr, unmarshalledIndex: number, unmarshalledArgs: Array<any>): $TypedArray {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): $TypedArray {
     if (unmarshalledIndex !== -1) {
       // We assume typed arrays are references to memory in the WebAssembly, so
       // the unmarshalled value and the marshalled values are the same,

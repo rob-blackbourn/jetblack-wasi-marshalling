@@ -5,8 +5,6 @@ import { MemoryManager } from '../MemoryManager'
 import { ValueType } from './ValueType'
 import { Type } from './Type'
 
-import type { void_ptr } from '../wasiLibDef'
-
 /**
  * An argument definition is used by {@link FunctionPrototype} to define the
  * arguments to a function.
@@ -58,12 +56,12 @@ export class ArgumentDef<T> {
   /**
    * Unmarshall a value
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {number|T} addressOrValue The marshalled address or value 
+   * @param {number} addressOrValue The marshalled address or value 
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
    * @param {Array<*>} unmarshalledArgs The unmarshall args
-   * @returns {number|T} The unmarshalled value.
+   * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager: MemoryManager, addressOrValue: void_ptr|T, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void_ptr|T {
+  unmarshall (memoryManager: MemoryManager, addressOrValue: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): ?number {
     if (this.type instanceof ValueType) {
       return addressOrValue
     }
