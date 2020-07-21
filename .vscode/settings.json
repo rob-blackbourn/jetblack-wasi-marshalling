@@ -1,6 +1,9 @@
 {
-    "standard.enable": false,
+    "flow.enable": true,
+    "flow.pathToFlow": "${workspaceFolder}/node_modules/.bin/flow",
+    "javascript.validate.enable": false,
     "cSpell.words": [
+        "Blackbourn",
         "ESUCCESS",
         "FDFLAGS",
         "Finalizers",
@@ -15,6 +18,8 @@
         "proto",
         "setlocale",
         "stdlib",
+        "strlen",
+        "typeof",
         "unmarshall",
         "unmarshalled",
         "wasm"

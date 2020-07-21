@@ -1,3 +1,5 @@
+// @flow
+
 import { Type } from './Type'
 
 /**
@@ -5,11 +7,5 @@ import { Type } from './Type'
  * @template T
  * @extends {Type<T>}
  */
-export class ReferenceType extends Type {
-  /**
-   * Construct a reference type.
-   */
-  constructor () {
-    super(Uint32Array)
-  }
+export class ReferenceType<T> extends Type<T> {
 }

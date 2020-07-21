@@ -1,3 +1,5 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
@@ -6,7 +8,7 @@ import { ValueType } from './ValueType'
  * A type representing a 64 bit float
  * @extends {ValueType<number>}
  */
-export class Float64Type extends ValueType {
+export class Float64Type extends ValueType<number> {
   /**
    * Construct a 64 bit float type
    */
@@ -21,7 +23,7 @@ export class Float64Type extends ValueType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     memoryManager.dataView.setFloat64(address, unmarshalledArgs[unmarshalledIndex])
     return address
@@ -35,7 +37,7 @@ export class Float64Type extends ValueType {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     try {
       return memoryManager.dataView.getFloat64(address)
     } finally {
@@ -45,7 +47,7 @@ export class Float64Type extends ValueType {
 
   static MANGLED_NAME = 'f64'
 
-  get mangledName () {
+  get mangledName (): string {
     return Float64Type.MANGLED_NAME
   }
 }

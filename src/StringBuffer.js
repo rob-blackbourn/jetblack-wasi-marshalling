@@ -1,3 +1,5 @@
+// @flow
+
 import { MemoryManager } from './MemoryManager'
 
 /**
@@ -6,7 +8,7 @@ import { MemoryManager } from './MemoryManager'
  * @param {number} address The address of the string in memory.
  * @returns {number} The length of the string.
  */
-function strlen(memoryManager, address) {
+function strlen(memoryManager: MemoryManager, address: number): number {
   const buf = new Uint8Array(memoryManager.memory.buffer, address)
   let i = 0
   while (buf[i] !== 0) {
@@ -16,7 +18,7 @@ function strlen(memoryManager, address) {
 }
 
 /**
- * A styped array representing a string.
+ * A typed array representing a string.
  */
 export class StringBuffer extends Uint8Array {
   /**
@@ -26,7 +28,7 @@ export class StringBuffer extends Uint8Array {
    * @param {boolean} finalize If true free the memory through finalization.
    * @returns {StringBuffer} The created string buffer.
    */
-  static fromString(memoryManager, string, finalize) {
+  static fromString(memoryManager: MemoryManager, string: string, finalize: boolean): StringBuffer {
     // Encode the string in utf-8.
     const encoder = new TextEncoder()
     const encodedString = encoder.encode(string)
@@ -54,7 +56,7 @@ export class StringBuffer extends Uint8Array {
    * @param {boolean} finalize If true register the string buffer for finalization.
    * @returns {StringBuffer} The created string buffer.
    */
-  static fromAddress (memoryManager, address, finalize) {
+  static fromAddress (memoryManager: MemoryManager, address: number, finalize: boolean): StringBuffer {
     let length = strlen(memoryManager, address)
     const array = new StringBuffer(memoryManager.memory.buffer, address, length)
     if (finalize) {
@@ -67,7 +69,7 @@ export class StringBuffer extends Uint8Array {
    * Decode the string buffer to a string
    * @returns {string}
    */
-  toString () {
+  toString (): string {
     const decoder = new TextDecoder()
     const string = decoder.decode(this)
     return string

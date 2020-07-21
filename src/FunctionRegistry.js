@@ -1,19 +1,27 @@
+// @flow
+
 import { MemoryManager } from './MemoryManager'
 import { FunctionPrototype } from './types/FunctionPrototype'
 
-// @filename: types.d.ts
-
+import type { wasmCallback } from './wasiLibDef'
  /**
   * A function registry
   */
 export class FunctionRegistry {
+  memoryManager: MemoryManager
+  #registry: {
+    [string|symbol]: {
+      [string]: wasmCallback
+    }
+  }
+
   /**
    * Construct a function registry
    * @param {MemoryManager} memoryManager The memory manager
    */
-  constructor (memoryManager) {
+  constructor (memoryManager: MemoryManager) {
     this.memoryManager = memoryManager
-    this._registry = {}
+    this.#registry = {}
   }
 
   /**
@@ -22,7 +30,7 @@ export class FunctionRegistry {
    * @param {FunctionPrototype} prototype The function prototype
    * @param {wasmCallback} callback The wasm callback
    */
-  registerImplied (name, prototype, callback) {
+  registerImplied<TResult> (name: string|symbol, prototype: FunctionPrototype<TResult>, callback: wasmCallback): void {
     this.registerExplicit(name, prototype.mangledArgs, prototype, callback)
   }
 
@@ -33,18 +41,18 @@ export class FunctionRegistry {
    * @param {FunctionPrototype} prototype The function prototype
    * @param {wasmCallback} callback The function to call
    */
-  registerExplicit(name, mangledArgs, prototype, callback) {
+  registerExplicit<TResult>(name: string|symbol, mangledArgs: string, prototype: FunctionPrototype<TResult>, callback: wasmCallback): void {
     if (!this.has(name)) {
-      this._registry[name] = {}
+      this.#registry[name] = {}
     }
-    this._registry[name][mangledArgs] = (...args) => prototype.invoke(this.memoryManager, callback, ...args)
+    this.#registry[name][mangledArgs] = (...args) => prototype.invoke(this.memoryManager, callback, ...args)
   }
 
-  registerUnmarshalled(name, callback) {
+  registerUnmarshalled(name: string|symbol, callback: wasmCallback): void {
     if (!this.has(name)) {
-      this._registry[name] = {}
+      this.#registry[name] = {}
     }
-    this._registry[name]['*'] = callback
+    this.#registry[name]['*'] = callback
   }
 
   /**
@@ -54,7 +62,7 @@ export class FunctionRegistry {
    * @param {object} options Options for the mangler
    * @returns {wasmCallback|null} The wasm callback or null
    */
-  findImplied (name, values, options) {
+  findImplied (name: string|symbol, values: Array<any>, options: {}): null|wasmCallback {
     if (this.has(name)) {
       return this.findExplicit(name, FunctionPrototype.mangleValues(values, options))
     } else {
@@ -68,8 +76,8 @@ export class FunctionRegistry {
    * @param {string} mangledValues The value mangle
    * @returns {wasmCallback|null}
    */
-  findExplicit (name, mangledValues) {
-    return this._registry[name][mangledValues] || this._registry[name]['*'] || null
+  findExplicit (name: string|symbol, mangledValues: string): null|wasmCallback {
+    return this.#registry[name][mangledValues] || this.#registry[name]['*'] || null
   }
 
   /**
@@ -77,7 +85,8 @@ export class FunctionRegistry {
    * @param {string|symbol} name The name of the function
    * @returns {boolean} Returns true if the function exists.
    */
-  has (name) {
-    return name in this._registry
+  has (name: string|symbol): boolean {
+    // $FlowFixMe
+    return name in this.#registry
   }
 }

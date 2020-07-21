@@ -1,3 +1,5 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
@@ -6,7 +8,7 @@ import { ValueType } from './ValueType'
  * A type representing a 64 bit float
  * @extends {ValueType<number>}
  */
-export class Float32Type extends ValueType {
+export class Float32Type extends ValueType<number> {
   /**
    * Construct a 32 bit float type
    */
@@ -18,10 +20,10 @@ export class Float32Type extends ValueType {
    * Marshalls the value to a pointer
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index of value to marshall
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of a pointer to the value
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
     memoryManager.dataView.setFloat32(address, unmarshalledArgs[unmarshalledIndex])
     return address
@@ -32,10 +34,10 @@ export class Float32Type extends ValueType {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the pointer to the value
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     try {
       return memoryManager.dataView.getFloat32(address)
     } finally {
@@ -45,7 +47,7 @@ export class Float32Type extends ValueType {
 
   static MANGLED_NAME = 'f32'
 
-  get mangledName () {
+  get mangledName(): string {
     return Float32Type.MANGLED_NAME
   }
 }

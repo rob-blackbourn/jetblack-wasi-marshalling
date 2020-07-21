@@ -1,3 +1,5 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { Type } from './Type'
@@ -7,7 +9,18 @@ import { Type } from './Type'
  * @template T
  * @extends {Type<T>}
  */
-export class ValueType extends Type {
+export class ValueType<T> extends Type<T> {
+  TypedArrayType: Class<$TypedArray>
+
+  /**
+   * The abstract constructor for a type.
+   * @param {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} typedArrayType The typed array for the type
+   */
+  constructor (typedArrayType: Class<$TypedArray>) {
+    super()
+    this.TypedArrayType = typedArrayType
+  }
+
   /**
    * Allocate memory for the type
    * @param {MemoryManager} memoryManager The memory manager
@@ -15,7 +28,7 @@ export class ValueType extends Type {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory
    */
-  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     return memoryManager.malloc(this.TypedArrayType.BYTES_PER_ELEMENT)
   }
 
@@ -27,7 +40,7 @@ export class ValueType extends Type {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     memoryManager.free(address)
   }
 }

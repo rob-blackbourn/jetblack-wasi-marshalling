@@ -45,7 +45,8 @@ describe('test the marshaller', () => {
     const type = new ArrayType(new StringType(), value.length)
     const ptr = type.marshall(memoryManager, 0, [value])
     const roundtrip = type.unmarshall(memoryManager, ptr, -1, [])
-    assert.deepStrictEqual(value, roundtrip)
+    console.log('hello', roundtrip)
+    assert.deepStrictEqual(roundtrip, value)
     assert.strictEqual(memoryManager.usedCount(), 0)
   })
 

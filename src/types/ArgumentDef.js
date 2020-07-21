@@ -1,3 +1,5 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
@@ -8,7 +10,11 @@ import { Type } from './Type'
  * arguments to a function.
  * @template T
  */
-export class ArgumentDef {
+export class ArgumentDef<T> {
+  type: Type<T>
+  isInput: boolean
+  isOutput: boolean
+
   /**
    * Construct an argument definition. The {@link In}, {@link Out}, and {@link InOut}
    * helper classes should be used to construct argument definitions as they are
@@ -18,7 +24,7 @@ export class ArgumentDef {
    * @param {boolean} isInput If true the argument provides data to the function
    * @param {boolean} isOutput If true the argument is populated by the function
    */
-  constructor (type, isInput, isOutput) {
+  constructor (type: Type<T>, isInput: boolean, isOutput: boolean) {
     this.type = type
     this.isInput = isInput
     this.isOutput = isOutput
@@ -31,11 +37,11 @@ export class ArgumentDef {
    * the data will be copied.
    * @param {MemoryManager} memoryManager A class which provides methods to
    * @param {number} unmarshalledIndex The index of the unmarshalled value
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number|T} The address of the allocated memory or the marshalled value.
    * @throws {Error} If the argument is not input and/or output.
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number|T {
     if (this.type instanceof ValueType) {
       return unmarshalledArgs[unmarshalledIndex]
     } else if (this.isInput) {
@@ -50,12 +56,12 @@ export class ArgumentDef {
   /**
    * Unmarshall a value
    * @param {MemoryManager} memoryManager The memory manager
-   * @param {number|T} addressOrValue The marshalled address or value 
+   * @param {number} addressOrValue The marshalled address or value 
    * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshall args
-   * @returns {number|T} The unmarshalled value.
+   * @param {Array<any>} unmarshalledArgs The unmarshall args
+   * @returns {number} The unmarshalled value.
    */
-  unmarshall (memoryManager, addressOrValue, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, addressOrValue: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): ?number {
     if (this.type instanceof ValueType) {
       return addressOrValue
     }

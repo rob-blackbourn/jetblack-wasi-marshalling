@@ -33,6 +33,14 @@ async function setupWasi (fileName, envVars) {
   return wasi
 }
 
+function marshallExample(wasi) {
+  const value = ['one', 'two', 'three', 'four']
+  const type = new ArrayType(new StringType(), value.length)
+  const ptr = type.marshall(wasi.memoryManager, 0, [value])
+  const roundtrip = type.unmarshall(wasi.memoryManager, ptr, -1, [])
+  console.log(roundtrip)
+}
+
 function mangleExample() {
   const proto1 = new FunctionPrototype(
     [
@@ -49,6 +57,8 @@ function mangleExample() {
 
 async function main () {
   const wasi = await setupWasi('./client/example.wasm', {})
+
+  marshallExample(wasi)
 
   // The first example takes in two arrays on the same length and
   // multiplies them, returning a third array.

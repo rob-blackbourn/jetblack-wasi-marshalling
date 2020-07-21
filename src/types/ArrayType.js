@@ -1,13 +1,18 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
+import { ValueType } from './ValueType'
+
+import type { lengthCallback } from '../wasiLibDef'
 
 /**
  * Gets the length
  * @callback lengthCallback
  * @param {number} unmarshalledIndex The index of the unmarshalled value or -1
- * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+ * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
  * @returns {number} The length of the array
  */
 
@@ -16,13 +21,16 @@ import { Type } from './Type'
  * @template T
  * @extends {ReferenceType<Array<T>>}
  */
-export class ArrayType extends ReferenceType {
+export class ArrayType<T> extends ReferenceType<Array<T>> {
+  type: Type<T>
+  length: number|lengthCallback|null
+
   /**
    * Construct an array type
    * @param {Type<T>} type The type of the elements in the array
    * @param {number|lengthCallback} [length] The length of the array
    */
-  constructor (type, length = null) {
+  constructor (type: Type<T>, length: number|lengthCallback|null = null) {
     super()
     this.type = type
     this.length = length
@@ -31,10 +39,10 @@ export class ArrayType extends ReferenceType {
   /**
    * Get the length of the array
    * @param {number} unmarshalledIndex The index of the unmarshalled argument or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The length of the array.
    */
-  getLength (unmarshalledIndex, unmarshalledArgs) {
+  getLength (unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     if (typeof this.length === 'number') {
       return this.length
     } else if (typeof this.length === 'function') {
@@ -51,12 +59,16 @@ export class ArrayType extends ReferenceType {
    * Allocate memory for the array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index to the unmarshalled array
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated memory.
    */
-  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
-    return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
+    if (this.type instanceof ValueType) {
+      return memoryManager.malloc(length * this.type.TypedArrayType.BYTES_PER_ELEMENT)
+    } else {
+      return memoryManager.malloc(length * Uint32Array.BYTES_PER_ELEMENT)
+    }
   }
 
   /**
@@ -64,15 +76,15 @@ export class ArrayType extends ReferenceType {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the memory to be freed
    * @param {number} unmarshalledIndex The index of the unmarshalled array or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled args
+   * @param {Array<any>} unmarshalledArgs The unmarshalled args
    * @returns {void}
    */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     try {
       const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
       if (this.type instanceof ReferenceType) {
         const unmarshalledValue = unmarshalledIndex == -1 ? null : unmarshalledArgs[unmarshalledIndex]
-        const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
+        const typedArray = new Uint32Array(memoryManager.memory.buffer, address, length)
         typedArray.forEach((item, i) => {
           const index = unmarshalledValue == null ? -1 : 0
           const args = unmarshalledValue == null ? [] : unmarshalledValue[i]
@@ -88,21 +100,22 @@ export class ArrayType extends ReferenceType {
    * Marshall a possibly nested array.
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index of the unmarshalled value
-   * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
+   * @param {Array<any>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the marshalled array
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
 
-    const unmarshalledValue = /** @type {Array<T>} */ unmarshalledArgs[unmarshalledIndex]
-    const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, unmarshalledValue.length)
-    if (this.type instanceof ReferenceType) {
-      unmarshalledValue.forEach((item, i) => {
-        typedArray[i] = /** @type {number} */ (this.type.marshall(memoryManager, 0, [item]))
-      })
-    } else {
-      // @ts-ignore
+    const unmarshalledValue = unmarshalledArgs[unmarshalledIndex]
+    if (this.type instanceof ValueType) {
+      const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, unmarshalledValue.length)
       typedArray.set(unmarshalledValue)
+    } else {
+      const typedArray = new Uint32Array(memoryManager.memory.buffer, address, unmarshalledValue.length)
+      unmarshalledValue.forEach((item, i) => {
+        // $FlowFixMe
+        typedArray[i] = this.type.marshall(memoryManager, 0, [item])
+      })
     }
 
     return address
@@ -113,17 +126,20 @@ export class ArrayType extends ReferenceType {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} address The address of the marshalled array
    * @param {number} unmarshalledIndex The index of the unmarshalled arg or -1
-   * @param {Array<*>} unmarshalledArgs The unmarshalled args
+   * @param {Array<any>} unmarshalledArgs The unmarshalled args
    * @returns {Array<T>} The unmarshalled array
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): Array<T> {
     try {
       const length = this.getLength(unmarshalledIndex, unmarshalledArgs)
-      const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
-      if (this.type instanceof ReferenceType) {
-        return Array.from(/** @type {Iterable<number>} */ (typedArray), x => (this.type.unmarshall(memoryManager, x, -1, [])))
+      if (this.type instanceof ValueType) {
+        const typedArray = new this.type.TypedArrayType(memoryManager.memory.buffer, address, length)
+        // $FlowFixMe
+        return Array.from(typedArray)
       } else {
-        return /** @type {Array<T>} */ (Array.from(/** @type {Iterable<*>} */ (typedArray)))
+        const typedArray = new Uint32Array(memoryManager.memory.buffer, address, length)
+        // $FlowFixMe
+        return Array.from(typedArray, x => this.type.unmarshall(memoryManager, x, -1, []))
       }
     } finally {
       memoryManager.free(address)
@@ -136,12 +152,16 @@ export class ArrayType extends ReferenceType {
    * @param {Array<T>} source The source array
    * @returns {Array<T>} The array to which the data was copied.
    */
-  copy (dest, source) {
+  copy (dest: Array<T>, source: Array<T>): Array<T> {
     dest.splice(0, dest.length, ...source)
     return dest
   }
 
-  get mangledName() {
+  /**
+   * Gets the mangled name.
+   * @returns {string} The mangled name.
+   */
+  get mangledName(): string {
     return `a(${this.type.mangledName})`
   }
 }

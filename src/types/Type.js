@@ -1,17 +1,14 @@
+// @flow
+
 import { MemoryManager } from '../MemoryManager'
+
+import type { malloc, free } from '../wasiLibDef'
 
 /**
  * The base class for representing types
  * @template T The value type
  */
-export class Type {
-  /**
-   * The abstract constructor for a type.
-   * @param {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} typedArrayType The typed array for the type
-   */
-  constructor (typedArrayType) {
-    this.TypedArrayType = typedArrayType
-  }
+export class Type<T> {
 
   /**
    * Allocate memory for the type
@@ -21,7 +18,7 @@ export class Type {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {number} The address of the allocated value in memory
    */
-  alloc (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  alloc (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     throw new TypeError('Not Implemented')
   }
 
@@ -34,7 +31,7 @@ export class Type {
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
    * @returns {void}
    */
-  free (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  free (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): void {
     throw new TypeError('Not Implemented')
   }
 
@@ -44,9 +41,9 @@ export class Type {
    * @param {MemoryManager} memoryManager The memory manager
    * @param {number} unmarshalledIndex The index of the value to marshall
    * @param {Array<*>} unmarshalledArgs The unmarshalled arguments
-   * @returns {number|T} The marshalled value
+   * @returns {number} The marshalled value
    */
-  marshall (memoryManager, unmarshalledIndex, unmarshalledArgs) {
+  marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     throw new TypeError('Not Implemented')
   }
 
@@ -59,7 +56,7 @@ export class Type {
    * @param {Array<*>} unmarshalledArgs The unmarshalled args
    * @returns {T}
    */
-  unmarshall (memoryManager, address, unmarshalledIndex, unmarshalledArgs) {
+  unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): T {
     throw new TypeError('Not Implemented')
   }
 
@@ -70,7 +67,7 @@ export class Type {
    * @param {T} source The source value
    * @returns {T} The destination value
    */
-  copy (dest, source) {
+  copy (dest: T, source: T): T {
     throw new TypeError('Not Implemented')
   }
 
@@ -78,7 +75,7 @@ export class Type {
    * The mangled name
    * @returns {string} The mangled name for the type.
    */
-  get mangledName() {
+  get mangledName(): string {
     throw new TypeError("Not Implemented")
   }
 }
