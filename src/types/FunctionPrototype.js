@@ -19,7 +19,7 @@ import { StringBufferType } from './StringBufferType'
 import { StringType } from './StringType'
 import { VoidType } from './VoidType'
 
-import type { wasmCallback, BigInt64Array, BigUint64Array } from '../wasiLibDef'
+import type { wasmCallback } from '../wasiLibDef'
 
 /**
  * A function prototype

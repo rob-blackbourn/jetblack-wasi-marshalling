@@ -1,6 +1,4 @@
 declare type BigInt = BigInteger
-declare class BigInt64Array extends $TypedArray {}
-declare class BigUint64Array extends $TypedArray {}
 
 declare function malloc(byteLength: uint32): number
 declare function free(address: number): void

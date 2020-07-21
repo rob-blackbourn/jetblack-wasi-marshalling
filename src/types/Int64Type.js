@@ -4,7 +4,7 @@ import { MemoryManager } from '../MemoryManager'
 
 import { ValueType } from './ValueType'
 
-import type { BigInt, BigInt64Array } from '../wasiLibDef'
+import type { BigInt } from '../wasiLibDef'
 
 /**
  * A type representing a 64 bit integer
@@ -15,6 +15,7 @@ export class Int64Type extends ValueType<BigInt> {
    * Construct a 16 bit integer type
    */
   constructor () {
+    // $FlowFixMe
     super(BigInt64Array)
   }
 
