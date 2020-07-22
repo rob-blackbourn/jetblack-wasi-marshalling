@@ -1,6 +1,6 @@
 
-// declare function malloc(byteLength: number): number;
-// declare function free(address: number): void;
+// declare function mallocCallback(byteLength: number): number;
+// declare function freeCallback(address: number): void;
 
 // declare class FinalizationRegistry {
 //     constructor(cleanup: (held: Array<any>) => void);

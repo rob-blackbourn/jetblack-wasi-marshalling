@@ -1,9 +1,8 @@
-import resolve from '@rollup/plugin-node-resolve';
-import babel from '@rollup/plugin-babel';
-import {terser} from 'rollup-plugin-terser';
+import typescript from '@rollup/plugin-typescript';
+import { terser } from 'rollup-plugin-terser'
 
 export default {
-  input: 'src/index.js',
+  input: './src/index.ts',
   output: [
     {
       file: 'lib/index.js',
@@ -19,8 +18,5 @@ export default {
       sourcemap: true
     }
   ],
-  plugins: [
-    resolve(),
-    babel({ babelHelpers: 'bundled' })
-  ]
-};
+  plugins: [typescript()]
+}

@@ -11,8 +11,12 @@
             "skipFiles": [
               "<node_internals>/**"
             ],
-            "runtimeArgs": ["--harmony-weak-refs"],
-            "program": "${workspaceFolder}/client/main.js"
+            "runtimeArgs": [
+              "--harmony-weak-refs",
+              "-r",
+              "ts-node/register"
+            ],
+            "program": "${workspaceFolder}/client/main.ts"
           },
           {
             "type": "node",
@@ -22,8 +26,9 @@
             "runtimeArgs": ["--harmony-weak-refs"],
             "args": [
               "--harmony-weak-refs",
-              "-r", "@babel/register",
-              "${workspaceFolder}/test/**/*test*.js",
+              "-r",
+              "ts-node/register",
+              "${workspaceFolder}/test/**/*test*.ts",
             ],
             "env": {
               "NODE_ENV": "test",

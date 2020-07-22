@@ -1,7 +1,5 @@
 {
-    "flow.enable": true,
-    "flow.pathToFlow": "${workspaceFolder}/node_modules/.bin/flow",
-    "javascript.validate.enable": false,
+    "flow.enable": false,
     "cSpell.words": [
         "Blackbourn",
         "ESUCCESS",
