@@ -1,0 +1,27 @@
+{
+    "flow.enable": true,
+    "flow.pathToFlow": "${workspaceFolder}/node_modules/.bin/flow",
+    "javascript.validate.enable": false,
+    "cSpell.words": [
+        "Blackbourn",
+        "ESUCCESS",
+        "FDFLAGS",
+        "Finalizers",
+        "WASI",
+        "deallocating",
+        "fdstat",
+        "finalizer",
+        "iovs",
+        "jetblack",
+        "malloc",
+        "nwritten",
+        "proto",
+        "setlocale",
+        "stdlib",
+        "strlen",
+        "typeof",
+        "unmarshall",
+        "unmarshalled",
+        "wasm"
+    ]
+}
