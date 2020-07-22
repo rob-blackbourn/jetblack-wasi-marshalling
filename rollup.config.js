@@ -1,5 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser'
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs'
 
 export default {
   input: './src/index.ts',
@@ -18,5 +20,9 @@ export default {
       sourcemap: true
     }
   ],
-  plugins: [typescript()]
+  plugins: [
+    nodeResolve(),
+    typescript({ module: 'CommonJS' }),
+    commonjs({ extensions: ['.js', '.ts'] }) // the ".ts" extension is required
+  ]
 }

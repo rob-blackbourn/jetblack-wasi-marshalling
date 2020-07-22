@@ -4,21 +4,33 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-              "<node_internals>/**"
-            ],
-            "runtimeArgs": [
-              "--harmony-weak-refs",
-              "-r",
-              "ts-node/register"
-            ],
-            "program": "${workspaceFolder}/client/main.ts"
-          },
-          {
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Typescript",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "runtimeArgs": [
+          "--harmony-weak-refs",
+          "-r",
+          "ts-node/register"
+        ],
+        "program": "${workspaceFolder}/client/main.ts"
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch JavaScript",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "runtimeArgs": [
+          "--harmony-weak-refs"
+        ],
+        "program": "${workspaceFolder}/client/main.js"
+      },
+  {
             "type": "node",
             "request": "launch",
             "name": "Mocha Tests",
