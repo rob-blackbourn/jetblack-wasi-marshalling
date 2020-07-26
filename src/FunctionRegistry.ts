@@ -1,8 +1,6 @@
 import { MemoryManager } from './MemoryManager'
 import { FunctionPrototype } from './types/FunctionPrototype'
 
-interface wasmCallback{(...args: any): any;}
-
 /**
   * A function registry
   */

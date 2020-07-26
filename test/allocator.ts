@@ -1,5 +1,3 @@
-/* @flow */
-
 const POINTER_SIZE_IN_BYTES = 4;
 const MAX_HEIGHT = 32;
 
@@ -300,7 +298,6 @@ export function inspect (int32Array: Int32Array): InspectionResult {
       throw new Error(`Got invalid sized chunk at ${quadsToBytes(block)} (${quadsToBytes(size)})`);
     }
     if (isFree(int32Array, block)) {
-      // @flowIssue todo
       blocks.push(readListNode(int32Array, block));
     }
     else {

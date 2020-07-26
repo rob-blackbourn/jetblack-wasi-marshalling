@@ -4,8 +4,6 @@ import { ReferenceType } from './ReferenceType'
 import { Type } from './Type'
 import { ValueType } from './ValueType'
 
-interface lengthCallback{(unmarshalledIndex: number, unmarshalledArgs: Array<any>): number;}
-
 /**
  * Gets the length
  * @callback lengthCallback

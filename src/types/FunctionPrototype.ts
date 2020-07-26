@@ -17,8 +17,6 @@ import { StringBufferType } from './StringBufferType'
 import { StringType } from './StringType'
 import { VoidType } from './VoidType'
 
-interface wasmCallback{(...args: any): any;}
-
 /**
  * A function prototype
  * @template T

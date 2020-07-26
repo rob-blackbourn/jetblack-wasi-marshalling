@@ -4,11 +4,6 @@ import { FunctionRegistry } from './FunctionRegistry'
 import { FunctionPrototype } from './types/FunctionPrototype'
 
 interface writeCallback {(text: string):void}
-type lengthOrArray = number|Array<any>
-
-interface mallocCallback{(byteLength: number): number}
-interface freeCallback{(address: number): void}
-interface wasmCallback{(...args: any): any}
 
 /**
  * Write
@@ -46,7 +41,7 @@ export class Marshaller {
   #stderrText: string
 
   /**
-   * Create a Marhsaller class
+   * Create a Marshaller class
    * @param {Object.<string, string>} env The environment variables
    */
   constructor(env: { [key: string]: string }) {
@@ -82,7 +77,7 @@ export class Marshaller {
 
   get memoryManager(): MemoryManager {
     if (this.#memoryManager == null) {
-      throw new Error('Not initialised')
+      throw new Error('Not initialized')
     }
     return this.#memoryManager
   }
@@ -93,7 +88,7 @@ export class Marshaller {
 
   get instance(): WebAssembly.Instance {
     if (this.#instance == null) {
-      throw new Error('Not initialised')
+      throw new Error('Not initialized')
     }
     return this.#instance
   }
@@ -104,7 +99,7 @@ export class Marshaller {
 
   get functionRegistry(): FunctionRegistry {
     if (this.#functionRegistry == null) {
-      throw new Error('Not initialised')
+      throw new Error('Not initialized')
     }
     return this.#functionRegistry
   }
@@ -121,8 +116,8 @@ export class Marshaller {
     this.#instance = instance
     this.#memoryManager = new MemoryManager(
       <WebAssembly.Memory>instance.exports.memory,
-      <mallocCallback>instance.exports.malloc,
-      <freeCallback>instance.exports.free)
+      <malloc>instance.exports.malloc,
+      <free>instance.exports.free)
     this.#functionRegistry = new FunctionRegistry(this.memoryManager)
   }
 

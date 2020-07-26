@@ -1,15 +1,3 @@
-interface malloc{(byteLength: number): number}
-interface free{(byteLength: number): void}
-
-declare class FinalizationRegistry {
-    constructor(cleanup: (held: Array<any>) => void);
-  
-    register(item: any, tag: any): void;
-}
-
-type TypedArrayConstructor = Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor
-type TypedArray = Int8Array|Int16Array|Int32Array|BigInt64Array|Uint8Array|Uint16Array|Uint32Array|BigUint64Array|Float32Array|Float64Array
-
 /**
  * TypedArrayType
  * @typedef {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} TypedArrayType
