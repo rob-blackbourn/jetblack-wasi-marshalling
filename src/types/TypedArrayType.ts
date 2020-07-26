@@ -1,3 +1,5 @@
+import type { lengthCallback ,TypedArray } from '../wasiLibDef'
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ReferenceType } from './ReferenceType'

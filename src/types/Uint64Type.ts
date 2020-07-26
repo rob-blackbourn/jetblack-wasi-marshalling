@@ -11,7 +11,6 @@ export class Uint64Type extends ValueType<bigint> {
    * Construct a 64 bit unsigned integer type
    */
   constructor () {
-    // $FlowFixMe
     super(BigUint64Array)
   }
 
@@ -24,7 +23,6 @@ export class Uint64Type extends ValueType<bigint> {
    */
   marshall (memoryManager: MemoryManager, unmarshalledIndex: number, unmarshalledArgs: Array<any>): number {
     const address = this.alloc(memoryManager, unmarshalledIndex, unmarshalledArgs)
-    // $FlowFixMe
     memoryManager.dataView.setBigUint64(address, unmarshalledArgs[unmarshalledIndex])
     return address
   }
@@ -39,7 +37,6 @@ export class Uint64Type extends ValueType<bigint> {
    */
   unmarshall (memoryManager: MemoryManager, address: number, unmarshalledIndex: number, unmarshalledArgs: Array<any>): bigint {
     try {
-      // $FlowFixMe
       return memoryManager.dataView.getBigUint64(address)
     } finally {
       memoryManager.free(address)

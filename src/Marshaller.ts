@@ -1,3 +1,5 @@
+import type { malloc, free, wasmCallback } from './wasiLibDef'
+
 import { WASI, STDOUT, STDERR } from './constants'
 import { MemoryManager } from './MemoryManager'
 import { FunctionRegistry } from './FunctionRegistry'
@@ -193,7 +195,6 @@ export class Marshaller {
     const encoder = new TextEncoder()
 
     Object.entries(this.env).map(
-      // $FlowFixMe
       ([key, value]) => `${key}=${value}`
     ).forEach(envVar => {
       this.memoryManager.dataView.setUint32(environ, environBuf, true)
@@ -215,7 +216,6 @@ export class Marshaller {
     const encoder = new TextEncoder()
 
     const envVars = Object.entries(this.env).map(
-      // $FlowFixMe
       ([key, value]) => `${key}=${value}`
     )
     const size = envVars.reduce(
@@ -310,9 +310,7 @@ export class Marshaller {
 
     this.memoryManager.dataView.setUint8(stat + 0, WASI.FILETYPE.CHARACTER_DEVICE)
     this.memoryManager.dataView.setUint32(stat + 2, WASI.FDFLAGS.APPEND, true)
-    // $FlowFixMe
     this.memoryManager.dataView.setBigUint64(stat + 8, WASI.RIGHTS.FD.WRITE, true)
-    // $FlowFixMe
     this.memoryManager.dataView.setBigUint64(stat + 16, WASI.RIGHTS.FD.WRITE, true)
     return WASI.ESUCCESS
   }

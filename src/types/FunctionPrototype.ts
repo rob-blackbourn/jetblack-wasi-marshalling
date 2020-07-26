@@ -1,3 +1,5 @@
+import type { wasmCallback } from '../wasiLibDef'
+
 import { MemoryManager } from '../MemoryManager'
 import { StringBuffer } from '../StringBuffer'
 
@@ -127,8 +129,7 @@ export class FunctionPrototype<TResult> {
       return `t(${Int16Type.MANGLED_NAME})`
     } else if (value instanceof Int32Array) {
       return `t(${Int32Type.MANGLED_NAME})`
-    } else //$FlowFixMe
-      if (value instanceof BigInt64Array) {
+    } else if (value instanceof BigInt64Array) {
       return `t(${Int64Type.MANGLED_NAME})`
     } else if (value instanceof Uint8Array) {
       return `t(${Uint8Type.MANGLED_NAME})`
@@ -136,8 +137,7 @@ export class FunctionPrototype<TResult> {
       return `t(${Uint16Type.MANGLED_NAME})`
     } else if (value instanceof Uint32Array) {
       return `t(${Uint32Type.MANGLED_NAME})`
-    } else // $FlowFixMe
-      if (value instanceof BigUint64Array) {
+    } else if (value instanceof BigUint64Array) {
       return `t(${Uint64Type.MANGLED_NAME})`
     } else if (value instanceof StringBuffer) {
       return StringBufferType.MANGLED_NAME

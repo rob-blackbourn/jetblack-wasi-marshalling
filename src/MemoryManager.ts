@@ -1,3 +1,12 @@
+import type { malloc, free, TypedArray, TypedArrayConstructor } from './wasiLibDef'
+
+
+declare class FinalizationRegistry {
+  constructor(cleanup: (held: Array<any>) => void);
+
+  register(item: any, tag: any): void;
+}
+
 /**
  * TypedArrayType
  * @typedef {Int8ArrayConstructor|Int16ArrayConstructor|Int32ArrayConstructor|BigInt64ArrayConstructor|Uint8ArrayConstructor|Uint16ArrayConstructor|Uint32ArrayConstructor|BigUint64ArrayConstructor|Float32ArrayConstructor|Float64ArrayConstructor} TypedArrayType
@@ -29,13 +38,15 @@ export class MemoryManager {
     this.malloc = malloc
     this.free = free
     this.#dataView = null
-    // $FlowFixMe
     this.#registry = typeof FinalizationRegistry === 'undefined'
       ? null
-      // $FlowFixMe
       : new FinalizationRegistry(addresses => {
-          for (const address of addresses) {
-            free(address)
+          for (const addressOrCallback of addresses) {
+            if (typeof addressOrCallback === 'number') {
+              free(addressOrCallback)
+            } else {
+              addressOrCallback()
+            }
           }
         })
   }

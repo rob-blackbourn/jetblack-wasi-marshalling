@@ -1,4 +1,4 @@
-// @filename '../types.d.ts'
+import type { TypedArrayConstructor } from '../wasiLibDef'
 
 import { MemoryManager } from '../MemoryManager'
 

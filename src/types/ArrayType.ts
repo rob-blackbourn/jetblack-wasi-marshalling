@@ -1,3 +1,5 @@
+import type { lengthCallback } from '../wasiLibDef'
+
 import { MemoryManager } from '../MemoryManager'
 
 import { ReferenceType } from './ReferenceType'
@@ -109,7 +111,6 @@ export class ArrayType<T> extends ReferenceType<Array<T>> {
     } else {
       const typedArray = new Uint32Array(memoryManager.memory.buffer, address, unmarshalledValue.length)
       unmarshalledValue.forEach((item, i) => {
-        // $FlowFixMe
         typedArray[i] = this.type.marshall(memoryManager, 0, [item])
       })
     }

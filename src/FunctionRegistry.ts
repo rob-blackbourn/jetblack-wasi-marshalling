@@ -1,3 +1,5 @@
+import type { wasmCallback } from './wasiLibDef'
+
 import { MemoryManager } from './MemoryManager'
 import { FunctionPrototype } from './types/FunctionPrototype'
 
@@ -79,7 +81,6 @@ export class FunctionRegistry {
    * @returns {boolean} Returns true if the function exists.
    */
   has (name: string|symbol): boolean {
-    // $FlowFixMe
     return name in this.#registry
   }
 }
