@@ -3,17 +3,11 @@ const assert = require('assert')
 import { makeMockMemoryManager } from './mocks'
 import {
   ArrayType,
-  Float32Type,
   Float64Type,
-  FunctionPrototype,
-  In,
   Int32Type,
-  Uint64Type,
-  Out,
   Pointer,
   PointerType,
-  StringType,
-  TypedArrayType
+  StringType
 } from '../src'
 import { VoidType } from '../src/types/VoidType'
 

@@ -35,19 +35,19 @@ The implementation of the WASI layer is provided through a class of the
 same name. Here is an example of initializing the library.
 
 ```javascript
-import { Wasi } from '@jetblack/wasi-marshalling'
+import { Marshaller } from '@jetblack/wasi-marshalling'
 
-// Create the Wasi instance passing in environment variables.
-const wasi = new Wasi({})
+// Create the Marshaller instance passing in environment variables.
+const marshaller = new Marshaller({})
 
 // Instantiate the wasm module.
 WebAssembly.instantiateStreaming(
   fetch('example.wasm'), {
-    wasi_snapshot_preview1: wasi.imports()
+    wasi_snapshot_preview1: marshaller.wasiImplementation()
   })
   .then(res => {
-    // Initialize the wasi instance
-    wasi.init(res.instance)
+    // Initialize the Marshaller instance
+    marshaller.init(res.instance)
 
     // Do something interesting ...
   })
@@ -62,7 +62,7 @@ Given the following C function call which multiplies two arrays.
 ```C
 #include <stdlib.h>
 
-__attribute__((used)) double* multipleFloat64ArraysReturningPtr (double* array1, double* array2, int length)
+__attribute__((used)) double* multiplyFloat64ArraysReturningPtr (double* array1, double* array2, int length)
 {
   double* result = (double*) malloc(length * sizeof(double));
   if (result == 0)
@@ -99,8 +99,8 @@ const prototype = new FunctionPrototype(
 )
 
 const result = prototype.invoke(
-  wasi.memoryManager,
-  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+  marshaller.memoryManager,
+  marshaller.instance.exports.multiplyFloat64ArraysReturningPtr,
   [1, 2, 3, 4],
   [5, 6, 7, 8],
   4)
@@ -143,8 +143,8 @@ const prototype = new FunctionPrototype(
 )
 
 const result = prototype.invoke(
-  wasi.memoryManager,
-  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+  marshaller.memoryManager,
+  marshaller.instance.exports.multiplyFloat64ArraysReturningPtr,
   [1, 2, 3, 4],
   [5, 6, 7, 8],
   4)
@@ -185,10 +185,10 @@ const proto = new FunctionPrototype(
 )
 
 const result = proto.invoke(
-  wasi.memoryManager,
-  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
-  wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
-  wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
+  marshaller.memoryManager,
+  marshaller.instance.exports.multiplyFloat64ArraysReturningPtr,
+  marshaller.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
+  marshaller.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
   4)
 
 console.log(result)

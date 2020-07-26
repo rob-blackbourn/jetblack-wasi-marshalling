@@ -15,7 +15,7 @@ describe('test invoking functions', () => {
   it('should capture function result', () => {
     const memoryManager = makeMockMemoryManager()
 
-    function multipleFloat64ArraysReturningPtr (arrayPtr1, arrayPtr2, length) {
+    function multiplyFloat64ArraysReturningPtr (arrayPtr1, arrayPtr2, length) {
       const array1 = new Float64Array(memoryManager.memory.buffer, arrayPtr1, length)
       const array2 = new Float64Array(memoryManager.memory.buffer, arrayPtr2, length)
       const resultPtr = memoryManager.malloc(length * Float64Array.BYTES_PER_ELEMENT)
@@ -37,7 +37,7 @@ describe('test invoking functions', () => {
 
     const result = proto.invoke(
       memoryManager,
-      multipleFloat64ArraysReturningPtr,
+      multiplyFloat64ArraysReturningPtr,
       [1, 2, 3, 4],
       [5, 6, 7, 8],
       4)
@@ -49,7 +49,7 @@ describe('test invoking functions', () => {
   it('should capture function result with length callback', () => {
     const memoryManager = makeMockMemoryManager()
 
-    function multipleFloat64ArraysReturningPtr (arrayPtr1, arrayPtr2, length) {
+    function multiplyFloat64ArraysReturningPtr (arrayPtr1, arrayPtr2, length) {
       const array1 = new Float64Array(memoryManager.memory.buffer, arrayPtr1, length)
       const array2 = new Float64Array(memoryManager.memory.buffer, arrayPtr2, length)
       const resultPtr = memoryManager.malloc(length * Float64Array.BYTES_PER_ELEMENT)
@@ -71,7 +71,7 @@ describe('test invoking functions', () => {
 
     const result = proto.invoke(
       memoryManager,
-      multipleFloat64ArraysReturningPtr,
+      multiplyFloat64ArraysReturningPtr,
       [1, 2, 3, 4],
       [5, 6, 7, 8],
       4)
@@ -83,7 +83,7 @@ describe('test invoking functions', () => {
   it('should update output argument', () => {
     const memoryManager = makeMockMemoryManager()
 
-    function multipleFloat64ArraysWithOutputArray (arrayPtr1, arrayPtr2, resultPtr, length) {
+    function multiplyFloat64ArraysWithOutputArray (arrayPtr1, arrayPtr2, resultPtr, length) {
       const array1 = new Float64Array(memoryManager.memory.buffer, arrayPtr1, length)
       const array2 = new Float64Array(memoryManager.memory.buffer, arrayPtr2, length)
       const result = new Float64Array(memoryManager.memory.buffer, resultPtr, length)
@@ -107,7 +107,7 @@ describe('test invoking functions', () => {
     const output = new Array(4)
     proto.invoke(
       memoryManager,
-      multipleFloat64ArraysWithOutputArray,
+      multiplyFloat64ArraysWithOutputArray,
       input1,
       input2,
       output,

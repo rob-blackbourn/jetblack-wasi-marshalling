@@ -31,4 +31,4 @@ export {
 } from './types/index'
 
 export { FunctionRegistry } from './FunctionRegistry'
-export { Wasi } from './wasi'
+export { Marshaller } from './Marshaller'
