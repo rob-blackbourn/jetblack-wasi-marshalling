@@ -18,7 +18,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c",
-    "exec:prepare": "npm run build && cp lib/index.js client/index.js",
+    "exec:prepare": "npm run build && cp lib/index.js client && cp lib/index.js.map client",
     "exec:nodejs": "npm run exec:prepare && node --harmony-weak-refs client/main.js",
     "exec:browser": "npm run exec:prepare && npx serve client",
     "test": "mocha --harmony-weak-refs --require ts-node/register test/**/*test*.ts",

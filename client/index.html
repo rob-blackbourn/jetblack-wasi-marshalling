@@ -9,17 +9,18 @@
         <p>See console for output</p>
         <script src="index.js"></script>
         <script>
-console.log(wasiMarshalling)
+console.log(WasiMarshalling)
 const {
     Wasi,
     Float64Type,
     ArrayType,
     Int32Type,
     StringType,
+    VoidType,
     FunctionPrototype,
     In,
     Out
-} = wasiMarshalling
+} = WasiMarshalling
 
 // Create the Wasi instance passing in environment variables.
 const wasi = new Wasi({})
@@ -60,7 +61,8 @@ WebAssembly.instantiateStreaming(
         new In(new ArrayType(new Float64Type())),
         new Out(new ArrayType(new Float64Type())),
         new In(new Int32Type())
-      ]
+      ],
+      new VoidType()
     )
 
     const output = new Array(4)
