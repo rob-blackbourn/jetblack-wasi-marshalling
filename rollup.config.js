@@ -1,9 +1,10 @@
-import resolve from '@rollup/plugin-node-resolve';
-import babel from '@rollup/plugin-babel';
-import {terser} from 'rollup-plugin-terser';
+import typescript from '@rollup/plugin-typescript';
+import { terser } from 'rollup-plugin-terser'
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs'
 
 export default {
-  input: 'src/index.js',
+  input: './src/index.ts',
   output: [
     {
       file: 'lib/index.js',
@@ -20,7 +21,8 @@ export default {
     }
   ],
   plugins: [
-    resolve(),
-    babel({ babelHelpers: 'bundled' })
+    nodeResolve(),
+    typescript({ module: 'CommonJS' }),
+    commonjs({ extensions: ['.js', '.ts'] }) // the ".ts" extension is required
   ]
-};
+}

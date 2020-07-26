@@ -13,7 +13,7 @@ const {
   In,
   Out,
   MemoryManager
-} = require('../lib/index')
+} = require('../src/index')
 
 async function setupWasi (fileName, envVars) {
   // Read the wasm file.
