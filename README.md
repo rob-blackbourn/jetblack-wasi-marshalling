@@ -62,7 +62,7 @@ Given the following C function call which multiplies two arrays.
 ```C
 #include <stdlib.h>
 
-__attribute__((used)) double* multipleFloat64ArraysReturningPtr (double* array1, double* array2, int length)
+__attribute__((used)) double* multiplyFloat64ArraysReturningPtr (double* array1, double* array2, int length)
 {
   double* result = (double*) malloc(length * sizeof(double));
   if (result == 0)
@@ -100,7 +100,7 @@ const prototype = new FunctionPrototype(
 
 const result = prototype.invoke(
   wasi.memoryManager,
-  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+  wasi.instance.exports.multiplyFloat64ArraysReturningPtr,
   [1, 2, 3, 4],
   [5, 6, 7, 8],
   4)
@@ -144,7 +144,7 @@ const prototype = new FunctionPrototype(
 
 const result = prototype.invoke(
   wasi.memoryManager,
-  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+  wasi.instance.exports.multiplyFloat64ArraysReturningPtr,
   [1, 2, 3, 4],
   [5, 6, 7, 8],
   4)
@@ -186,7 +186,7 @@ const proto = new FunctionPrototype(
 
 const result = proto.invoke(
   wasi.memoryManager,
-  wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+  wasi.instance.exports.multiplyFloat64ArraysReturningPtr,
   wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
   wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
   4)

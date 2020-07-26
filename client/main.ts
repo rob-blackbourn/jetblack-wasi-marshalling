@@ -84,7 +84,7 @@ async function main () {
 
   const result1 = proto1.invoke(
     wasi.memoryManager,
-    wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+    wasi.instance.exports.multiplyFloat64ArraysReturningPtr,
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     4)
@@ -107,7 +107,7 @@ async function main () {
   const output = new Array(4)
   proto2.invoke(
     wasi.memoryManager,
-    wasi.instance.exports.multipleFloat64ArraysWithOutputArray,
+    wasi.instance.exports.multiplyFloat64ArraysWithOutputArray,
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     output,
@@ -140,7 +140,7 @@ async function main () {
 
   const result4 = proto4.invoke(
     wasi.memoryManager,
-    wasi.instance.exports.multipleFloat64ArraysReturningPtr,
+    wasi.instance.exports.multiplyFloat64ArraysReturningPtr,
     wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
     wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
     4)
@@ -159,7 +159,7 @@ async function main () {
   const output2 = wasi.memoryManager.createTypedArray(Float64Array, 4)
   proto5.invoke(
     wasi.memoryManager,
-    wasi.instance.exports.multipleFloat64ArraysWithOutputArray,
+    wasi.instance.exports.multiplyFloat64ArraysWithOutputArray,
     wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
     wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
     output2,
