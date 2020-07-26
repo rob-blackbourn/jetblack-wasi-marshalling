@@ -9,7 +9,7 @@ import {
   Uint32Type,
   TypedArrayType,
   FunctionRegistry,
-  Wasi
+  Marshaller
 } from '../src/index'
 
 interface wasmCallback{(...args: any): any;}
@@ -19,10 +19,10 @@ describe('test the function invoking', () => {
   it('should invoke wasm functions', () => {
     const memoryManager = makeMockMemoryManager()
     const registry = new FunctionRegistry(memoryManager)
-    const wasi = new Wasi({})
-    wasi.memoryManager = memoryManager
-    wasi.functionRegistry = registry
-    wasi.instance = {
+    const marshaller = new Marshaller({})
+    marshaller.memoryManager = memoryManager
+    marshaller.functionRegistry = registry
+    marshaller.instance = {
       'exports': {
         'add_int32': (a, b, len) => {
           const array1 = new Int32Array(memoryManager.memory.buffer, a, len)
@@ -108,22 +108,22 @@ describe('test the function invoking', () => {
       new TypedArrayType(new Float64Type(), (i, args) => args[2])
     )
 
-    wasi.registerFunction(
+    marshaller.registerFunction(
       plusName,
       plusIntProto,
-      <wasmCallback>wasi.instance.exports.add_int32
+      <wasmCallback>marshaller.instance.exports.add_int32
     )
 
-    wasi.registerFunction(
+    marshaller.registerFunction(
       plusName,
       plusFloatProto,
-      <wasmCallback>wasi.instance.exports.add_float32
+      <wasmCallback>marshaller.instance.exports.add_float32
     )
 
-    wasi.registerFunction(
+    marshaller.registerFunction(
       plusName,
       plusDoubleProto,
-      <wasmCallback>wasi.instance.exports.add_float64
+      <wasmCallback>marshaller.instance.exports.add_float64
     )
 
     // Minus
@@ -153,25 +153,25 @@ describe('test the function invoking', () => {
       new TypedArrayType(new Float64Type(), (i, args) => args[2])
     )
 
-    wasi.registerFunction(
+    marshaller.registerFunction(
       minusName,
       minusIntProto,
-      <wasmCallback>wasi.instance.exports.minus_int32
+      <wasmCallback>marshaller.instance.exports.minus_int32
     )
 
-    wasi.registerFunction(
+    marshaller.registerFunction(
       minusName,
       minusFloatProto,
-      <wasmCallback>wasi.instance.exports.minus_float32
+      <wasmCallback>marshaller.instance.exports.minus_float32
     )
 
-    wasi.registerFunction(
+    marshaller.registerFunction(
       minusName,
       minusDoubleProto,
-      <wasmCallback>wasi.instance.exports.minus_float64
+      <wasmCallback>marshaller.instance.exports.minus_float64
     )
 
-    const plusIntResult = wasi.invoke(
+    const plusIntResult = marshaller.invoke(
       plusName,
       memoryManager.createTypedArray(Int32Array, [1,2,3,4]),
       memoryManager.createTypedArray(Int32Array, [1,2,3,4]),
@@ -179,7 +179,7 @@ describe('test the function invoking', () => {
     assert.ok(plusIntResult instanceof Int32Array)
     assert.deepStrictEqual(plusIntResult, new Int32Array([2,4,6,8]))
 
-    const minusIntResult = wasi.invoke(
+    const minusIntResult = marshaller.invoke(
       minusName,
       memoryManager.createTypedArray(Int32Array, [1,2,3,4]),
       memoryManager.createTypedArray(Int32Array, [1,2,3,4]),

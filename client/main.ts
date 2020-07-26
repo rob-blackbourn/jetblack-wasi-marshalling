@@ -1,6 +1,6 @@
 const fs = require('fs')
 const {
-  Wasi,
+  Marshaller,
   Float64Type,
   ArrayType,
   TypedArrayType,
@@ -15,29 +15,29 @@ const {
   MemoryManager
 } = require('../src/index')
 
-async function setupWasi (fileName, envVars) {
+async function setupWasi (fileName: string, envVars: { [key: string]: string}): Promise<typeof Marshaller> {
   // Read the wasm file.
   const buf = fs.readFileSync(fileName)
 
-  // Create the Wasi instance passing in environment variables.
-  const wasi = new Wasi(envVars)
+  // Create the Marshaller instance passing in environment variables.
+  const marshaller = new Marshaller(envVars)
 
   // Instantiate the wasm module.
   const res = await WebAssembly.instantiate(buf, {
-    wasi_snapshot_preview1: wasi.imports()
+    wasi_snapshot_preview1: marshaller.wasiImplementation()
   })
 
-  // Initialise the wasi instance
-  wasi.init(res.instance)
+  // Initialize the marshaller instance
+  marshaller.init(res.instance)
 
-  return wasi
+  return marshaller
 }
 
-function marshallExample(wasi) {
+function marshallExample(marshaller: typeof Marshaller) {
   const value = ['one', 'two', 'three', 'four']
   const type = new ArrayType(new StringType(), value.length)
-  const ptr = type.marshall(wasi.memoryManager, 0, [value])
-  const roundtrip = type.unmarshall(wasi.memoryManager, ptr, -1, [])
+  const ptr = type.marshall(marshaller.memoryManager, 0, [value])
+  const roundtrip = type.unmarshall(marshaller.memoryManager, ptr, -1, [])
   console.log(roundtrip)
 
   const proto = new FunctionPrototype(
@@ -67,9 +67,9 @@ function mangleExample() {
 }
 
 async function main () {
-  const wasi = await setupWasi('./client/example.wasm', {})
+  const marshaller = await setupWasi('./client/example.wasm', {})
 
-  marshallExample(wasi)
+  marshallExample(marshaller)
 
   // The first example takes in two arrays on the same length and
   // multiplies them, returning a third array.
@@ -83,8 +83,8 @@ async function main () {
   )
 
   const result1 = proto1.invoke(
-    wasi.memoryManager,
-    wasi.instance.exports.multiplyFloat64ArraysReturningPtr,
+    marshaller.memoryManager,
+    marshaller.instance.exports.multiplyFloat64ArraysReturningPtr,
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     4)
@@ -106,8 +106,8 @@ async function main () {
 
   const output = new Array(4)
   proto2.invoke(
-    wasi.memoryManager,
-    wasi.instance.exports.multiplyFloat64ArraysWithOutputArray,
+    marshaller.memoryManager,
+    marshaller.instance.exports.multiplyFloat64ArraysWithOutputArray,
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     output,
@@ -122,8 +122,8 @@ async function main () {
     new StringType()
   )
   const reversed = proto3.invoke(
-    wasi.memoryManager,
-    wasi.instance.exports.reverseString,
+    marshaller.memoryManager,
+    marshaller.instance.exports.reverseString,
     'abcdefg'
   )
   console.log(reversed)
@@ -139,10 +139,10 @@ async function main () {
   )
 
   const result4 = proto4.invoke(
-    wasi.memoryManager,
-    wasi.instance.exports.multiplyFloat64ArraysReturningPtr,
-    wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
-    wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
+    marshaller.memoryManager,
+    marshaller.instance.exports.multiplyFloat64ArraysReturningPtr,
+    marshaller.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
+    marshaller.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
     4)
   console.log(result4)
 
@@ -156,12 +156,12 @@ async function main () {
     new VoidType()
   )
 
-  const output2 = wasi.memoryManager.createTypedArray(Float64Array, 4)
+  const output2 = marshaller.memoryManager.createTypedArray(Float64Array, 4)
   proto5.invoke(
-    wasi.memoryManager,
-    wasi.instance.exports.multiplyFloat64ArraysWithOutputArray,
-    wasi.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
-    wasi.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
+    marshaller.memoryManager,
+    marshaller.instance.exports.multiplyFloat64ArraysWithOutputArray,
+    marshaller.memoryManager.createTypedArray(Float64Array, [1, 2, 3, 4]),
+    marshaller.memoryManager.createTypedArray(Float64Array, [5, 6, 7, 8]),
     output2,
     4)
   console.log(output2)
@@ -175,9 +175,9 @@ async function main () {
     new StringBufferType()
   )
   const result6 = proto6.invoke(
-    wasi.memoryManager,
-    wasi.instance.exports.reverseString,
-    StringBuffer.fromString(wasi.memoryManager, 'abcdefg', true)
+    marshaller.memoryManager,
+    marshaller.instance.exports.reverseString,
+    StringBuffer.fromString(marshaller.memoryManager, 'abcdefg', true)
   )
   console.log(result6.toString())
 
@@ -188,14 +188,14 @@ async function main () {
     new VoidType()
   )
   proto7.invoke(
-    wasi.memoryManager,
-    wasi.instance.exports.sendToStdout,
+    marshaller.memoryManager,
+    marshaller.instance.exports.sendToStdout,
     "Hello, World!\n"
   )
 
   proto7.invoke(
-    wasi.memoryManager,
-    wasi.instance.exports.sendToStderr,
+    marshaller.memoryManager,
+    marshaller.instance.exports.sendToStderr,
     "Hello, World!\n"
   )
 }

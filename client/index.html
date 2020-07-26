@@ -11,7 +11,7 @@
         <script>
 console.log(WasiMarshalling)
 const {
-    Wasi,
+    Marshaller,
     Float64Type,
     ArrayType,
     Int32Type,
@@ -22,17 +22,17 @@ const {
     Out
 } = WasiMarshalling
 
-// Create the Wasi instance passing in environment variables.
-const wasi = new Wasi({})
+// Create the Marshaller instance passing in environment variables.
+const marshaller = new Marshaller({})
 
 // Instantiate the wasm module.
 WebAssembly.instantiateStreaming(
   fetch('example.wasm'), {
-    wasi_snapshot_preview1: wasi.imports()
+    wasi_snapshot_preview1: marshaller.wasiImplementation()
   })
   .then(res => {
-    // Initialise the wasi instance
-    wasi.init(res.instance)
+    // Initialise the Marshaller instance
+    marshaller.init(res.instance)
 
     // The first example takes in two arrays on the same length and
     // multiplies them, returning a third array.
@@ -46,8 +46,8 @@ WebAssembly.instantiateStreaming(
     )
 
     const result1 = proto1.invoke(
-      wasi.memoryManager,
-      wasi.instance.exports.multiplyFloat64ArraysReturningPtr,
+      marshaller.memoryManager,
+      marshaller.instance.exports.multiplyFloat64ArraysReturningPtr,
       [1, 2, 3, 4],
       [5, 6, 7, 8],
       4)
@@ -67,8 +67,8 @@ WebAssembly.instantiateStreaming(
 
     const output = new Array(4)
     proto2.invoke(
-      wasi.memoryManager,
-      wasi.instance.exports.multiplyFloat64ArraysWithOutputArray,
+      marshaller.memoryManager,
+      marshaller.instance.exports.multiplyFloat64ArraysWithOutputArray,
       [1, 2, 3, 4],
       [5, 6, 7, 8],
       output,
@@ -83,8 +83,8 @@ WebAssembly.instantiateStreaming(
       new StringType()
     )
     const reversed = proto3.invoke(
-      wasi.memoryManager,
-      wasi.instance.exports.reverseString,
+      marshaller.memoryManager,
+      marshaller.instance.exports.reverseString,
       'abcdefg'
     )
     console.log(reversed)

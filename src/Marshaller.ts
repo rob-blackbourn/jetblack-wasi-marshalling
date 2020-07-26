@@ -37,7 +37,7 @@ function drainWriter(write: writeCallback, prev: string, current: string): strin
  * An implementation of WASI which supports the minimum required to memory
  * allocation, stdio and multi byte (UTF-8) characters.
  */
-export class Wasi {
+export class Marshaller {
   env: { [key: string]: string }
   #instance: WebAssembly.Instance|null
   #memoryManager: MemoryManager|null
@@ -46,7 +46,7 @@ export class Wasi {
   #stderrText: string
 
   /**
-   * Create a Wasi class
+   * Create a Marhsaller class
    * @param {Object.<string, string>} env The environment variables
    */
   constructor(env: { [key: string]: string }) {
@@ -114,7 +114,7 @@ export class Wasi {
   }
 
   /**
-   * Initialize the WASI class with a WebAssembly instance.
+   * Initialize the Marshaller class with a WebAssembly instance.
    * @param {WebAssembly.Instance} instance A WebAssembly instance
    */
   init(instance: WebAssembly.Instance) {
@@ -322,7 +322,7 @@ export class Wasi {
     return WASI.ESUCCESS
   }
 
-  imports(): {} {
+  wasiImplementation(): {} {
     return {
       environ_get: (environ, environBuf) => this.environ_get(environ, environBuf),
       environ_sizes_get: (environCount, environBufSize) => this.environ_sizes_get(environCount, environBufSize),
