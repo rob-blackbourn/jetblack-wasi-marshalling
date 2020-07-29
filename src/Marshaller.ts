@@ -1,4 +1,4 @@
-import type { malloc, free, wasmCallback } from './wasiLibDef'
+import type { malloc, free, wasmCallback, mangleDefaults } from './wasiLibDef'
 
 import { WASI, STDOUT, STDERR } from './constants'
 import { MemoryManager } from './MemoryManager'
@@ -150,10 +150,10 @@ export class Marshaller {
    * Invoke a function implied by the arguments
    * @param {string|symbol} name The function name
    * @param {Array<any>} values The values with which to call the function
-   * @param {object} options Name mangling options
+   * @param {mangleDefaults} options Name mangling options
    * @returns {*} The return value if any
    */
-  invokeImpliedFunction (name: string|symbol, values: Array<any>, options: {}): any {
+  invokeImpliedFunction (name: string|symbol, values: Array<any>, options: mangleDefaults): any {
     const callback = this.functionRegistry.findImplied(name, values, options)
     if (callback == null) {
       throw new Error('Function not found')

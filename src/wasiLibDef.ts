@@ -9,3 +9,10 @@ export declare interface free{(byteLength: number): void}
 export declare interface wasmCallback{(...args: any): any;}
 
 export declare interface lengthCallback{(unmarshalledIndex: number, unmarshalledArgs: Array<any>): number;}
+
+export declare interface mangleDefaults {
+    defaultString?: string,
+    defaultNumber?: string,
+    defaultFloat?: string,
+    defaultInt?: string
+}

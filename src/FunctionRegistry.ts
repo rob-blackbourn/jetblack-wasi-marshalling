@@ -1,4 +1,4 @@
-import type { wasmCallback } from './wasiLibDef'
+import type { wasmCallback, mangleDefaults } from './wasiLibDef'
 
 import { MemoryManager } from './MemoryManager'
 import { FunctionPrototype } from './types/FunctionPrototype'
@@ -57,7 +57,7 @@ export class FunctionRegistry {
    * @param {object} options Options for the mangler
    * @returns {wasmCallback|null} The wasm callback or null
    */
-  findImplied (name: string|symbol, values: Array<any>, options: {}): null|wasmCallback {
+  findImplied (name: string|symbol, values: Array<any>, options: mangleDefaults): null|wasmCallback {
     if (this.has(name)) {
       return this.findExplicit(name, FunctionPrototype.mangleValues(values, options))
     } else {

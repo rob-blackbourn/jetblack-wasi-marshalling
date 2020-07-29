@@ -1,4 +1,4 @@
-import type { wasmCallback } from '../wasiLibDef'
+import type { wasmCallback, mangleDefaults } from '../wasiLibDef'
 
 import { MemoryManager } from '../MemoryManager'
 import { StringBuffer } from '../StringBuffer'
@@ -71,7 +71,7 @@ export class FunctionPrototype<TResult> {
   }
 
   get mangleReturns(): string {
-    return this.returns == null ? 'v0' : this.returns.mangledName
+    return this.returns == null ? VoidType.MANGLED_NAME : this.returns.mangledName
   }
 
   /**
@@ -82,7 +82,7 @@ export class FunctionPrototype<TResult> {
     return `${this.mangleReturns}_${this.mangledArgs}`
   }
 
-  static mangleNumber(value: number, options: any): string {
+  static mangleNumber(value: number, options: mangleDefaults): string {
     if ('defaultNumber' in options) {
       return options['defaultNumber']
     } else if (Number.isInteger(value)) {
@@ -98,7 +98,7 @@ export class FunctionPrototype<TResult> {
     }
   }
 
-  static mangleString(value: string, options: any): string {
+  static mangleString(value: string, options: mangleDefaults): string {
     if ('defaultString' in options) {
       return options['defaultString']
     } else {
@@ -109,10 +109,10 @@ export class FunctionPrototype<TResult> {
   /**
    * Mangle the value.
    * @param {any} value The value to mangle
-   * @param {object} options Mangling options
+   * @param {mangleDefaults} options Mangling options
    * @returns {string} The mangled value
    */
-  static mangleValue(value: any, options: any): string {
+  static mangleValue(value: any, options: mangleDefaults): string {
     if (value == null) {
       return VoidType.MANGLED_NAME
     } else if (typeof value === 'number') {
@@ -159,11 +159,12 @@ export class FunctionPrototype<TResult> {
   }
 
   /**
-   * 
+   * Mangle the values of the function arguments.
    * @param {Array<any>} values The values to mangle
-   * @param {object} options Mangling options
+   * @param {mangleDefaults} options Mangling options
+   * @returns {string} The value mangle.
    */
-  static mangleValues(values: Array<any>, options: any): string {
+  static mangleValues(values: Array<any>, options: mangleDefaults): string {
     return values.map(x => FunctionPrototype.mangleValue(x, options)).join('')
   }
 }
